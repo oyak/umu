@@ -36,11 +36,11 @@ SOURCES += main.cpp\
     defcoreM/datatransfers/idatatransfer.cpp \
     defcoreM/sockets/isocket.cpp \
     defcoreM/sockets/socket_lan.cpp \
-    defcore/CriticalSection_Lin.cpp \
-    defcore/ThreadClassList_Lin.cpp \
-    defcore/LinThread.cpp \
-    defcore/platforms.cpp \
-    defcore/TickCount.cpp \
+    defcoreM/CriticalSection_Lin.cpp \
+    defcoreM/ThreadClassList_Lin.cpp \
+    defcoreM/LinThread.cpp \
+    defcoreM/platforms.cpp \
+    defcoreM/TickCount.cpp \
     devlin.cpp \
     DETECTOR/objectstor.cpp \
     DETECTOR/sobfile.cpp \
@@ -69,11 +69,11 @@ HEADERS  += mainwindow.h \
     defcoreM/datatransfers/idatatransfer.h \
     defcoreM/sockets/isocket.h \
     defcoreM/sockets/socket_lan.h \
-    defcore/CriticalSection_Lin.h \
-    defcore/ThreadClassList_Lin.h \
-    defcore/LinThread.h \
-    defcore/platforms.h \
-    defcore/TickCount.h \
+    defcoreM/CriticalSection_Lin.h \
+    defcoreM/ThreadClassList_Lin.h \
+    defcoreM/LinThread.h \
+    defcoreM/platforms.h \
+    defcoreM/TickCount.h \
     devlin.h \
     DETECTOR/objectstor.h \
     DETECTOR/sobfile.h \
@@ -87,8 +87,8 @@ INCLUDEPATH += UMU3204/MAIN \
                UMU3204/ETHER \
                defcoreM/datatransfers \
                defcoreM/sockets \
-               defcore \
-               defcore/datacontainer 
+               defcoreM \
+               defcoreM/datacontainer
 
 
 
