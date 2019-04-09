@@ -1,0 +1,5 @@
+     Чтобы не ждать соединения с ПК тренажера нужно открыть #define SKIP_PC_CONNECTING
+в  /umu/EMULATOR/umudevice.h   
+    defcore - ссылка на defcore авикон-31
+    Папку files положить рядом с исполняемым файлом, иначе коде assert, если файл не найден.
+    
