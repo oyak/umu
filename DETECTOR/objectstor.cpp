@@ -21,11 +21,11 @@ QMap<QString, tSCANOBJECT_EX*>::iterator it;
 }
 
 // возвращает: objectOrder - порядок объекта, len - длина в мм
-SCANOBJECT *OBJECTSTOR::extractObject(eOBJECT_ORDER& objectOrder, unsigned int& len, unsigned int objectId, Test::eMovingDir movingDirection)
+SCANOBJECT *OBJECTSTOR::extractObject(eOBJECT_ORDER& objectOrder, unsigned int& len, unsigned int objectId)
 {
 SCANOBJECT *res = nullptr;
 QString key;
-    constructKey(key, objectId, movingDirection);
+    constructKey(key, objectId);
     if (_storage.contains(key))
     {
         res = _storage[key]->pScanObject;
@@ -42,48 +42,40 @@ OBJECTLIB lib;
 SOBFMAKER maker(pathToFiles);
 tSCANOBJECT_EX* pObjectEx;
 
-/*
     lib.getAllIds(objectIdsArray);
     if (!objectIdsArray.empty())
     {
     QVector<unsigned int>::iterator it;
         for(it = objectIdsArray.begin(); it != objectIdsArray.end(); ++it)
         {
-
+            pObjectEx = maker.restoreObjectFromFile(*it);
+            if(pObjectEx)
+            {
+             QString key;
+                constructKey(key, *it);
+                _storage.insert(key, pObjectEx);
+            }
         }
     }
-*/
-    pObjectEx = maker.restoreObjectFromFile(21, Test::DirUpWard);
+
+    /*
+
+    pObjectEx = maker.restoreObjectFromFile(21);
     if(pObjectEx)
     {
         _storage.insert("21d", pObjectEx);
     }
-    pObjectEx = maker.restoreObjectFromFile(81, Test::DirUpWard);
+    pObjectEx = maker.restoreObjectFromFile(81);
     if(pObjectEx)
     {
         _storage.insert("81d", pObjectEx);
     }
-    pObjectEx = maker.restoreObjectFromFile(91, Test::DirUpWard);
+    pObjectEx = maker.restoreObjectFromFile(91);
     if(pObjectEx)
     {
         _storage.insert("91d", pObjectEx);
     }
-    pObjectEx = maker.restoreObjectFromFile(21, Test::DirDownWard);
-    if(pObjectEx)
-    {
-        _storage.insert("21r", pObjectEx);
-    }
-    pObjectEx = maker.restoreObjectFromFile(81, Test::DirDownWard);
-    if(pObjectEx)
-    {
-        _storage.insert("81r", pObjectEx);
-    }
-    pObjectEx = maker.restoreObjectFromFile(91, Test::DirDownWard);
-    if(pObjectEx)
-    {
-        _storage.insert("91r", pObjectEx);
-    }
-
+*/
 }
 
 bool OBJECTSTOR::addObject(unsigned int id, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject)
@@ -91,10 +83,8 @@ bool OBJECTSTOR::addObject(unsigned int id, eOBJECT_ORDER objectOrder, SCANOBJEC
 
 }
 
-void OBJECTSTOR::constructKey(QString& key, unsigned int objectId, Test::eMovingDir movingDirection)
+void OBJECTSTOR::constructKey(QString& key, unsigned int objectId)
 {
-    assert(movingDirection != Test::DirNotDefined);
     key.setNum(objectId);
-    if (movingDirection == Test::DirUpWard) key += "d";
-        else key += "r";
+    key += "d";
 }

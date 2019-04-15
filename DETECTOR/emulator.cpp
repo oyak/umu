@@ -77,7 +77,7 @@ void EMULATOR::getChannelList(QList<CID>& channelList)
     channelList = _channelList;
 }
 
-bool EMULATOR::onMessageId(unsigned char objectId, unsigned int startCoordInMM, eUMUSide side, Test::eMovingDir movingDirection)
+bool EMULATOR::onMessageId(unsigned char objectId, unsigned int startCoordInMM, eUMUSide side)
 {
 bool res = false;
 
@@ -95,7 +95,7 @@ tSCANOBJECT_EX object(pObject);
 */
 eOBJECT_ORDER order;
 unsigned int len;
-SCANOBJECT *pObject = _pStorage->extractObject(order, len, objectId, movingDirection);
+SCANOBJECT *pObject = _pStorage->extractObject(order, len, objectId);
      if (pObject)
      {
         res = _pPathModel[side]->addObject(objectId, startCoordInMM, len, order, pObject);

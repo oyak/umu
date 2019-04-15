@@ -14,7 +14,9 @@ const int TROLLEY::_TimeLug = 10;
 TROLLEY::TROLLEY(cCriticalSection *cs): _timeCorrection(0),
                     _currentV(0.0)
 {
-    setCoordinate(950000.0);
+//    setCoordinate(950000.0);
+     setCoordinate(0.0);
+
     _lastCoordDiscrepancy = 0.0;
     _currentVCorrection = 0.0;
     _targetV = 0.0;

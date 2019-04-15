@@ -1,16 +1,20 @@
 #include "sobfmaker.h"
+#include <QDebug>
+#include <QVector>
+#include <QTextCodec>
 
 // конструктор, при использовании класса для создания файлов sob
 SOBFMAKER::SOBFMAKER(QString filePathToDestination, QString filePathToSource)
 {
-    _filePath = filePathToDestination;
+    _destinationFilePath = filePathToDestination;
+    _sourceFilePath = filePathToSource;
     _pFileParser = new Test(filePathToSource);
 }
 
 // конструктор, при использовании класса для чтения файлов sob
 SOBFMAKER::SOBFMAKER(QString filePath)
 {
-    _filePath = filePath;
+    _destinationFilePath = filePath;
     _pFileParser = nullptr;
 }
 
@@ -19,7 +23,7 @@ SOBFMAKER::~SOBFMAKER()
     delete _pFileParser;
 }
 
-bool SOBFMAKER::createFile(unsigned int objectId, Test::eMovingDir movingDirection)
+bool SOBFMAKER::createFile(unsigned int objectId)
 {
 bool res;
 tSCANOBJECT_EX object;
@@ -33,7 +37,10 @@ QString fileName;
 QString filePath;
 
     assert(_pFileParser); // нужно вызывать правильный конструктор
-    if (_pFileParser->extractObject(lib, objectId, object, movingDirection) )
+
+//        qDebug() << "offset coord = " << _pFileParser->countCoordUntilFileOffet(81, 0x67c4fe);
+
+    if (_pFileParser->extractObject(lib, objectId, object) )
     {
         header.ObjectOrder = object.ObjectOrder;
         header.Size = object.Size;
@@ -41,8 +48,10 @@ QString filePath;
         header.SOBSize = object.pScanObject->size();
         header.PathStep = object.pScanObject->getPathStep();
     }
-    SOBFile::compileFileName(fileName, objectId, movingDirection);
-    filePath = _filePath + "/" + fileName;
+        else return false;
+//
+    SOBFile::compileFileName(fileName, objectId);
+    filePath = _destinationFilePath + "/" + fileName;
     _pFile = new SOBFile(filePath, QIODevice::ReadWrite);
     if (_pFile->writeHeader(&header, true))
     {
@@ -83,7 +92,7 @@ QString filePath;
 }
 
 // создает объект tSCANOBJECT_EX и возвращает на него указатель
-tSCANOBJECT_EX *SOBFMAKER::restoreObjectFromFile(unsigned int objectId, Test::eMovingDir movingDirection)
+tSCANOBJECT_EX *SOBFMAKER::restoreObjectFromFile(unsigned int objectId)
 {
 tSCANOBJECT_EX *pObjectEx = nullptr;
 SCANOBJECT *pObject;
@@ -95,8 +104,8 @@ unsigned char qChannels;
 CID channel;
 
     pObject = new SCANOBJECT;
-    SOBFile::compileFileName(fileName, objectId, movingDirection);
-    filePath = _filePath + "/" + fileName;
+    SOBFile::compileFileName(fileName, objectId);
+    filePath = _destinationFilePath + "/" + fileName;
     _pFile = new SOBFile(filePath, QIODevice::ReadOnly);
     if (_pFile->readHeader(&header, true))
     {
@@ -166,3 +175,54 @@ CID channel;
     }
     return pObjectEx;
 }
+//
+void SOBFMAKER::createSOBFiles()
+{
+QVector<unsigned int> idsOfObjects;
+QVector<unsigned int>::iterator it;
+OBJECTLIB lib;
+    lib.getAllIds(idsOfObjects);
+    _cancellFlag = false;
+    for(it = idsOfObjects.begin(); it != idsOfObjects.end(); ++it)
+    {
+        QString nStr;
+        nStr.setNum(*it);
+        emit resultMessage("Creating " + nStr + "object");
+        if (createFile(*it)) emit resultMessage("OK");
+            else emit resultMessage("failed");
+        if (_cancellFlag) break;
+        sleep(10);
+    }
+}
+//
+bool SOBFMAKER::testDetectorFilesPresence()
+{
+bool res = true;
+OBJECTLIB lib;
+QVector<QString> FileNamesArray;
+QVector<QString>::iterator it;
+//QTextCodec *pCodec;
+
+//    pCodec = QTextCodec::codecForName("Windows-1251");
+
+//    pCodec = QTextCodec::codecForLocale();
+    lib.getAllSorceFiles(FileNamesArray);
+    for (it = FileNamesArray.begin(); it != FileNamesArray.end(); ++it)
+    {
+        if (!QFile::exists(_sourceFilePath + "/" + it->toUtf8()))
+        {
+            emit resultMessage("File " + *it + "not found");
+            res = false;
+//            break;
+        }
+    }
+    return res;
+}
+
+// вызываем для отмены операции пользователем
+void SOBFMAKER::onCancell()
+{
+    _cancellFlag = false;
+}
+
+\

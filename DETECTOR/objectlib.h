@@ -58,6 +58,8 @@ public:
 
     bool getRecordData(unsigned int Id, tObjectSourceDescr& descriptor);
     void getAllIds(QVector<unsigned int>& IdsArray);
+    void getAllSorceFiles(QVector<QString>& FileNamesArray);
+
 private:
     QMap<unsigned int, tObjectSourceDescr> table;
 };

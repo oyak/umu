@@ -39,7 +39,7 @@ public:
 
     void getChannelList(QList<CID>& channelList);
 
-    bool onMessageId(unsigned char objectId, unsigned int startCoord, eUMUSide side, Test::eMovingDir movingDirection);
+    bool onMessageId(unsigned char objectId, unsigned int startCoord, eUMUSide side);
     void deletePathObjects();
 
 private:

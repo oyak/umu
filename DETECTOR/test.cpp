@@ -35,7 +35,7 @@ Test::~Test()
     closeFile();
 }
 
-bool Test::extractObject(OBJECTLIB& lib, unsigned int objectId, tSCANOBJECT_EX& object, eMovingDir movingDirection)
+bool Test::extractObject(OBJECTLIB& lib, unsigned int objectId, tSCANOBJECT_EX& object)
 {
 tObjectSourceDescr descriptor;
 bool res;
@@ -57,19 +57,23 @@ sCoordPostMRF post;
     {
         if (!(_Header.StartKM > descriptor.StartKm) || (_Header.StartKM == descriptor.StartKm) && (_Header.StartPk > descriptor.StartPk))
         {
-            post.Km[0] = descriptor.StartKm;
-            post.Pk[0] = descriptor.StartPk;
+            post.Km[1] = descriptor.StartKm;
+            post.Pk[1] = descriptor.StartPk;
             if ((_Header.StartKM < descriptor.StartKm) || (_Header.StartKM == descriptor.StartKm) && (_Header.StartPk < descriptor.StartPk))
             {
               int currentCoord = _fullCoordinate;
                 res = findAndParseStolbID(post, &currentCoord);
-                if (res) _fullCoordinate = currentCoord;
+                if (res)
+                {
+                    _fullCoordinate = currentCoord;
+                    qDebug() << "Disared Stolb found - currentCoord = " << _fullCoordinate << "fileOffset = " << _fileOffset;
+                }
             }
             if (res)
             {
                unsigned int objSize = descriptor.LengthMM - descriptor.LngCutting - 2;
                unsigned int systemCoord = _fullCoordinate + convertMMToSystemCoord(descriptor.StartM * 1000 + descriptor.StartmM);
-               res = extractScanObject(systemCoord, descriptor.Side, objSize, object, movingDirection);
+               res = extractScanObject(systemCoord, descriptor.Side, objSize, object);
                object.ObjectOrder = descriptor.Order;
                object.Size = objSize;
             }
@@ -96,7 +100,7 @@ bool res = false;
         {
          QDir dir;
             dir = QDir::currentPath();
-           _pFile = new QFile(dir.path() + _pathToFiles + "/" + fileName);
+           _pFile = new QFile(dir.path() + "/" + _pathToFiles + "/" + fileName);
         }
             else
             {
@@ -128,8 +132,9 @@ void Test::closeFile()
 
 bool Test::readHeader()
 {
-    return readHeader(true, &_Header);
     _fullCoordinate = 0;
+    _fileOffset = 0;
+    return readHeader(true, &_Header);
 }
 
 bool Test::readHeader(bool toResetFilePos, sFileHeader_v5 *pHeader)
@@ -137,6 +142,7 @@ bool Test::readHeader(bool toResetFilePos, sFileHeader_v5 *pHeader)
 qint64 rBytes;
 unsigned int error;
 bool res = true;
+
     assert(_pFile != NULL);
     if(toResetFilePos)
     {
@@ -185,7 +191,7 @@ bool res;
 // startCoord - начальная системная координата объекта
 // side - сторона, к которой он относится
 // len - длина объекта в мм
-bool Test::extractScanObject(unsigned int startCoord, eUMUSide side, unsigned int len, tSCANOBJECT_EX& object, eMovingDir movingDirection)
+bool Test::extractScanObject(unsigned int startCoord, eUMUSide side, unsigned int len, tSCANOBJECT_EX& object)
 {
 SignalsData signalsData;
 bool res;
@@ -195,7 +201,7 @@ unsigned int offset = 0;
     object.pScanObject->setPathStep(_Header.ScanStep);
     do
     {
-        res = extractSignalsByCoord(startCoord + offset, side, signalsData, movingDirection);
+        res = extractSignalsByCoord(startCoord + offset, side, signalsData);
         if (res)
         {
             object.pScanObject->add(&signalsData);
@@ -212,7 +218,9 @@ unsigned int offset = 0;
 
 CID Test::convertToCID(CID chIdx, eMovingDir movingDirection)
 {
-    if (movingDirection != DirDownWard) return chIdx;
+//    if (movingDirection != DirDownWard)
+        return chIdx;
+/*
         else
         {
             switch(chIdx)
@@ -239,13 +247,14 @@ CID Test::convertToCID(CID chIdx, eMovingDir movingDirection)
                 default: assert(0);
             }
         }
+*/
 }
 
 // извлекает сигналы, относящиеся к заданной системной координате,
 // для заданной стороны
 // возвращает true, если координата найдена
 // если заданная координата coord меньше текущей в файле, поиск прекращается
-bool Test::extractSignalsByCoord(unsigned int coord, eUMUSide side, SignalsData& signalsData, eMovingDir movingDirection)
+bool Test::extractSignalsByCoord(unsigned int coord, eUMUSide side, SignalsData& signalsData)
 {
 unsigned int currentCoord = 0;
 bool fShort;
@@ -275,11 +284,17 @@ tDaCo_BScanSignals BSSignals; // здесь номер канала в терминах индекса канала в 
     {// нашли координату
         do
         {
+            qDebug() << "currenCoord = " << currentCoord << "fileOffset = " << _fileOffset;
+
             id = 0xFF;
             res = readAndParseEventID(id, NULL, true);
             if (res == false) break;
             if ( ((id & 0x80) == 0) && (((id & 0x40) >> 6) == getSideByte(side)) )
             {
+
+
+
+
                 res = readAndParseEventID(id, &BSSignals, false);
                 if (res == false)
                 {
@@ -287,7 +302,7 @@ tDaCo_BScanSignals BSSignals; // здесь номер канала в терминах индекса канала в 
                 }
                    else
                    {
-                       signalsData.addSignals(convertToCID(_Header.ChIdxtoCID[BSSignals.Channel], movingDirection), BSSignals.Count, &BSSignals.Signals);
+                       signalsData.addSignals(_Header.ChIdxtoCID[BSSignals.Channel], BSSignals.Count, &BSSignals.Signals);
                    }
 //                break;
 
@@ -368,11 +383,11 @@ sCoordPostMRF currentCoord;
          res = readNextStolb(&currentCoord, systemCoordPtr);
          if (res)
          {
-             found = (currentCoord.Km[0] == coord.Km[0]) && (currentCoord.Pk[0] == coord.Pk[0]);
+             found = (currentCoord.Km[1] == coord.Km[1]) && (currentCoord.Pk[1] == coord.Pk[1]);
              if (!found)
              {
-                 if ((currentCoord.Km[0] == coord.Km[0]) && (currentCoord.Pk[1] > coord.Pk[0]) ||
-                    (currentCoord.Km[0] > coord.Km[0])) res = false;
+                 if ((currentCoord.Km[1] == coord.Km[1]) && (currentCoord.Pk[1] > coord.Pk[1]) ||
+                    (currentCoord.Km[1] > coord.Km[1])) res = false;
              }
          }
      } while(res && !found);
@@ -448,6 +463,8 @@ bool res = true;
 unsigned char ID[4];
 
     assert(_pFile != NULL);
+
+//    qDebug() << "readAndParseEventID: start file position = " << _pFile->pos();
 
     if (_pFile->read(reinterpret_cast<char*>(ID), 1) < 1) return false;
     if (readIDOnly)
@@ -917,15 +934,26 @@ unsigned long long res;
     return static_cast<unsigned int>(res);
 }
 
-//
-unsigned int Test::countCoordUntilFileOffet(qint64 fileOffset)
+//файл должен быть открыт
+unsigned int Test::countCoordUntilFileOffet(unsigned int objectId, qint64 fileOffset)
 {
 unsigned int res = 0;
 bool fShort;
+OBJECTLIB lib;
+tObjectSourceDescr descriptor;
 
-    while (_fileOffset < fileOffset) {
-        if (readNextCoord(res, fShort) == false) break;
+   if(lib.getRecordData(objectId, descriptor))
+   {
+    if (openFile(descriptor.SourceFileName))
+    {
+        if (readHeader())
+        {
+            while (_fileOffset < fileOffset) {
+                if (readNextCoord(res, fShort) == false) break;
+            }
+        }
     }
+   }
     return res;
 }
 
