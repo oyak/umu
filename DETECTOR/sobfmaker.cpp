@@ -25,7 +25,7 @@ SOBFMAKER::~SOBFMAKER()
 
 bool SOBFMAKER::createFile(unsigned int objectId)
 {
-bool res;
+bool res = false;
 tSCANOBJECT_EX object;
 tSOBHeader header;
 SignalsData *pSignalsData;
@@ -176,22 +176,41 @@ CID channel;
     return pObjectEx;
 }
 //
-void SOBFMAKER::createSOBFiles()
+void SOBFMAKER::createSOBFiles(bool restoreAbsentFileOnly)
 {
 QVector<unsigned int> idsOfObjects;
 QVector<unsigned int>::iterator it;
 OBJECTLIB lib;
     lib.getAllIds(idsOfObjects);
-    _cancellFlag = false;
-    for(it = idsOfObjects.begin(); it != idsOfObjects.end(); ++it)
+//
+    if (restoreAbsentFileOnly)
     {
-        QString nStr;
-        nStr.setNum(*it);
-        emit resultMessage("Creating " + nStr + "object");
-        if (createFile(*it)) emit resultMessage("OK");
-            else emit resultMessage("failed");
-        if (_cancellFlag) break;
-        sleep(10);
+        for(it = idsOfObjects.begin(); it != idsOfObjects.end(); )
+        {
+            QString fileName;
+            QString filePath;
+            SOBFile::compileFileName(fileName, *it);
+            filePath = _destinationFilePath + "/" + fileName;
+            if (QFile::exists(filePath))
+            {
+                it = idsOfObjects.erase(it);
+            }
+                else ++it;
+        }
+    }
+//
+    _cancellFlag = false;
+    if (!idsOfObjects.empty())
+    {
+        for(it = idsOfObjects.begin(); it != idsOfObjects.end(); ++it)
+        {
+            QString nStr;
+            nStr.setNum(*it);
+            emit resultMessage("Creating " + nStr + " object");
+            if (createFile(*it)) emit resultMessage("OK");
+                else emit resultMessage("failed");
+            if (_cancellFlag) break;
+        }
     }
 }
 //
@@ -224,5 +243,3 @@ void SOBFMAKER::onCancell()
 {
     _cancellFlag = false;
 }
-
-\

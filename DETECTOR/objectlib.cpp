@@ -2320,7 +2320,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 8;
     descriptor.StartM = 0;
     descriptor.StartmM = 38;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(61, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2330,7 +2330,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 8;
     descriptor.StartM = 25;
     descriptor.StartmM = 13;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(62, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2340,7 +2340,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 8;
     descriptor.StartM = 50;
     descriptor.StartmM = 36;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(63, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2350,7 +2350,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 8;
     descriptor.StartM = 75;
     descriptor.StartmM = 9;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(64, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2360,7 +2360,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 9;
     descriptor.StartM = 12;
     descriptor.StartmM = 40;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(65, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2370,7 +2370,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 9;
     descriptor.StartM = 37;
     descriptor.StartmM = 13;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(66, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2380,7 +2380,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 9;
     descriptor.StartM = 62;
     descriptor.StartmM = 38;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(67, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2390,7 +2390,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 2;
     descriptor.StartM = 63;
     descriptor.StartmM = 37;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(68, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2400,7 +2400,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 3;
     descriptor.StartM = 0;
     descriptor.StartmM = 30;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(69, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2410,7 +2410,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 3;
     descriptor.StartM = 25;
     descriptor.StartmM = 3;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(610, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2420,7 +2420,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 3;
     descriptor.StartM = 50;
     descriptor.StartmM = 28;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(611, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2430,7 +2430,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 3;
     descriptor.StartM = 75;
     descriptor.StartmM = 1;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(612, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2440,7 +2440,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 4;
     descriptor.StartM = 0;
     descriptor.StartmM = 7;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(613, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2450,7 +2450,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 4;
     descriptor.StartM = 25;
     descriptor.StartmM = 30;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(614, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2460,7 +2460,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 4;
     descriptor.StartM = 70;
     descriptor.StartmM = 12;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(615, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО чистая";
@@ -2470,7 +2470,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 5;
     descriptor.StartM = 0;
     descriptor.StartmM = 24;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(616, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО шумная";
@@ -2480,7 +2480,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 9;
     descriptor.StartM = 12;
     descriptor.StartmM = 40;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(71, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО шумная";
@@ -2490,7 +2490,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 9;
     descriptor.StartM = 37;
     descriptor.StartmM = 13;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(72, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО шумная";
@@ -2500,7 +2500,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 3;
     descriptor.StartM = 65;
     descriptor.StartmM = 43;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(73, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО шумная";
@@ -2510,7 +2510,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 5;
     descriptor.StartM = 17;
     descriptor.StartmM = 41;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(74, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО шумная";
@@ -2520,7 +2520,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 6;
     descriptor.StartM = 0;
     descriptor.StartmM = 22;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(75, descriptor);
     //
     descriptor.ObjectName = "Рельсовая плеть с БО шумная";
@@ -2530,7 +2530,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartPk = 7;
     descriptor.StartM = 0;
     descriptor.StartmM = 28;
-    descriptor.LengthMM = 24150;
+    descriptor.LengthMM = 24140;
     table.insert(76, descriptor);
 
     descriptor.LngCutting = 0;

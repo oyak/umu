@@ -16,7 +16,7 @@ public:
 
     bool createFile(unsigned int objectId);
     tSCANOBJECT_EX *restoreObjectFromFile(unsigned int objectId);
-    void createSOBFiles();
+    void createSOBFiles(bool restoreAbsentFileOnly);
     bool testDetectorFilesPresence();
 
 signals: void resultMessage(QString);
