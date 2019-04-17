@@ -46,8 +46,8 @@ struct tLAN_PCMessage
     enum eCONSTANTS
     {
 // PC
-        LanDataMaxSize = 1500,
-        LANBufferSize = 2048
+        LanDataMaxSize = 4090,
+        LANBufferSize = 4096
     };
 
     unsigned char Id;
