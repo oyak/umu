@@ -44,7 +44,8 @@ SOURCES += main.cpp\
     devlin.cpp \
     DETECTOR/objectstor.cpp \
     DETECTOR/sobfile.cpp \
-    DETECTOR/sobfmaker.cpp
+    DETECTOR/sobfmaker.cpp \
+    DETECTOR/objectsarray.cpp
 
 
 
@@ -77,7 +78,8 @@ HEADERS  += mainwindow.h \
     devlin.h \
     DETECTOR/objectstor.h \
     DETECTOR/sobfile.h \
-    DETECTOR/sobfmaker.h
+    DETECTOR/sobfmaker.h \
+    DETECTOR/objectsarray.h
 
 
 INCLUDEPATH += UMU3204/MAIN \

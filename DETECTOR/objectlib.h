@@ -8,7 +8,8 @@
 enum eOBJECT_ORDER
 {
     OverPlaced = 0,
-    OverPlacing = 1
+    OverPlacing = 1,
+    NumOfOrders = 2
 };
 
 struct tSCANOBJECT_EX
