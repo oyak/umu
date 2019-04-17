@@ -33,7 +33,7 @@ public:
     bool readHeader();
     bool readHeader(bool toResetFilePos, sFileHeader_v5 *pHeader);
 //    bool readEventID(unsigned char& Id, void *pParsedData);
-    bool findAndParseStolbID(sCoordPostMRF coord, int *systemCoordPtr);
+    bool findAndParseStolbID(sCoordPostMRF coord, int *systemCoordPtr, unsigned int directionCode);
     bool readNextCoord(unsigned int &coord, bool& fShort);
     bool readNextStolb(sCoordPostMRF *postCoordPtr, int *systemCoordPtr);
     bool extractScanObject(unsigned int startCoord, eUMUSide side, unsigned int len, tSCANOBJECT_EX& object);
