@@ -3,7 +3,8 @@
 
 //условия включения нового элемента в _ObjectArray
 //1. координаты нового элемента не пересекаются ни с одним элементом _ObjectArray
-//2. или координаты нового элемента пересекаются только с одним элементом _ObjectArray
+//2. или начальная координата нового элемента пересекается с конечной координатой последнего элементом _ObjectArray -
+//производим усечение ранее включенного элемента
 
 bool OBJECTSARRAY::addObject(unsigned int id, unsigned int startCoordInMM, unsigned int lenInMM, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject)
 {
@@ -31,10 +32,14 @@ unsigned int endCoordInMM = startCoordInMM + lenInMM;
         {
             temp =  overCrossedElement;
             ++temp;
-            if ((temp == _objectArray.end()) || (findOverCrossCoordinate(startCoordInMM, endCoordInMM, temp) == _objectArray.end()))
-            {// пересекающийся элемент только один
-                // добавить невозможно
-                    res = false;
+            if (temp == _objectArray.end())
+            {// пересекающийся элемент последний в списке
+                if ((overCrossedElement->FirstCoordinate > 0) && ((overCrossedElement->FirstCoordinate + 1) < startCoordInMM))
+                { // производим усечение ранее всключенного
+                    overCrossedElement->LastCoordinate = startCoordInMM - 1;
+                    res = insertSCANOBJECT_EXBefore(_objectArray.end(), id, startCoordInMM, endCoordInMM, objectOrder, pObject);
+                }
+                    else res = false;
             }
                 else
                 {// новый элемент добавить невозможно
