@@ -77,7 +77,7 @@ void EMULATOR::getChannelList(QList<CID>& channelList)
     channelList = _channelList;
 }
 
-bool EMULATOR::onMessageId(unsigned char objectId, unsigned int startCoordInMM, eUMUSide side)
+bool EMULATOR::onMessageId(unsigned short objectId, unsigned int startCoordInMM, eUMUSide side)
 {
 bool res = false;
 
