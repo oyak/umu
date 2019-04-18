@@ -351,6 +351,14 @@ cCriticalSection *pCS2;
      connect(&_pingTimer, SIGNAL(timeout()), this, SLOT(_onPingTimer()));
     _pingTimer.start(PING_PERIOD);
 
+
+    _PCLinkFault = false;
+     connect(&_PCLinkFaultTimer, SIGNAL(timeout()), this, SLOT(_onPCLinkFaultTimer()));
+    _PCLinkFaultTimer.setInterval(PC_LINK_FAULT_TIMEOUT);
+    _PCLinkFaultTimer.start();
+     connect(this, SIGNAL(restartPCLinkFaultTimer()), this, SLOT(_onRestartPCLinkFaultTimer()));
+
+
     _engineThreadIndex = _thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, engine));
     _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, Tick)));
 }
@@ -406,9 +414,11 @@ bool UMUDEVICE::engine(void)
         break;
 //
        case PCConnecting:
+        _PCConnected = false;
 #ifndef SKIP_PC_CONNECTING
         if (_dtLan->openConnection(_PCConnection_id) == 0)
         {
+            _PCLinkFault = false;
             _PCConnected = true;
             setState(WhenConnected);
         }
@@ -423,20 +433,20 @@ bool UMUDEVICE::engine(void)
 
 //
         case WhenConnected:
-//  .        emit PCconnected();
-//            _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, Tick)));
-//            if (_CDUConnected)
-//             {
-//                _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, umuTick)));
-//            }
             setState(Working);
             break;
 //
         case Working:
+#ifndef SKIP_PC_CONNECTING
+        if (_PCLinkFault)
+        {
+            _dtLan->closeConnection(_PCConnection_id);
+            setState(PCConnecting);
+        }
+#endif
         break;
 
         case Finishing:
-
         break;
 
         default: assert(0);
@@ -654,6 +664,7 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
     {
         case PingId:
         {
+            emit restartPCLinkFaultTimer();
             break;
         }
 //
@@ -767,6 +778,19 @@ void UMUDEVICE::AddToOutBuffSync(tLAN_PCMessage* _out_block)
 void UMUDEVICE::AddToOutBuffNoSync(tLAN_PCMessage* _out_block)
 {
     _PC_out_buffer.push(*_out_block);
+}
+
+void UMUDEVICE::_onPCLinkFaultTimer()
+{
+    if(_PCConnected)
+    {
+        _PCLinkFault = true;
+    }
+}
+
+void UMUDEVICE::_onRestartPCLinkFaultTimer()
+{
+    _PCLinkFaultTimer.start();
 }
 
 void UMUDEVICE::_onPingTimer()

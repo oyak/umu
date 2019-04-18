@@ -188,6 +188,8 @@ PingId = 16  //контроль соединения
 
 
 #define PING_PERIOD 500 // мс
+#define PC_LINK_FAULT_TIMEOUT 3000 // мс
+
 
 //
 class UMUDEVICE: public QObject
@@ -256,11 +258,14 @@ public:
 
 signals:
     void CDUconnected();
+    void restartPCLinkFaultTimer();
 
 public slots:
     void _onPLDInt(); // срабатывание таймера _PLDIntTimer
     void _onPathStep(int shift, int coordInMM); // слот на сигнал о срабатывании ДП от trolley
     void _onPingTimer();
+    void _onPCLinkFaultTimer(); // слот на срабатывание _PCLinkFaultTimer
+    void _onRestartPCLinkFaultTimer(); // перезапускаем _PCLinkFaultTimer, чтобы не сработал
 
 private:
     eState _state;
@@ -270,6 +275,9 @@ private:
 
     bool _CDUConnected;             // соединение с БУИ установлено
     bool _PCConnected;             // соединение с ПК установлено
+
+    bool _PCLinkFault;             // устанавливаем, если нет PingId от ПК в течение PC_LINK_FAULT_TIMEOUT
+    QTimer _PCLinkFaultTimer;
 
     unsigned int _write_error_count[NumOfOutBuffers];
 

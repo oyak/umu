@@ -221,3 +221,21 @@ int cDataTransferLan::read(const int connection_id, unsigned char* data_ptr, con
     pdata->_current_position += count;
     return count;
 }
+//
+bool cDataTransferLan::closeConnection(const int connection_id)
+{
+    if (!isConnectionExist(connection_id)) {
+        return false;
+    }
+
+    if (_connections_pull[connection_id]._socket_1 != 0) {
+        _connections_pull[connection_id]._socket_1->disconnect();
+    }
+
+    if (_connections_pull[connection_id]._socket_2 != 0) {
+        _connections_pull[connection_id]._socket_2->disconnect();
+    }
+
+    SLEEP(10);  // TODO: why 10?
+    return true;
+}
