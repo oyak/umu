@@ -682,7 +682,7 @@ tObjectSourceDescr descriptor;
     descriptor.LngCutting = 0;
 
 
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -692,7 +692,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(41, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -702,7 +702,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(42, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -712,7 +712,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(43, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -722,7 +722,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(44, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -732,7 +732,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(45, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -742,7 +742,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(46, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -752,7 +752,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(47, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -762,7 +762,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(48, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -772,7 +772,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(49, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -782,7 +782,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(410, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -792,7 +792,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(411, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -802,7 +802,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(412, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -812,7 +812,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(413, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -822,7 +822,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(414, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -832,7 +832,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(415, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -842,7 +842,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(416, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -852,7 +852,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(417, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -862,7 +862,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(418, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -872,7 +872,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(419, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -882,7 +882,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(420, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -892,7 +892,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(421, descriptor);
 //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -902,7 +902,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(422, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -912,7 +912,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(423, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -922,7 +922,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(424, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -932,7 +932,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(425, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -942,7 +942,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(426, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 349;
@@ -952,7 +952,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(427, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -962,7 +962,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(428, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -972,7 +972,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(429, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -982,7 +982,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(430, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -992,7 +992,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(431, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1002,7 +1002,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(432, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1012,7 +1012,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(433, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1022,7 +1022,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(434, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1032,7 +1032,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(435, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1042,7 +1042,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(436, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1052,7 +1052,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(437, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1062,7 +1062,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(438, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1072,7 +1072,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(439, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1082,7 +1082,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(440, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1092,7 +1092,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(441, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1102,7 +1102,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(442, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1112,7 +1112,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(443, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1122,7 +1122,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(444, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1132,7 +1132,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(445, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1142,7 +1142,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(446, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1152,7 +1152,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(447, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1162,7 +1162,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(448, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1172,7 +1172,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(449, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1182,7 +1182,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(450, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1192,7 +1192,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(451, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1202,7 +1202,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(452, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1212,7 +1212,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(453, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1222,7 +1222,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(454, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1232,7 +1232,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(455, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1242,7 +1242,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(456, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1252,7 +1252,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(457, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1262,7 +1262,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(458, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1272,7 +1272,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(459, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1282,7 +1282,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(460, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1292,7 +1292,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(461, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1302,7 +1302,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(462, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1312,7 +1312,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(463, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1322,7 +1322,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(464, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1332,7 +1332,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(465, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1342,7 +1342,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(466, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1352,7 +1352,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(467, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1362,7 +1362,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(468, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1372,7 +1372,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(469, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1382,7 +1382,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(470, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1392,7 +1392,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(471, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1402,7 +1402,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(472, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1412,7 +1412,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(473, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1422,7 +1422,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(474, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1432,7 +1432,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(475, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1442,7 +1442,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(476, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1452,7 +1452,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(477, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1462,7 +1462,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(478, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1472,7 +1472,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(479, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1482,7 +1482,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(480, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1492,7 +1492,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(481, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1502,7 +1502,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(482, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 350;
@@ -1512,7 +1512,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(483, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 350;
@@ -1522,7 +1522,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(484, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 351;
@@ -1532,7 +1532,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(485, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1542,7 +1542,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(486, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1552,7 +1552,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(487, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1562,7 +1562,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(488, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1572,7 +1572,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(489, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1582,7 +1582,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(490, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1592,7 +1592,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(490, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 351;
@@ -1602,7 +1602,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(491, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 351;
@@ -1612,7 +1612,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(492, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1622,7 +1622,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(493, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1632,7 +1632,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(494, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 351;
@@ -1642,7 +1642,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(495, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1652,7 +1652,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(496, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1662,7 +1662,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(497, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1672,7 +1672,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(498, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1682,7 +1682,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(499, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1692,7 +1692,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4100, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1702,7 +1702,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4101, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1712,7 +1712,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4102, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1722,7 +1722,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4103, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1732,7 +1732,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4104, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 351;
@@ -1742,7 +1742,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4105, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 351;
@@ -1752,7 +1752,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4106, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1762,7 +1762,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4107, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1772,7 +1772,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4108, descriptor);
 //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 351;
@@ -1782,7 +1782,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4109, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 351;
@@ -1792,7 +1792,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4110, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1802,7 +1802,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4111, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1812,7 +1812,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4112, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1822,7 +1822,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4113, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1832,7 +1832,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4114, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1842,7 +1842,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4115, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1852,7 +1852,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4116, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1862,7 +1862,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4117, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 351;
@@ -1872,7 +1872,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4118, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 351;
@@ -1882,7 +1882,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4119, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1892,7 +1892,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4120, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1902,7 +1902,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4121, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 351;
@@ -1912,7 +1912,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4122, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 351;
@@ -1922,7 +1922,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4123, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180808-125216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 351;
@@ -1932,7 +1932,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4124, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 354;
@@ -1942,7 +1942,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4125, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 354;
@@ -1952,7 +1952,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4126, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 354;
@@ -1962,7 +1962,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4127, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 354;
@@ -1972,7 +1972,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4128, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 354;
@@ -1982,7 +1982,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4129, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 354;
@@ -1992,7 +1992,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4130, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 354;
@@ -2002,7 +2002,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(4131, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть без БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 354;
@@ -2013,7 +2013,7 @@ tObjectSourceDescr descriptor;
     table.insert(4132, descriptor);
 //
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2023,7 +2023,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(51, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 346;
@@ -2033,7 +2033,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(52, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 346;
@@ -2043,7 +2043,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(53, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2053,7 +2053,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(54, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2063,7 +2063,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(55, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 346;
@@ -2073,7 +2073,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(56, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 346;
@@ -2083,7 +2083,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(57, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2093,7 +2093,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(58, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2103,7 +2103,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(59, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 346;
@@ -2113,7 +2113,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(510, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 346;
@@ -2123,7 +2123,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(511, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2133,7 +2133,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(512, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2143,7 +2143,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(513, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2153,7 +2153,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(514, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2163,7 +2163,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(515, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2173,7 +2173,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(516, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2183,7 +2183,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(517, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2193,7 +2193,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(518, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2203,7 +2203,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(519, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2213,7 +2213,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(520, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2223,7 +2223,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(521, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2233,7 +2233,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(522, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 346;
@@ -2243,7 +2243,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(523, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 347;
@@ -2253,7 +2253,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(524, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 347;
@@ -2263,7 +2263,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(525, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 347;
@@ -2273,7 +2273,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(526, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 347;
@@ -2283,7 +2283,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(527, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 347;
@@ -2293,7 +2293,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(528, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 347;
@@ -2303,7 +2303,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(529, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть без БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть без БО шумная";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 347;
@@ -2313,7 +2313,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24800;
     table.insert(530, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 354;
@@ -2323,7 +2323,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(61, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 354;
@@ -2333,7 +2333,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(62, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 354;
@@ -2343,7 +2343,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(63, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 354;
@@ -2353,7 +2353,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(64, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 354;
@@ -2363,7 +2363,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(65, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 354;
@@ -2373,7 +2373,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(66, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 354;
@@ -2383,7 +2383,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(67, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 355;
@@ -2393,7 +2393,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(68, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 355;
@@ -2403,7 +2403,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(69, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 355;
@@ -2413,7 +2413,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(610, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 355;
@@ -2423,7 +2423,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(611, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 355;
@@ -2433,7 +2433,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(612, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 355;
@@ -2443,7 +2443,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(613, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 355;
@@ -2453,7 +2453,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(614, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 355;
@@ -2463,7 +2463,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(615, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО чистая";
+    descriptor.ObjectName = "� ельсовая плеть с БО чистая";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 355;
@@ -2473,7 +2473,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(616, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть с БО шумная";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 354;
@@ -2483,7 +2483,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(71, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть с БО шумная";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 354;
@@ -2493,7 +2493,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(72, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть с БО шумная";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 355;
@@ -2503,7 +2503,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(73, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть с БО шумная";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 355;
@@ -2513,7 +2513,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(74, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть с БО шумная";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 355;
@@ -2523,7 +2523,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 24140;
     table.insert(75, descriptor);
     //
-    descriptor.ObjectName = "Рельсовая плеть с БО шумная";
+    descriptor.ObjectName = "� ельсовая плеть с БО шумная";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 355;
@@ -4453,7 +4453,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartM = 63;
     descriptor.StartmM = 521;
     descriptor.LengthMM = 1520;
-//    table.insert(531, descriptor);
+    table.insert(531, descriptor);
 //
     descriptor.ObjectName = "Болтовой стык с 53.1";
     descriptor.SourceFileName = "1_170615-113834.a31";
@@ -4549,7 +4549,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 12000;
     table.insert(12312, descriptor);
 //
-    descriptor.ObjectName = "Рамный рельс";
+    descriptor.ObjectName = "� амный рельс";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 7;
@@ -4559,7 +4559,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 12000;
     table.insert(12212, descriptor);
 //
-    descriptor.ObjectName = "Рамный рельс - копия 12212";
+    descriptor.ObjectName = "� амный рельс - копия 12212";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 7;
@@ -5232,7 +5232,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 12000;
     table.insert(23282, descriptor);
 //
-    descriptor.ObjectName = "Рамный рельс";
+    descriptor.ObjectName = "� амный рельс";
     descriptor.SourceFileName = "180712-132103.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 362;
@@ -5242,7 +5242,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 12000;
     table.insert(22282, descriptor);
 //
-    descriptor.ObjectName = "Рамный рельс - копия 22282";
+    descriptor.ObjectName = "� амный рельс - копия 22282";
     descriptor.SourceFileName = "180712-132103.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 362;
@@ -5626,7 +5626,7 @@ tObjectSourceDescr descriptor;
     table.insert(552, descriptor);
 //
     descriptor.ObjectName = "55.2";
-    descriptor.SourceFileName = "190226-111935.a31";
+    descriptor.SourceFileName = "170925-142835.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 0;
     descriptor.StartPk = 1;
