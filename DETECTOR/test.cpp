@@ -57,7 +57,7 @@ sCoordPostMRF post;
     {
         bool condition1;
         bool condition2;
-        if (_Header.DirectionCode == 0)
+        if (_Header.MoveDir == -1)
         {
             condition1 = (_Header.StartKM >= descriptor.StartKm);
             condition2 = (_Header.StartKM > descriptor.StartKm) || (_Header.StartKM == descriptor.StartKm) && (_Header.StartPk > descriptor.StartPk);
@@ -74,7 +74,7 @@ sCoordPostMRF post;
             if (condition2)
             {
               int currentCoord = _fullCoordinate;
-                res = findAndParseStolbID(post, &currentCoord, _Header.DirectionCode);
+                res = findAndParseStolbID(post, &currentCoord, _Header.MoveDir);
                 if (res)
                 {
                     _fullCoordinate = currentCoord;
@@ -84,7 +84,7 @@ sCoordPostMRF post;
             if (res)
             {
                unsigned int objSize = descriptor.LengthMM - descriptor.LngCutting - 2;
-               unsigned int systemCoord = _fullCoordinate + convertMMToSystemCoord(descriptor.StartM * 1000 + descriptor.StartmM);
+               unsigned int systemCoord = _fullCoordinate + convertMMToSystemCoord((descriptor.StartM - _Header.StartMetre) * 1000 + descriptor.StartmM);
                res = extractScanObject(systemCoord, descriptor.Side, objSize, object);
                object.ObjectOrder = descriptor.Order;
                object.Size = objSize;
@@ -385,7 +385,7 @@ unsigned int tempCoord;
 // текущую позицию в файле на следующий идентификатор и
 // возвращает true
 // предполагается, что идет увеличение путейской координаты
-bool Test::findAndParseStolbID(sCoordPostMRF coord, int *systemCoordPtr, unsigned int directionCode)
+bool Test::findAndParseStolbID(sCoordPostMRF coord, int *systemCoordPtr, int movingDir)
 {
 bool res;
 bool found = false;
@@ -398,7 +398,7 @@ sCoordPostMRF currentCoord;
              found = (currentCoord.Km[1] == coord.Km[1]) && (currentCoord.Pk[1] == coord.Pk[1]);
              if (!found)
              {
-                 if (directionCode == 0)
+                 if (movingDir == -1)
                  {
                      if ((currentCoord.Km[1] == coord.Km[1]) && (currentCoord.Pk[1] < coord.Pk[1]) ||
                          (currentCoord.Km[1] < coord.Km[1])) res = false;
