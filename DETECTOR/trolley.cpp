@@ -170,8 +170,9 @@ if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
     _targets.pop_front();
 }
     if ((_targetV == 0.0) && (_currentV != 0.0))
-    {  // coordDiscrepancy и _currentV разных знаков
+    {  // coordDiscrepancy и _currentV ранее были разных знаков
        // иначе бы _currentV была сразу установлена в ноль
+        coordDiscrepancy = _coordinate - _targetCoordinate;
         if (fabs(coordDiscrepancy) > fabs(_currentV))
         {
             _coordinate += _currentV;
