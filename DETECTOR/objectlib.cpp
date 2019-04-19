@@ -5646,7 +5646,7 @@ tObjectSourceDescr descriptor;
     table.insert(554, descriptor);
 //
     descriptor.ObjectName = "55.2";
-    descriptor.SourceFileName = "180927-124849.a31";
+    descriptor.SourceFileName = "180609-132919.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 340;
     descriptor.StartPk = 9;
