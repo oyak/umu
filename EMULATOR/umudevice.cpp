@@ -857,6 +857,17 @@ SignalsData *pSignalsData;
  bool isDataObject; // данной координате соответствует объект, но нет сигналов
  unsigned int positiveCoord;
 
+// предполагаетс€, что координата coordInMM соответствует центру искательной системы
+// получим координату ѕЁѕ 0 гр.
+
+    if (_movingDirection != Test::DirDownWard)
+    {
+        coordInMM += N0EMS_SENSOR_SHIFT_mm;
+    }
+        else
+        {
+            coordInMM -= N0EMS_SENSOR_SHIFT_mm;
+        }
     if (coordInMM >= 0)
     {
         positiveCoord = (unsigned int)coordInMM;
