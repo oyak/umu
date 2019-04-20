@@ -71,6 +71,7 @@ sCoordPostMRF post;
         {
             post.Km[1] = descriptor.StartKm;
             post.Pk[1] = descriptor.StartPk;
+            unsigned int systemCoord;
             if (condition2)
             {
               int currentCoord = _fullCoordinate;
@@ -79,12 +80,20 @@ sCoordPostMRF post;
                 {
                     _fullCoordinate = currentCoord;
                     qDebug() << "Disared Stolb found - currentCoord = " << _fullCoordinate << "fileOffset = " << _fileOffset;
+                    systemCoord = _fullCoordinate + convertMMToSystemCoord(descriptor.StartM * 1000 + descriptor.StartmM);
                 }
             }
+                else
+                {// начинаем на начальном пикете файла
+                    if (_Header.StartMetre <= descriptor.StartM)
+                    {
+                        systemCoord = _fullCoordinate + convertMMToSystemCoord((descriptor.StartM - _Header.StartMetre) * 1000 + descriptor.StartmM);
+                    }
+                       else res = false;
+                }
             if (res)
             {
                unsigned int objSize = descriptor.LengthMM - descriptor.LngCutting - 2;
-               unsigned int systemCoord = _fullCoordinate + convertMMToSystemCoord((descriptor.StartM - _Header.StartMetre) * 1000 + descriptor.StartmM);
                res = extractScanObject(systemCoord, descriptor.Side, objSize, object);
                object.ObjectOrder = descriptor.Order;
                object.Size = objSize;
@@ -758,22 +767,12 @@ unsigned char ID[4];
         case EID_SysCrd_NF:
         { //Полная системная координата без ссылки
         unsigned int *pCoord;
-
-//            systemCoordinate = _coordinate;
-//            idOfCoord = file->pos() - 1;
             pCoord = reinterpret_cast<unsigned int*>(pParsedData);
             const QByteArray& data = _pFile->read(4);
             if ((pParsedData) && (Id == EID_SysCrd_NF))
             {
                 *pCoord = qFromLittleEndian<int>(reinterpret_cast<const unsigned char*>(data.data()));
             }
-/*
-        int difference = _coordinate - systemCoordinate;
-        if(std::abs(difference) > 1){
-            qDebug() << "invalid difference: " + QString::number(difference);
-            difference = 1;
-        }
-  */
             break;
         }
         case EID_Time:
@@ -813,12 +812,6 @@ unsigned char ID[4];
                 {
                     pSignal = (static_cast<tDaCo_BScanSignals*>(&currentSignal));
                 }
-/*
-            if ((_lastID == EID_SysCrd_NS) || (_lastID == EID_SysCrd_NF)
-                || (_lastID != EID_SysCrd_NS) && (_lastID != EID_SysCrd_NF)
-                && ( (static_cast<int>(pSignal->Side) != ((ID[0] & 0x40) >> 6) ||   // Сторона дефектоскопа
-                   (pSignal->Channel != ((ID[0] >> 2) & 0xF)))))  // Канал
-                   */
             {
                 pSignal->Side = static_cast<eDeviceSide>(convertToUMUSide((ID[0] & 0x40) >> 6));  // Сторона БУМ - eUMUSide
                 pSignal->Channel = (ID[0] >> 2) & 0xF;  // Канал
@@ -838,7 +831,7 @@ unsigned char ID[4];
                        _pFile->getChar(reinterpret_cast<char*>(&pSignal->Signals[1].Delay));
                        _pFile->getChar(reinterpret_cast<char*>(&byte));
                        pSignal->Signals[0].Ampl = byte >> 4;
-                       pSignal->Signals[1].Ampl = byte && 0xF;
+                       pSignal->Signals[1].Ampl = byte & 0xF;
                        break;
                     }
                     case 3:
@@ -848,7 +841,7 @@ unsigned char ID[4];
                        _pFile->getChar(reinterpret_cast<char*>(&pSignal->Signals[2].Delay));
                        _pFile->getChar(reinterpret_cast<char*>(&byte));
                        pSignal->Signals[0].Ampl = byte >> 4;
-                       pSignal->Signals[1].Ampl = byte && 0xF;
+                       pSignal->Signals[1].Ampl = byte & 0xF;
                        _pFile->getChar(reinterpret_cast<char*>(&byte));
                        pSignal->Signals[2].Ampl = byte >> 4;
                        break;
@@ -861,72 +854,20 @@ unsigned char ID[4];
                         _pFile->getChar(reinterpret_cast<char*>(&pSignal->Signals[3].Delay));
                         _pFile->getChar(reinterpret_cast<char*>(&byte));
                         pSignal->Signals[0].Ampl = byte >> 4;
-                        pSignal->Signals[1].Ampl = byte && 0xF;
+                        pSignal->Signals[1].Ampl = byte & 0xF;
                         _pFile->getChar(reinterpret_cast<char*>(&byte));
                         pSignal->Signals[2].Ampl = byte >> 4;
-                        pSignal->Signals[3].Ampl = byte && 0xF;
+                        pSignal->Signals[3].Ampl = byte & 0xF;
                         break;
                    }
-
                 }
             }
-/*
-                else
-                {// сигналы 4..8
-                    switch((ID[0] & 0x3) + 1)
-                    {
-                        case 1:
-                        {
-                             _pFile->getChar(reinterpret_cast<char*>(pSignal->Signals[4].Delay));
-                             _pFile->getChar(reinterpret_cast<char*>(&byte));
-                             pSignal->Signals[4].Ampl = byte >> 4;
-                             break;
-                        }
-                        case 2:
-                        {
-                            _pFile->getChar(reinterpret_cast<char*>(pSignal->Signals[4].Delay));
-                            _pFile->getChar(reinterpret_cast<char*>(pSignal->Signals[5].Delay));
-                            _pFile->getChar(reinterpret_cast<char*>(&byte));
-                            pSignal->Signals[4].Ampl = byte >> 4;
-                            pSignal->Signals[5].Ampl = byte && 0xF;
-                            break;
-                        }
-                        case 3:
-                        {
-                           _pFile->getChar(reinterpret_cast<char*>(pSignal->Signals[4].Delay));
-                           _pFile->getChar(reinterpret_cast<char*>(pSignal->Signals[5].Delay));
-                           _pFile->getChar(reinterpret_cast<char*>(pSignal->Signals[6].Delay));
-                           _pFile->getChar(reinterpret_cast<char*>(&byte));
-                           pSignal->Signals[4].Ampl = byte >> 4;
-                           pSignal->Signals[5].Ampl = byte && 0xF;
-                           _pFile->getChar(reinterpret_cast<char*>(&byte));
-                           pSignal->Signals[6].Ampl = byte >> 4;
-                           break;
-                        }
-                        default:
-                        {
-                            _pFile->getChar(reinterpret_cast<char*>(pSignal->Signals[4].Delay));
-                            _pFile->getChar(reinterpret_cast<char*>(pSignal->Signals[5].Delay));
-                            _pFile->getChar(reinterpret_cast<char*>(pSignal->Signals[6].Delay));
-                            _pFile->getChar(reinterpret_cast<char*>(pSignal->Signals[7].Delay));
-                            _pFile->getChar(reinterpret_cast<char*>(&byte));
-                            pSignal->Signals[4].Ampl = byte >> 4;
-                            pSignal->Signals[5].Ampl = byte && 0xF;
-                            _pFile->getChar(reinterpret_cast<char*>(&byte));
-                            pSignal->Signals[6].Ampl = byte >> 4;
-                            pSignal->Signals[7].Ampl = byte && 0xF;
-                            break;
-                       }
-                   }
-                    pSignal->Count += (ID[0] & 0x3) + 1;
-                }
-                */
         }
     Id = ID[0];
     _fileOffset = _pFile->pos();
-//    _lastID = Id;
     return res;
 }
+//
 long long Test::convertToMM(tMRFCrd coord)
 {
     return coord.mm + (coord.Pk + coord.Km * 10) * 100000;
