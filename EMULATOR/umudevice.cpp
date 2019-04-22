@@ -136,7 +136,6 @@ DWORD get_msrd(void)
 
 void putmsg(UCHAR *srcbuf, USHORT size, vfuncpv userproc)
 {
-tLAN_CDUMessage message;
     if (userproc) userproc((void*)srcbuf);
     AddToOutBuffSync(reinterpret_cast<tLAN_CDUMessage*>(srcbuf));
 }
@@ -145,10 +144,11 @@ void put_DataByWord(unsigned int address, USHORT size)
 {
     assert(UMUDEVICE::pldRPtr);
     assert(UMUDEVICE::pldLPtr);
-    while((size--) && (UMUDEVICE::_BScanMessageCounter < UMUDEVICE::_BScanMessage.Size))
+    while((size) && (UMUDEVICE::_BScanMessageCounter < UMUDEVICE::_BScanMessage.Size))
     {
         UMUDEVICE::_BScanMessage.Data[UMUDEVICE::_BScanMessageCounter++] = UMUDEVICE::pldRPtr->readRegister(address);
         UMUDEVICE::_BScanMessage.Data[UMUDEVICE::_BScanMessageCounter++] = UMUDEVICE::pldLPtr->readRegister(address);
+        size -= 2;
         address += 2;
     }
 }
