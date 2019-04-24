@@ -22,7 +22,7 @@
 #include "emulator.h"
 #include "config.h"
 
-//#define SKIP_CDU_CONNECTING
+#define SKIP_CDU_CONNECTING
 #define SKIP_PC_CONNECTING
 
 #ifdef SKIP_CDU_CONNECTING
