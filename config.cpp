@@ -210,15 +210,12 @@ void CONFIG::setPathToObjectsFiles(QString path)
 
 bool CONFIG::testPassword(QString& password)
 {
-    _permission = true;
-    return true;
-/*
 bool res;
     if (_qAttempts < 10) res = true;
         else res = false;
     if ((!_permission) && (_qAttempts < 10))
     {
-        if (password == "7688328")
+        if (1) // (password == "")
         {
             _permission = true;
         }
@@ -229,7 +226,6 @@ bool res;
             }
     }
     return res;
-*/
 }
 
 void CONFIG::setCDULocalPort(unsigned short port)
