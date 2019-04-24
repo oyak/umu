@@ -21,7 +21,7 @@ class EMULATOR: public QObject
     Q_OBJECT
 
 public:
-    EMULATOR(cCriticalSection *cs1, cCriticalSection *cs2, float pathStep);
+    EMULATOR(cCriticalSection *cs1, cCriticalSection *cs2, float pathStep, QString pathToObjectsFiles);
 // cs1, cs2 критические секции для объектов *pPathodel[]
     ~EMULATOR();
     unsigned char codeToAmpl(unsigned int code)

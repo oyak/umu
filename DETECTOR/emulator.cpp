@@ -4,7 +4,7 @@
 #include "ChannelsIds.h"
 
 
-EMULATOR::EMULATOR(cCriticalSection* cs1, cCriticalSection *cs2, float pathStep)
+EMULATOR::EMULATOR(cCriticalSection* cs1, cCriticalSection *cs2, float pathStep, QString pathToObjectsFiles)
 {
 tStrokeConfig config;
 
@@ -46,13 +46,13 @@ tStrokeConfig config;
         _ampl[ii] = (unsigned char) (pow(10.0, bell) * 32.0);
     }
 //
-    QString path = "files";
-    _pFileParser = new Test(path);
+//    QString pathToObjectsFiles = "files";
+    _pFileParser = new Test(pathToObjectsFiles);
 
     _pPathModel[0] = new PATHMODEL(cs1, pathStep);
     _pPathModel[1] = new PATHMODEL(cs2, pathStep);
 
-    _pStorage = new OBJECTSTOR(path);
+    _pStorage = new OBJECTSTOR(pathToObjectsFiles);
 // для отладки
 bool res;
 //    res = onMessageId(81, 950001, usLeft, Test::DirUpWard);

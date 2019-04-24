@@ -20,9 +20,10 @@
 #include "pldemu.h"
 #include "trolley.h"
 #include "emulator.h"
+#include "config.h"
 
 //#define SKIP_CDU_CONNECTING
-//#define SKIP_PC_CONNECTING
+#define SKIP_PC_CONNECTING
 
 #ifdef SKIP_CDU_CONNECTING
 #ifdef SKIP_PC_CONNECTING
@@ -239,7 +240,7 @@ public:
     static char remoteIpAddress[];
 
 
-    UMUDEVICE(cThreadClassList* ThreadClassList, void *parentClass /*cCriticalSection* CriticalSection*/);
+    UMUDEVICE(cThreadClassList* ThreadClassList, void *parentClass, CONFIG *pConfig);
     ~UMUDEVICE();
 
     bool _enablePLDInt;   // флаг "прерывания" от ПЛИС разрешены
@@ -257,6 +258,36 @@ public:
     unsigned int getNumberOfTacts();
 
     void printConnectionStatus();
+
+// работа с настройками
+    QString& getCDULocalIPAddress();
+    QString& getCDURemoteIPAddress();
+    bool setCDULocalIPAddress(QString& IPAddressPart3, QString& IPAddressPart2, QString& IPAddressPart1, QString& IPAddressPart0);
+    bool setCDURemoteIPAddress(QString& IPAddressPart3, QString& IPAddressPart2, QString& IPAddressPart1, QString& IPAddressPart0);
+    QString& getPCLocalIPAddress();
+    QString& getPCRemoteIPAddress();
+    bool setPCLocalIPAddress(QString& IPAddressPart3, QString& IPAddressPart2, QString& IPAddressPart1, QString& IPAddressPart0);
+    bool setPCRemoteIPAddress(QString& IPAddressPart3, QString& IPAddressPart2, QString& IPAddressPart1, QString& IPAddressPart0);
+
+    bool setCDULocalPort(QString port);
+    bool setCDURemotePort(QString port);
+    bool setPCLocalPort(QString port);
+    bool setPCRemotePort(QString port);
+
+    unsigned short getCDULocalPort();
+    unsigned short getCDURemotePort();
+    unsigned short getPCLocalPort();
+    unsigned short getPCRemotePort();
+
+    bool getRestorePCConnectionFlagState();
+    void setRestorePCConnectionFlag(bool state);
+
+    QString getPathToObjectsFiles();
+    void setPathToObjectsFiles(QString path);
+
+    bool testPassword(QString& password);
+    void save();
+//
 
 signals:
     void CDUconnected();
@@ -309,6 +340,7 @@ private:
     QTimer _pingTimer;
     cCriticalSection* _pPingTimerCS;
     bool _needToPing;
+    CONFIG *_pConfig;
 
     bool isEndWork();
 

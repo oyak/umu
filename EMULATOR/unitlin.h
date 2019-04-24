@@ -6,13 +6,14 @@
 #include "CriticalSection_Lin.h"
 #include "ThreadClassList_Lin.h"
 #include "umudevice.h"
+#include "config.h"
 
 class UNITLIN: public QObject
 {
     Q_OBJECT
 public:
 
-    UNITLIN();
+    UNITLIN(CONFIG *pConfig);
     ~UNITLIN();
     void start();
     void stop();
@@ -22,6 +23,37 @@ public:
 
     void criticalSectionEnter(cCriticalSection_Lin *cs);
     void criticalSectionRelease(cCriticalSection_Lin *cs);
+
+// работа с настройками
+    QString& getCDULocalIPAddress();
+    QString& getCDURemoteIPAddress();
+    bool setCDULocalIPAddress(QString IPAddressPart3, QString IPAddressPart2, QString IPAddressPart1, QString IPAddressPart0);
+    bool setCDURemoteIPAddress(QString IPAddressPart3, QString IPAddressPart2, QString IPAddressPart1, QString IPAddressPart0);
+    QString& getPCLocalIPAddress();
+    QString& getPCRemoteIPAddress();
+    bool setPCLocalIPAddress(QString IPAddressPart3, QString IPAddressPart2, QString IPAddressPart1, QString IPAddressPart0);
+    bool setPCRemoteIPAddress(QString IPAddressPart3, QString IPAddressPart2, QString IPAddressPart1, QString IPAddressPart0);
+
+    bool setCDULocalPort(QString port);
+    bool setCDURemotePort(QString port);
+    bool setPCLocalPort(QString port);
+    bool setPCRemotePort(QString port);
+
+    unsigned short getCDULocalPort();
+    unsigned short getCDURemotePort();
+    unsigned short getPCLocalPort();
+    unsigned short getPCRemotePort();
+
+    bool getRestorePCConnectionFlagState();
+    void setRestorePCConnectionFlag(bool state);
+
+    QString getPathToObjectsFiles();
+    void setPathToObjectsFiles(QString path);
+
+    bool testPassword(const QString& password);
+    void save();
+    void scatterIPAddress(QString& IPAddressPart3, QString& IPAddressPart2, QString& IPAddressPart1, QString& IPAddressPart0, QString sourceString);
+
 
 // для отладки
     void _onPathStep(int shift, unsigned int coordInSteps);

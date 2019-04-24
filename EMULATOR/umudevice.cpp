@@ -229,17 +229,17 @@ void get_Access(USHORT size)
 #endif
 }
 
-char CDULocalIpAddress[] = "127.0.0.1";
-char CDURemoteIpAddress[] = "127.0.0.1";
+//char CDULocalIpAddress[] = "127.0.0.1";
+//char CDURemoteIpAddress[] = "127.0.0.1";
 
 //char CDULocalIpAddress[] = "192.168.100.100";
 //char CDURemoteIpAddress[] = "192.168.100.1";
 
-char PCLocalIpAddress[] = "192.168.100.1";
-char PCRemoteIpAddress[] = "192.168.100.3";
+//char PCLocalIpAddress[] = "192.168.100.1";
+//char PCRemoteIpAddress[] = "192.168.100.3";
 
 // parentClass - указатель на объект либо UNITLIN, либо UNITWIN
-UMUDEVICE::UMUDEVICE(cThreadClassList* ThreadClassList, void *parentClass)
+UMUDEVICE::UMUDEVICE(cThreadClassList* ThreadClassList, void *parentClass, CONFIG *pConfig): _pConfig(pConfig)
 {
 cDataTransferLan::cLanConnectionParams connectionParams;
 cCriticalSection *pCS1;
@@ -261,7 +261,7 @@ cCriticalSection *pCS2;
      pCS1 = reinterpret_cast<UNITLIN*>(parentClass)->createCriticalSection();
      pCS2 = reinterpret_cast<UNITLIN*>(parentClass)->createCriticalSection();
 #endif
-    _pEmulator = new EMULATOR(pCS1, pCS2, TROLLEY::step);
+    _pEmulator = new EMULATOR(pCS1, pCS2, TROLLEY::step, _pConfig->getPathToObjectsFiles());
     _pEmulator->getChannelList(_channelList);
 //
       moveLargeBScanInit
@@ -310,22 +310,37 @@ cCriticalSection *pCS2;
 // БУИ-соединение
     _CDUConnected = false;
 
-    strncpy(connectionParams._local_ip, CDULocalIpAddress, cDataTransferLan::cLanConnectionParams::_ip_size);
-    strncpy(connectionParams._remote_ip, CDURemoteIpAddress, cDataTransferLan::cLanConnectionParams::_ip_size);
-    connectionParams._port_in = 43000;
-    connectionParams._port_out = 43001;
+//    strncpy(connectionParams._local_ip, CDULocalIpAddress, cDataTransferLan::cLanConnectionParams::_ip_size);
+//    strncpy(connectionParams._remote_ip, CDURemoteIpAddress, cDataTransferLan::cLanConnectionParams::_ip_size);
+    QByteArray IPAddress;
+    IPAddress = getCDULocalIPAddress().toLatin1();
+    strncpy(connectionParams._local_ip, IPAddress.data(), cDataTransferLan::cLanConnectionParams::_ip_size);
+
+    IPAddress = getCDURemoteIPAddress().toLatin1();
+    strncpy(connectionParams._remote_ip, IPAddress.data(), cDataTransferLan::cLanConnectionParams::_ip_size);
+
+    connectionParams._port_in = getCDULocalPort(); // 43000;
+    connectionParams._port_out = getCDURemotePort(); // 43001;
     connectionParams._socket_1_tcp = true;
     connectionParams._socket_2_tcp = false;
     connectionParams._socket_1_server = true;
     connectionParams._socket_1_transfer_direction = cSocketLan::DirectionToLocal;
 
     _CDUConnection_id = _dtLan->addConnection(reinterpret_cast<cDataTransferLan::cLanConnectionParams* const>(&connectionParams));
+//
 // ПК-соединение
     _PCConnected = false;
-    strncpy(connectionParams._local_ip, PCLocalIpAddress, cDataTransferLan::cLanConnectionParams::_ip_size);
-    strncpy(connectionParams._remote_ip, PCRemoteIpAddress, cDataTransferLan::cLanConnectionParams::_ip_size);
-    connectionParams._port_in =  50002;// 43000; // local
-    connectionParams._port_out = 50002; // 43000; // remoute
+
+//    strncpy(connectionParams._local_ip, PCLocalIpAddress, cDataTransferLan::cLanConnectionParams::_ip_size);
+//    strncpy(connectionParams._remote_ip, PCRemoteIpAddress, cDataTransferLan::cLanConnectionParams::_ip_size);
+
+    IPAddress = getPCLocalIPAddress().toLatin1();
+    strncpy(connectionParams._local_ip, IPAddress.data(), cDataTransferLan::cLanConnectionParams::_ip_size);
+    IPAddress = getPCRemoteIPAddress().toLatin1();
+    strncpy(connectionParams._remote_ip, IPAddress.data(), cDataTransferLan::cLanConnectionParams::_ip_size);
+
+    connectionParams._port_in =  getPCLocalPort(); //50002  local
+    connectionParams._port_out = getPCRemotePort();//  50002 remote
 
     connectionParams._socket_1_tcp = true;
     connectionParams._socket_2_tcp = true;
@@ -438,7 +453,7 @@ bool UMUDEVICE::engine(void)
 //
         case Working:
 #ifndef SKIP_PC_CONNECTING
-        if (_PCLinkFault)
+        if ((_pConfig->getRestorePCConnectionFlagState()) && (_PCLinkFault))
         {
             _dtLan->closeConnection(_PCConnection_id);
             setState(PCConnecting);
@@ -967,4 +982,114 @@ void UMUDEVICE::printConnectionStatus()
     {
         qDebug() << "CDU connection is present";
     }
+}
+//
+QString& UMUDEVICE::getCDULocalIPAddress()
+{
+    return _pConfig->getCDULocalIPAddress();
+}
+
+QString& UMUDEVICE::getCDURemoteIPAddress()
+{
+    return _pConfig->getCDURemoteIPAddress();
+}
+
+bool UMUDEVICE::setCDULocalIPAddress(QString& IPAddressPart3, QString& IPAddressPart2, QString& IPAddressPart1, QString& IPAddressPart0)
+{
+    return _pConfig->setCDULocalIPAddress(IPAddressPart3, IPAddressPart2, IPAddressPart1, IPAddressPart0);
+}
+
+bool UMUDEVICE::setCDURemoteIPAddress(QString& IPAddressPart3, QString& IPAddressPart2, QString& IPAddressPart1, QString& IPAddressPart0)
+{
+    return _pConfig->setCDURemoteIPAddress(IPAddressPart3, IPAddressPart2, IPAddressPart1, IPAddressPart0);
+}
+
+QString& UMUDEVICE::getPCLocalIPAddress()
+{
+    return _pConfig->getPCLocalIPAddress();
+}
+
+QString& UMUDEVICE::getPCRemoteIPAddress()
+{
+    return _pConfig->getPCRemoteIPAddress();
+}
+
+bool UMUDEVICE::setPCLocalIPAddress(QString& IPAddressPart3, QString& IPAddressPart2, QString& IPAddressPart1, QString& IPAddressPart0)
+{
+    return _pConfig->setPCLocalIPAddress(IPAddressPart3, IPAddressPart2, IPAddressPart1, IPAddressPart0);
+}
+
+bool UMUDEVICE::setPCRemoteIPAddress(QString& IPAddressPart3, QString& IPAddressPart2, QString& IPAddressPart1, QString& IPAddressPart0)
+{
+    return _pConfig->setPCRemoteIPAddress(IPAddressPart3, IPAddressPart2, IPAddressPart1, IPAddressPart0);
+}
+
+bool UMUDEVICE::setCDULocalPort(QString port)
+{
+    return _pConfig->setCDULocalPort(port);
+}
+
+bool UMUDEVICE::setCDURemotePort(QString port)
+{
+    return _pConfig->setCDURemotePort(port);
+}
+
+bool UMUDEVICE::setPCLocalPort(QString port)
+{
+    return _pConfig->setPCLocalPort(port);
+}
+
+bool UMUDEVICE::setPCRemotePort(QString port)
+{
+    return _pConfig->setPCRemotePort(port);
+}
+
+unsigned short UMUDEVICE::getCDULocalPort()
+{
+    return _pConfig->getCDULocalPort();
+}
+
+unsigned short UMUDEVICE::getCDURemotePort()
+{
+    return _pConfig->getCDURemotePort();
+}
+
+unsigned short UMUDEVICE::getPCLocalPort()
+{
+    return _pConfig->getPCLocalPort();
+}
+
+unsigned short UMUDEVICE::getPCRemotePort()
+{
+    return _pConfig->getPCRemotePort();
+}
+
+bool UMUDEVICE::getRestorePCConnectionFlagState()
+{
+    return _pConfig->getRestorePCConnectionFlagState();
+}
+
+void UMUDEVICE::setRestorePCConnectionFlag(bool state)
+{
+    _pConfig->setRestorePCConnectionFlag(state);
+}
+
+QString UMUDEVICE::getPathToObjectsFiles()
+{
+    return _pConfig->getPathToObjectsFiles();
+}
+
+void UMUDEVICE::setPathToObjectsFiles(QString path)
+{
+    _pConfig->setPathToObjectsFiles(path);
+}
+
+bool UMUDEVICE::testPassword(QString& password)
+{
+    return _pConfig->testPassword(password);
+}
+
+void UMUDEVICE::save()
+{
+    _pConfig->save();
 }

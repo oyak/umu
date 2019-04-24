@@ -41,11 +41,11 @@ SOURCES += main.cpp\
     defcoreM/LinThread.cpp \
     defcoreM/platforms.cpp \
     defcoreM/TickCount.cpp \
-    devlin.cpp \
     DETECTOR/objectstor.cpp \
     DETECTOR/sobfile.cpp \
     DETECTOR/sobfmaker.cpp \
-    DETECTOR/objectsarray.cpp
+    DETECTOR/objectsarray.cpp \
+    config.cpp
 
 
 
@@ -75,11 +75,11 @@ HEADERS  += mainwindow.h \
     defcoreM/LinThread.h \
     defcoreM/platforms.h \
     defcoreM/TickCount.h \
-    devlin.h \
     DETECTOR/objectstor.h \
     DETECTOR/sobfile.h \
     DETECTOR/sobfmaker.h \
-    DETECTOR/objectsarray.h
+    DETECTOR/objectsarray.h \
+    config.h
 
 
 INCLUDEPATH += UMU3204/MAIN \
