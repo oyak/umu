@@ -293,7 +293,7 @@ cCriticalSection *pCS2;
      pldLPtr = _pldl;
      pldRPtr = _pldr;
 
-     connect(_pTrolley, SIGNAL(pathStep(int, int)), this, SLOT(_onPathStep(int, int)));
+     connect(_pTrolley, SIGNAL(pathStep(int, int, int)), this, SLOT(_onPathStep(int, int, int)));
 
      _PLDIntTimer.setInterval(1);
      connect(&_PLDIntTimer, SIGNAL(timeout()), this, SLOT(_onPLDInt()));
@@ -764,7 +764,7 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
             if (buff.Size == sizeof(tNEXTTRACKCOORD))
             {
                 pMessage = reinterpret_cast<tNEXTTRACKCOORD*>(buff.Data);
-                _pTrolley->changeMovingParameters(pMessage->Speed, pMessage->Coord, pMessage->Time);
+                _pTrolley->changeMovingParameters(pMessage->Speed, pMessage->Coord, pMessage->LeftDebugCoord, pMessage->RightDebugCoord, pMessage->Time);
             }
             break;
         }
@@ -850,9 +850,9 @@ void UMUDEVICE::_onPLDInt()
 }
 
 // слот на сигнал о срабатывании ДП от trolley
-void UMUDEVICE::_onPathStep(int shift, int coordInMM)
+void UMUDEVICE::_onPathStep(int shift, int coordLInMM, int coordRInMM)
 {
-    whenTrolleyCoordChanged(coordInMM);
+    whenTrolleyCoordChanged(coordLInMM, coordRInMM);
     if (_movingDirection != Test::DirDownWard)
     {
         _pldl->setPathShft(shift);
@@ -863,33 +863,41 @@ void UMUDEVICE::_onPathStep(int shift, int coordInMM)
         }
 }
 
-void UMUDEVICE::whenTrolleyCoordChanged(int coordInMM)
+void UMUDEVICE::whenTrolleyCoordChanged(int coordLInMM, int coordRInMM)
 {
 SignalsData *pSignalsData;
  QList<CID>::iterator it;
  tSignalObject *pSignals;
  tStrokeConfig strokeAndLine;
  bool isDataObject; // данной координате соответствует объект, но нет сигналов
- unsigned int positiveCoord;
+ unsigned int positiveCoordL;
+ unsigned int positiveCoordR;
 
 // предполагается, что координата coordInMM соответствует центру искательной системы
 // получим координату ПЭП 0 гр.
 
     if (_movingDirection != Test::DirDownWard)
     {
-        coordInMM += N0EMS_SENSOR_SHIFT_mm;
+        coordLInMM += N0EMS_SENSOR_SHIFT_mm;
+        coordRInMM += N0EMS_SENSOR_SHIFT_mm;
     }
         else
         {
-            coordInMM -= N0EMS_SENSOR_SHIFT_mm;
+            coordLInMM -= N0EMS_SENSOR_SHIFT_mm;
+            coordRInMM -= N0EMS_SENSOR_SHIFT_mm;
         }
-    if (coordInMM >= 0)
+    if (coordLInMM >= 0)
     {
-        positiveCoord = (unsigned int)coordInMM;
+        positiveCoordL = (unsigned int)coordLInMM;
     }
-        else positiveCoord = 0;
-
-    pSignalsData = _pEmulator->getScanObject(usLeft, positiveCoord, isDataObject);
+        else positiveCoordL = 0;
+    if (coordRInMM >= 0)
+    {
+        positiveCoordR = (unsigned int)coordRInMM;
+    }
+        else positiveCoordR = 0;
+//
+    pSignalsData = _pEmulator->getScanObject(usLeft, positiveCoordL, isDataObject);
     if (pSignalsData)
     {
         for (it=_channelList.begin(); it != _channelList.end(); ++it)
@@ -927,7 +935,7 @@ SignalsData *pSignalsData;
                  }
              }
 //
-    pSignalsData = _pEmulator->getScanObject(usRight, positiveCoord, isDataObject);
+    pSignalsData = _pEmulator->getScanObject(usRight, positiveCoordR, isDataObject);
     if (pSignalsData)
     {
         for (it=_channelList.begin(); it != _channelList.end(); ++it)

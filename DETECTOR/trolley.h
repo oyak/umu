@@ -13,6 +13,8 @@ typedef struct
 {
     unsigned int Time;
     int StartCoord;
+    int StartCoordL;
+    int StartCoordR;
     double TargetSpeed;
 } tMovingTarget;
 
@@ -30,11 +32,11 @@ public:
     static const int _TimeLug; // максимально допустимая положительная разница между системным временем
 // ПК и здесь
 
-    void changeMovingParameters(float targetSpeed, int coord, unsigned int time);
+    void changeMovingParameters(float targetSpeed, int coord, int coordL, int coordR, unsigned int time);
     void setCoordinate(int coord);
 
 signals:
-    void pathStep(int shift, int coordinateInPathStep);
+    void pathStep(int shift, int coordinateLInMM, int coordinateRInMM);
 
 public slots:
     void proc1ms();
@@ -44,8 +46,18 @@ private:
     int _stepCoordinate;
     int _startStepCoordinate;
     double _coordinate;
+    double _memCoordinate;
+    double _coordinateL;
+    double _coordinateR;
+    double _rotationCoefficient; // рассчитываем в момент прихода данных от ПК (_targetRotationDegree - _rotationDegree) / (_targetCoordinate - _coordinate)
+//                               // _memCoordinate = _coordinate
+//  rotationDegree = (_coordinate - _memCoordinate) * _rotationCoefficient
+    double _rotationDegree; //  _coordinateL - _coordinateR
     double _lastCoordinate;
+
     double _targetCoordinate; // координата из сообщения NextTrackCoordinateId
+//
+    double _targetRotationDegree; //  _targetCoordinateL - _targetCoordinateR
 
     double _currentV; // текущая скорость, мм/мс
     double _targetV;
@@ -66,7 +78,7 @@ private:
 
     unsigned int getCurrentTime(bool withCorrection);
     bool isTagetTimeCorrect(unsigned int timeByMS);
-    void setCoordinate(double coord);
+    void setCoordinate(double coord, double coordL, double coordR);
 };
 
 

@@ -295,7 +295,7 @@ signals:
 
 public slots:
     void _onPLDInt(); // срабатывание таймера _PLDIntTimer
-    void _onPathStep(int shift, int coordInMM); // слот на сигнал о срабатывании ДП от trolley
+    void _onPathStep(int shift, int coordLInMM, int coordRInMM); // слот на сигнал о срабатывании ДП от trolley
     void _onPingTimer();
     void _onPCLinkFaultTimer(); // слот на срабатывание _PCLinkFaultTimer
     void _onRestartPCLinkFaultTimer(); // перезапускаем _PCLinkFaultTimer, чтобы не сработал
@@ -377,9 +377,8 @@ protected:
     void AddToOutBuffNoSync(tLAN_PCMessage* _out_block);
     void sendPingToPC();
 
-    void whenTrolleyCoordChanged(int coordInMM);
+    void whenTrolleyCoordChanged(int coordLInMM, int coordRInMM);
 
-//    void sendResponseWithData(const unsigned char id, const unsigned char* data, const unsigned short size);
 };
 
 #endif

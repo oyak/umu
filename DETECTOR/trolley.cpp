@@ -34,9 +34,9 @@ TROLLEY::~TROLLEY()
 
 }
 
-// coord, time  задают требование оказаться в координате в заданный момент времени
+// coord, coordL, coordR, time  задают требование оказаться в координате в заданный момент времени
 //
-void TROLLEY::changeMovingParameters(float targetSpeed, int coord, unsigned int time)
+void TROLLEY::changeMovingParameters(float targetSpeed, int coord, int coordL, int coordR, unsigned int time)
 {
 tMovingTarget target;
     _cs->Enter();
@@ -45,17 +45,19 @@ tMovingTarget target;
 
     target.Time = time;
     target.StartCoord = coord;
+    target.StartCoordL = coordL;
+    target.StartCoordR = coordR;
     target.TargetSpeed = (double)targetSpeed / 1000.0; // мм/с -> мм/мс
     _targets.push_back(target);
     _cs->Release();
 }
 
-void TROLLEY::setCoordinate(double coord)
+void TROLLEY::setCoordinate(double coord, double coordL, double coordR)
 {
     _lastCoordinate = _coordinate = _targetCoordinate = coord;
+    _memCoordinate = _coordinate;
     _startStepCoordinate = _coordinate / step;
     _stepCoordinate = _startStepCoordinate;
-
 }
 void TROLLEY::setCoordinate(int coord)
 {
@@ -76,7 +78,8 @@ int c = _coordinate / step;
     if (c != _stepCoordinate)
     {
     QTime curT;
-        emit pathStep(c - _stepCoordinate, (int)_coordinate);
+    double shift = _rotationDegree * 0.5;
+        emit pathStep(c - _stepCoordinate, (int)(_coordinate + shift), (int)(_coordinate - shift));
 
         curT = QTime::currentTime();
 //        qDebug() << "msec = " << curT.msec() << "step = " << c - _stepCoordinate << " path = " << _coordinate << "mm";
@@ -166,6 +169,9 @@ if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
             }
             _lastCoordDiscrepancy = coordDiscrepancy;
         }
+       _targetRotationDegree = _targets.front().StartCoordL - _targets.front().StartCoordR;
+       _rotationCoefficient = (_targetRotationDegree - _rotationDegree) / (_targetCoordinate - _coordinate);
+       _memCoordinate = _coordinate;
    } //
     _targets.pop_front();
 }
@@ -185,7 +191,9 @@ if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
             }
     }
         else _coordinate += _currentV; // за интервал 1 мС
-
+//
+    _rotationDegree = _rotationCoefficient * (_coordinate - _memCoordinate);
+//
     if (_coordinate != _lastCoordinate)
     {
 //        qDebug() << "Coordinate = " << _coordinate;

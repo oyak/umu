@@ -187,9 +187,9 @@ QStringList list;
 }
 
 // для отладки
-void UNITLIN::_onPathStep(int shift, unsigned int coordInSteps)
+void UNITLIN::_onPathStep(int shift, unsigned int coordInMM)
 {
-    _pDevice->_onPathStep(shift, coordInSteps);
+    _pDevice->_onPathStep(shift, coordInMM, coordInMM);
 }
 
 void UNITLIN::printConnectionStatus()
