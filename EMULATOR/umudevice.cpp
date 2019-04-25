@@ -455,6 +455,7 @@ bool UMUDEVICE::engine(void)
 #ifndef SKIP_PC_CONNECTING
         if ((_pConfig->getRestorePCConnectionFlagState()) && (_PCLinkFault))
         {
+            _pTrolley->stopTrolley();
             _dtLan->closeConnection(_PCConnection_id);
             setState(PCConnecting);
         }
@@ -775,7 +776,7 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
             if (buff.Size == sizeof(tJUMPTRACKCOORD))
             {
                pMessage = reinterpret_cast<tJUMPTRACKCOORD*>(buff.Data);
-              _pTrolley->setCoordinate(pMessage->Coord);
+              _pTrolley->setCoordinate(pMessage->Coord, pMessage->LeftDebugCoord, pMessage->RightDebugCoord);
               qDebug() << "JumpTrackCoordinateId";
             }
             break;

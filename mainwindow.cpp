@@ -58,6 +58,7 @@ QString s4;
     ui->lineEdit_27->setEnabled(false);
 //
     ui->pushButton_2->setEnabled(false);
+    ui->checkBox->setEnabled(false);
     ui->lineEdit->setEnabled(true);
 
     pDevice->start();
@@ -105,6 +106,7 @@ void MainWindow::on_lineEdit_textChanged(const QString &arg1)
     ui->lineEdit_27->setEnabled(true);
 //
     ui->pushButton_2->setEnabled(true);
+    ui->checkBox->setEnabled(true);
 //
 }
 

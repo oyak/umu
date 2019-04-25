@@ -8,19 +8,20 @@
 const float TROLLEY::step = 1.83;
 const unsigned int TROLLEY::_timerPeriod = 1;
 const double TROLLEY::_absDiscrepancyMaxOfCoord = 2.0; // максимальная невязка координаты
-const int TROLLEY::_TimeLug = 10;
+const int TROLLEY::_TimeLag = 10;
 
 
 TROLLEY::TROLLEY(cCriticalSection *cs): _timeCorrection(0),
                     _currentV(0.0)
 {
+    _cs = cs;
+    _rotationDegree = 0.0;
 //    setCoordinate(950000.0);
-     setCoordinate(0.0);
+     setCoordinate(0.0, 0.0, 0.0);
 
     _lastCoordDiscrepancy = 0.0;
     _currentVCorrection = 0.0;
     _targetV = 0.0;
-    _cs = cs;
     _trolleyTimer1ms.setInterval(1);
     _trolleyTimer1ms.start();
     connect(&_trolleyTimer1ms, SIGNAL(timeout()), this, SLOT(proc1ms()));
@@ -55,16 +56,22 @@ tMovingTarget target;
 void TROLLEY::setCoordinate(double coord, double coordL, double coordR)
 {
     _lastCoordinate = _coordinate = _targetCoordinate = coord;
-    _memCoordinate = _coordinate;
     _startStepCoordinate = _coordinate / step;
     _stepCoordinate = _startStepCoordinate;
+    setTrolleyTargetRotation(coordL, coordR);
 }
-void TROLLEY::setCoordinate(int coord)
+void TROLLEY::setCoordinate(int coord, int coordL, int coordR)
 {
     _cs->Enter();
-    setCoordinate((double)coord);
+    setCoordinate((double)coord, (double)coordL, (double)coordR);
     _cs->Release();
 }
+void TROLLEY::stopTrolley()
+{
+    _targetV = 0.0;
+    stopMoving();
+}
+
 void TROLLEY::stopMoving()
 {
     _currentV = 0;
@@ -85,13 +92,27 @@ int c = _coordinate / step;
 //        qDebug() << "msec = " << curT.msec() << "step = " << c - _stepCoordinate << " path = " << _coordinate << "mm";
 
         _stepCoordinate = c;
-
     }
 }
 
 float TROLLEY::getDisplacement(float v0, float a, unsigned int time)
 {
     return (v0 + a * time) * time;
+}
+
+void TROLLEY::setTrolleyTargetRotation(double targetCoordL, double targetCoordR)
+{
+    _targetRotationDegree = targetCoordL - targetCoordR;
+
+    if (_targetRotationDegree != 0.0)
+    {
+        _targetRotationDegree += 0.1;
+        _targetRotationDegree -= 0.1;
+    }
+
+    if (_targetCoordinate != _coordinate) _rotationCoefficient = (_targetRotationDegree - _rotationDegree) / (_targetCoordinate - _coordinate);
+        else _rotationCoefficient = 0.0;
+    _memCoordinate = _coordinate;
 }
 
 void TROLLEY::proc1ms()
@@ -169,9 +190,8 @@ if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
             }
             _lastCoordDiscrepancy = coordDiscrepancy;
         }
-       _targetRotationDegree = _targets.front().StartCoordL - _targets.front().StartCoordR;
-       _rotationCoefficient = (_targetRotationDegree - _rotationDegree) / (_targetCoordinate - _coordinate);
-       _memCoordinate = _coordinate;
+
+        setTrolleyTargetRotation((double)_targets.front().StartCoordL, (double)_targets.front().StartCoordR);
    } //
     _targets.pop_front();
 }
@@ -222,7 +242,7 @@ unsigned int correctedTime = getCurrentTime(true);
 int deltaT = timeByMS - correctedTime;
 bool res = true;
 
-    if ((deltaT < 0) || (deltaT > _TimeLug))
+    if ((deltaT < 0) || (deltaT > _TimeLag))
     {
         correctedTime = getCurrentTime(false);
         deltaT = timeByMS - correctedTime;
@@ -233,13 +253,13 @@ bool res = true;
             targetT.fromMSecsSinceStartOfDay(timeByMS);
             if (targetT.hour() != 0)
             {
-                _timeCorrection =  deltaT - _TimeLug; // чтобы сделать момент времени timeByMS будущим и отстоящим на 10 мС
+                _timeCorrection =  deltaT - _TimeLag; // чтобы сделать момент времени timeByMS будущим и отстоящим на 10 мС
 //                qDebug() << "TROLLEY::isTagetTimeCorrect: изменена поправка времени до "<< _timeCorrection << "мС";
             }
         }
-            else if (deltaT > _TimeLug)
+            else if (deltaT > _TimeLag)
                  {
-                     _timeCorrection = deltaT - _TimeLug;
+                     _timeCorrection = deltaT - _TimeLag;
 //                     qDebug() << "TROLLEY::isTagetTimeCorrect: изменена поправка времени до "<< _timeCorrection << "мС";
                  }
     }

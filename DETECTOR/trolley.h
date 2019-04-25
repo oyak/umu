@@ -29,11 +29,12 @@ public:
     static const float step;
     static const unsigned int _timerPeriod;
     static const double _absDiscrepancyMaxOfCoord; // максимальное значение нев€зки по координате в мм
-    static const int _TimeLug; // максимально допустима€ положительна€ разница между системным временем
+    static const int _TimeLag; // максимально допустима€ положительна€ разница между системным временем
 // ѕ  и здесь
 
     void changeMovingParameters(float targetSpeed, int coord, int coordL, int coordR, unsigned int time);
-    void setCoordinate(int coord);
+    void setCoordinate(int coord, int coordL, int coordR);
+    void stopTrolley();
 
 signals:
     void pathStep(int shift, int coordinateLInMM, int coordinateRInMM);
@@ -47,8 +48,6 @@ private:
     int _startStepCoordinate;
     double _coordinate;
     double _memCoordinate;
-    double _coordinateL;
-    double _coordinateR;
     double _rotationCoefficient; // рассчитываем в момент прихода данных от ѕ  (_targetRotationDegree - _rotationDegree) / (_targetCoordinate - _coordinate)
 //                               // _memCoordinate = _coordinate
 //  rotationDegree = (_coordinate - _memCoordinate) * _rotationCoefficient
@@ -79,6 +78,7 @@ private:
     unsigned int getCurrentTime(bool withCorrection);
     bool isTagetTimeCorrect(unsigned int timeByMS);
     void setCoordinate(double coord, double coordL, double coordR);
+    void setTrolleyTargetRotation(double targetCoordL, double targetCoordR);
 };
 
 
