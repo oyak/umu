@@ -2558,7 +2558,7 @@ void setRelayCtrlSignals(unsigned char command )
         case setKCmd:
         case resetKCmd:
            Wr_RegPLD(a0x1307, command);
-           vTaskDelay(cRelayCtrlSignalDur);
+           vTaskDelay(TimeToTick(cRelayCtrlSignalDur));
            Wr_RegPLD(a0x1307, KSignalsOff);
             break;
         default: 
