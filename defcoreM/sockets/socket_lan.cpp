@@ -67,8 +67,7 @@ int remoute_port_num;
     else {
         target.sin_addr.s_addr = htonl(INADDR_ANY);
     }
-
-    if (params->_transferDirection != cSocketLan::DirectionToRemoute)
+    if (params->_transferDirection == cSocketLan::DirectionToLocal)
     {
         if (bind(*pSocket, reinterpret_cast<sockaddr*>(&target), sizeof(target)) < 0) {
             disconnect();
