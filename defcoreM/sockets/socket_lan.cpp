@@ -18,27 +18,25 @@ int cSocketLanTcp::getDataCountInTcpBuffer()
 // +
 bool cSocketLanTcp::connect(const cConnectionParams* socket_params)
 {
-int *pSocket;
-const cSocketLanParams* params = static_cast<const cSocketLanParams*>(socket_params);
+    int* pSocket;
+    const cSocketLanParams* params = static_cast<const cSocketLanParams*>(socket_params);
 
     if (!cISocket::connect(socket_params)) {
         return false;
     }
-    if (params->_server)
-    {
+    if (params->_server) {
         pSocket = &_serverSocket;
     }
-        else
-        {
-            pSocket = &_socket;
-        }
-int local_port_num;
+    else {
+        pSocket = &_socket;
+    }
+    int local_port_num;
     local_port_num = params->_local_port_num;
     char* local_ip_address = 0;
     if (params->_local_ip_address[0] != '\0') {
         local_ip_address = params->_local_ip_address;
     }
-int remoute_port_num;
+    int remoute_port_num;
     remoute_port_num = params->_remoute_port_num;
     char* remoute_ip_address = params->_remoute_ip_address;
 
@@ -68,8 +66,7 @@ int remoute_port_num;
         target.sin_addr.s_addr = htonl(INADDR_ANY);
     }
 
-    if (params->_transferDirection != cSocketLan::DirectionToRemoute)
-    {
+    if (params->_transferDirection != cSocketLan::DirectionToRemoute) {
         if (bind(*pSocket, reinterpret_cast<sockaddr*>(&target), sizeof(target)) < 0) {
             disconnect();
             return false;
@@ -77,10 +74,8 @@ int remoute_port_num;
     }
     target.sin_addr.s_addr = inet_addr(remoute_ip_address);
 
-   if (!params->_server)
-    {
-
-       target.sin_port = htons(remoute_port_num);
+    if (!params->_server) {
+        target.sin_port = htons(remoute_port_num);
 
 
         int resl = ::connect(_socket, reinterpret_cast<sockaddr*>(&target), sizeof(target));
@@ -89,21 +84,19 @@ int remoute_port_num;
             return false;
         }
     }
-        else
-        {
-            unsigned int socketLen = sizeof(target);
-            int resl = listen(_serverSocket, SOMAXCONN);
-            if (resl < 0) {
-                disconnect();
-                return false;
-            }
-            _socket = accept(_serverSocket, reinterpret_cast<sockaddr*>(&target), &socketLen);
-            if (_socket < 0)
-            {
-                disconnect();
-                return false;
-            }
+    else {
+        unsigned int socketLen = sizeof(target);
+        int resl = listen(_serverSocket, SOMAXCONN);
+        if (resl < 0) {
+            disconnect();
+            return false;
         }
+        _socket = accept(_serverSocket, reinterpret_cast<sockaddr*>(&target), reinterpret_cast<socklen_t*>(&socketLen));
+        if (_socket < 0) {
+            disconnect();
+            return false;
+        }
+    }
     return true;
 }
 //
@@ -229,9 +222,8 @@ bool cSocketLanUdp::connect(const cConnectionParams* socket_params)
         return false;
     }
 
-    if (params->_transferDirection != cSocketLan::DirectionToRemoute)
-    {
-    int result = bind(_socket, reinterpret_cast<sockaddr*>(&target), sizeof(target));
+    if (params->_transferDirection != cSocketLan::DirectionToRemoute) {
+        int result = bind(_socket, reinterpret_cast<sockaddr*>(&target), sizeof(target));
         if (result < 0) {
             disconnect();
             return false;
@@ -241,11 +233,8 @@ bool cSocketLanUdp::connect(const cConnectionParams* socket_params)
     target.sin_port = htons(remoute_port_num);
     target.sin_addr.s_addr = inet_addr(remoute_ip_address);
 
-    if (params->_transferDirection == cSocketLan::DirectionToRemoute)
-    {
-        if (::connect(_socket, reinterpret_cast<sockaddr*>(&target), sizeof(target))
-            < 0)
-        {
+    if (params->_transferDirection == cSocketLan::DirectionToRemoute) {
+        if (::connect(_socket, reinterpret_cast<sockaddr*>(&target), sizeof(target)) < 0) {
             disconnect();
             return false;
         }
@@ -255,19 +244,19 @@ bool cSocketLanUdp::connect(const cConnectionParams* socket_params)
 // +
 bool cSocketLanUdp::sendData(const unsigned char* msg, const int length)
 {
-//    (void) msg;
-//    (void) length;
+    //    (void) msg;
+    //    (void) length;
 
 #ifdef DEFCORE_OS_WIN
     assert(false);
     return false;
 #else
-//    sockaddr_in target;
-//    memset(&target, 0, sizeof(sockaddr_in));
-//    target.sin_port = htons(
-//    int i =  cSocketLan::cSocketLanParams._remoute_port_num
+    //    sockaddr_in target;
+    //    memset(&target, 0, sizeof(sockaddr_in));
+    //    target.sin_port = htons(
+    //    int i =  cSocketLan::cSocketLanParams._remoute_port_num
 
-//    target.sin_addr.s_addr = inet_addr(cSocketLanParams._remoute_ip_address);
+    //    target.sin_addr.s_addr = inet_addr(cSocketLanParams._remoute_ip_address);
 
     int errorCode = 0;
     socklen_t len = sizeof(errorCode);
