@@ -15,7 +15,7 @@ public:
     ~SOBFMAKER();
 
     bool createFile(unsigned int objectId);
-    tSCANOBJECT_EX *restoreObjectFromFile(unsigned int objectId);
+    tSCANOBJECT_EX *restoreObjectFromFile(unsigned int objectId, Test::eMovingDir movingDirection);
     void createSOBFiles(bool restoreAbsentFileOnly);
     bool testDetectorFilesPresence();
 

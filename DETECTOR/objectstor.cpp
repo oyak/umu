@@ -21,11 +21,11 @@ QMap<QString, tSCANOBJECT_EX*>::iterator it;
 }
 
 // возвращает: objectOrder - порядок объекта, len - длина в мм
-SCANOBJECT *OBJECTSTOR::extractObject(eOBJECT_ORDER& objectOrder, unsigned int& len, unsigned int objectId)
+SCANOBJECT *OBJECTSTOR::extractObject(eOBJECT_ORDER& objectOrder, unsigned int& len, unsigned int objectId, Test::eMovingDir movingDirection)
 {
 SCANOBJECT *res = nullptr;
 QString key;
-    constructKey(key, objectId);
+    constructKey(key, objectId, movingDirection);
     if (_storage.contains(key))
     {
         res = _storage[key]->pScanObject;
@@ -83,8 +83,10 @@ bool OBJECTSTOR::addObject(unsigned int id, eOBJECT_ORDER objectOrder, SCANOBJEC
 
 }
 
-void OBJECTSTOR::constructKey(QString& key, unsigned int objectId)
+void OBJECTSTOR::constructKey(QString& key, unsigned int objectId, Test::eMovingDir movingDirection)
 {
+    assert(movingDirection != Test::DirNotDefined);
     key.setNum(objectId);
-    key += "d";
+    if (movingDirection == Test::DirUpWard) key += "d";
+        else key += "r";
 }
