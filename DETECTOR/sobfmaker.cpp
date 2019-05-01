@@ -173,6 +173,8 @@ CID channel;
                 delete pObject;
             }
     }
+    _pFile->close();
+    delete _pFile;
     return pObjectEx;
 }
 //
@@ -183,6 +185,7 @@ QVector<unsigned int>::iterator it;
 OBJECTLIB lib;
     lib.getAllIds(idsOfObjects);
 //
+/*
     if (restoreAbsentFileOnly)
     {
         for(it = idsOfObjects.begin(); it != idsOfObjects.end(); )
@@ -198,6 +201,7 @@ OBJECTLIB lib;
                 else ++it;
         }
     }
+*/
 //
     _cancellFlag = false;
     if (!idsOfObjects.empty())
@@ -207,7 +211,11 @@ OBJECTLIB lib;
             QString nStr;
             nStr.setNum(*it);
             emit resultMessage("Creating " + nStr + " object");
-            if (createFile(*it)) emit resultMessage("OK");
+            if (createFile(*it, Test::DirUpWard)) emit resultMessage("OK");
+                else emit resultMessage("failed");
+            if (_cancellFlag) break;
+//
+            if (createFile(*it, Test::DirDownWard)) emit resultMessage("OK");
                 else emit resultMessage("failed");
             if (_cancellFlag) break;
         }

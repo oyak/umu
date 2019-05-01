@@ -35,7 +35,7 @@ Test::~Test()
     closeFile();
 }
 
-bool Test::extractObject(OBJECTLIB& lib, unsigned int objectId, tSCANOBJECT_EX& object)
+bool Test::extractObject(OBJECTLIB& lib, unsigned int objectId, tSCANOBJECT_EX& object, eMovingDir movingDirection)
 {
 tObjectSourceDescr descriptor;
 bool res;
@@ -94,7 +94,7 @@ sCoordPostMRF post;
             if (res)
             {
                unsigned int objSize = descriptor.LengthMM - descriptor.LngCutting - 2;
-               res = extractScanObject(systemCoord, descriptor.Side, objSize, object);
+               res = extractScanObject(systemCoord, descriptor.Side, objSize, object, movingDirection);
                object.ObjectOrder = descriptor.Order;
                object.Size = objSize;
             }
@@ -212,7 +212,7 @@ bool res;
 // startCoord - начальная системная координата объекта
 // side - сторона, к которой он относится
 // len - длина объекта в мм
-bool Test::extractScanObject(unsigned int startCoord, eUMUSide side, unsigned int len, tSCANOBJECT_EX& object)
+bool Test::extractScanObject(unsigned int startCoord, eUMUSide side, unsigned int len, tSCANOBJECT_EX& object, eMovingDir movingDirectiosn)
 {
 SignalsData signalsData;
 bool res;
@@ -222,7 +222,7 @@ unsigned int offset = 0;
     object.pScanObject->setPathStep(_Header.ScanStep);
     do
     {
-        res = extractSignalsByCoord(startCoord + offset, side, signalsData);
+        res = extractSignalsByCoord(startCoord + offset, side, signalsData, movingDirectiosn);
         if (res)
         {
             object.pScanObject->add(&signalsData);
@@ -239,9 +239,7 @@ unsigned int offset = 0;
 
 CID Test::convertToCID(CID chIdx, eMovingDir movingDirection)
 {
-//    if (movingDirection != DirDownWard)
-        return chIdx;
-/*
+    if (movingDirection != DirDownWard) return chIdx;
         else
         {
             switch(chIdx)
@@ -268,14 +266,13 @@ CID Test::convertToCID(CID chIdx, eMovingDir movingDirection)
                 default: assert(0);
             }
         }
-*/
 }
 
 // извлекает сигналы, относящиеся к заданной системной координате,
 // для заданной стороны
 // возвращает true, если координата найдена
 // если заданная координата coord меньше текущей в файле, поиск прекращается
-bool Test::extractSignalsByCoord(unsigned int coord, eUMUSide side, SignalsData& signalsData)
+bool Test::extractSignalsByCoord(unsigned int coord, eUMUSide side, SignalsData& signalsData, eMovingDir movingDirection)
 {
 unsigned int currentCoord = 0;
 bool fShort;
@@ -323,10 +320,8 @@ tDaCo_BScanSignals BSSignals; // здесь номер канала в терминах индекса канала в 
                 }
                    else
                    {
-                       signalsData.addSignals(_Header.ChIdxtoCID[BSSignals.Channel], BSSignals.Count, &BSSignals.Signals);
+                       signalsData.addSignals(convertToCID(_Header.ChIdxtoCID[BSSignals.Channel], movingDirection), BSSignals.Count, &BSSignals.Signals);
                    }
-//                break;
-
             }
                 else
                 {

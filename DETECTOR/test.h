@@ -28,15 +28,15 @@ public:
     };
 
     ~Test();
-    bool extractObject(OBJECTLIB& lib, unsigned int objectId, tSCANOBJECT_EX& object);
-    bool extractSignalsByCoord(unsigned int coord, eUMUSide side, SignalsData& signalData);
+    bool extractObject(OBJECTLIB& lib, unsigned int objectId, tSCANOBJECT_EX& object, eMovingDir movingDirection);
+    bool extractSignalsByCoord(unsigned int coord, eUMUSide side, SignalsData& signalData, eMovingDir movingDirection);
     bool readHeader();
     bool readHeader(bool toResetFilePos, sFileHeader_v5 *pHeader);
 //    bool readEventID(unsigned char& Id, void *pParsedData);
     bool findAndParseStolbID(sCoordPostMRF coord, int *systemCoordPtr, int movingDir);
     bool readNextCoord(unsigned int &coord, bool& fShort);
     bool readNextStolb(sCoordPostMRF *postCoordPtr, int *systemCoordPtr);
-    bool extractScanObject(unsigned int startCoord, eUMUSide side, unsigned int len, tSCANOBJECT_EX& object);
+    bool extractScanObject(unsigned int startCoord, eUMUSide side, unsigned int len, tSCANOBJECT_EX& object, eMovingDir movingDirection);
 
     unsigned int convertToSystemCoord(tMRFCrd &coord);
     unsigned int convertMMToSystemCoord(unsigned int mm);

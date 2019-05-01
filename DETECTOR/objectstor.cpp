@@ -48,11 +48,17 @@ tSCANOBJECT_EX* pObjectEx;
     QVector<unsigned int>::iterator it;
         for(it = objectIdsArray.begin(); it != objectIdsArray.end(); ++it)
         {
-            pObjectEx = maker.restoreObjectFromFile(*it);
+            QString key;
+            pObjectEx = maker.restoreObjectFromFile(*it, Test::DirUpWard);
             if(pObjectEx)
             {
-             QString key;
-                constructKey(key, *it);
+                constructKey(key, *it, Test::DirUpWard);
+                _storage.insert(key, pObjectEx);
+            }
+            pObjectEx = maker.restoreObjectFromFile(*it, Test::DirDownWard);
+            if(pObjectEx)
+            {
+                constructKey(key, *it, Test::DirDownWard);
                 _storage.insert(key, pObjectEx);
             }
         }

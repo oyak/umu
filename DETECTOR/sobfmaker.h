@@ -14,7 +14,7 @@ public:
     SOBFMAKER(QString filePath);
     ~SOBFMAKER();
 
-    bool createFile(unsigned int objectId);
+    bool createFile(unsigned int objectId, Test::eMovingDir movingDirection);
     tSCANOBJECT_EX *restoreObjectFromFile(unsigned int objectId, Test::eMovingDir movingDirection);
     void createSOBFiles(bool restoreAbsentFileOnly);
     bool testDetectorFilesPresence();
