@@ -231,56 +231,64 @@ bool MainWindow::testCDULocalPort()
 
 bool MainWindow::testCDURemotePort()
 {
-    return pDevice->setCDULocalPort(ui->lineEdit_19->text());
+    return pDevice->setCDURemotePort(ui->lineEdit_19->text());
 }
 
 bool MainWindow::testPCLocalPort()
 {
-    return pDevice->setCDULocalPort(ui->lineEdit_24->text());
+    return pDevice->setPCLocalPort(ui->lineEdit_24->text());
 }
 
 bool MainWindow::testPCRemotePort()
 {
-    return pDevice->setCDULocalPort(ui->lineEdit_25->text());
+    return pDevice->setPCRemotePort(ui->lineEdit_25->text());
 }
 
 void MainWindow::on_lineEdit_2_textChanged(const QString& arg1)
 {
+    (void) arg1;
     if (!testCDULocalIPAddress()) drawCDULocalIPAddress();
 }
 
 void MainWindow::on_lineEdit_3_textChanged(const QString& arg1)
 {
+    (void) arg1;
     if (!testCDULocalIPAddress()) drawCDULocalIPAddress();
 }
 
 void MainWindow::on_lineEdit_4_textChanged(const QString& arg1)
 {
+    (void) arg1;
     if (!testCDULocalIPAddress()) drawCDULocalIPAddress();
 }
 
 void MainWindow::on_lineEdit_5_cursorPositionChanged(int arg1, int arg2)
 {
+    (void) arg1;
     if (!testCDULocalIPAddress()) drawCDULocalIPAddress();
 }
 
 void MainWindow::on_lineEdit_18_textChanged(const QString& arg1)
 {
+    (void) arg1;
     if (!testCDULocalPort()) drawCDULocalPort();
 }
 
 void MainWindow::on_lineEdit_19_textChanged(const QString& arg1)
 {
+    (void) arg1;
     if (!testCDURemotePort()) drawCDURemotePort();
 }
 
 void MainWindow::on_lineEdit_24_textChanged(const QString& arg1)
 {
+    (void) arg1;
     if (!testPCLocalPort()) drawPCLocalPort();
 }
 
 void MainWindow::on_lineEdit_25_textChanged(const QString& arg1)
 {
+    (void) arg1;
     if (!testPCRemotePort()) drawPCRemotePort();
 }
 
@@ -304,4 +312,79 @@ void MainWindow::on_checkBox_stateChanged(int arg1)
         pDevice->setRestorePCConnectionFlag(false);
 }
 
+
+void MainWindow::on_lineEdit_10_textChanged(const QString &arg1)
+{
+    (void) arg1;
+    if (!testCDURemoteIPAddress()) drawCDURemoteIPAddress();
+}
+
+
 void MainWindow::on_pushButton_released() {}
+
+void MainWindow::on_lineEdit_11_textChanged(const QString &arg1)
+{
+    (void) arg1;
+    if (!testCDURemoteIPAddress()) drawCDURemoteIPAddress();
+}
+
+
+void MainWindow::on_lineEdit_12_textChanged(const QString &arg1)
+{
+    (void) arg1;
+    if (!testCDURemoteIPAddress()) drawCDURemoteIPAddress();
+}
+
+void MainWindow::on_lineEdit_13_textChanged(const QString &arg1)
+{
+    (void) arg1;
+    if (!testCDURemoteIPAddress()) drawCDURemoteIPAddress();
+}
+
+void MainWindow::on_lineEdit_14_textChanged(const QString &arg1)
+{
+    (void) arg1;
+    if (!testPCLocalIPAddress()) drawPCLocalIPAddress();
+}
+
+void MainWindow::on_lineEdit_15_textChanged(const QString &arg1)
+{
+    (void) arg1;
+    if (!testPCLocalIPAddress()) drawPCLocalIPAddress();
+}
+
+void MainWindow::on_lineEdit_16_textChanged(const QString &arg1)
+{
+    (void) arg1;
+    if (!testPCLocalIPAddress()) drawPCLocalIPAddress();
+}
+
+void MainWindow::on_lineEdit_17_textChanged(const QString &arg1)
+{
+    (void) arg1;
+    if (!testPCLocalIPAddress()) drawPCLocalIPAddress();
+}
+
+void MainWindow::on_lineEdit_6_textChanged(const QString &arg1)
+{
+    (void) arg1;
+    if (!testPCRemoteIPAddress()) drawPCRemoteIPAddress();
+}
+
+void MainWindow::on_lineEdit_7_textChanged(const QString &arg1)
+{
+    (void) arg1;
+    if (!testPCRemoteIPAddress()) drawPCRemoteIPAddress();
+}
+
+void MainWindow::on_lineEdit_8_textChanged(const QString &arg1)
+{
+    (void) arg1;
+    if (!testPCRemoteIPAddress()) drawPCRemoteIPAddress();
+}
+
+void MainWindow::on_lineEdit_9_textChanged(const QString &arg1)
+{
+    (void) arg1;
+    if (!testPCRemoteIPAddress()) drawPCRemoteIPAddress();
+}

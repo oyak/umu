@@ -63,6 +63,30 @@ private slots:
 
     void on_pushButton_released();
 
+    void on_lineEdit_10_textChanged(const QString &arg1);
+
+    void on_lineEdit_11_textChanged(const QString &arg1);
+
+    void on_lineEdit_12_textChanged(const QString &arg1);
+
+    void on_lineEdit_13_textChanged(const QString &arg1);
+
+    void on_lineEdit_14_textChanged(const QString &arg1);
+
+    void on_lineEdit_15_textChanged(const QString &arg1);
+
+    void on_lineEdit_16_textChanged(const QString &arg1);
+
+    void on_lineEdit_17_textChanged(const QString &arg1);
+
+    void on_lineEdit_6_textChanged(const QString &arg1);
+
+    void on_lineEdit_7_textChanged(const QString &arg1);
+
+    void on_lineEdit_8_textChanged(const QString &arg1);
+
+    void on_lineEdit_9_textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow* ui;
     UNITLIN* pDevice;
