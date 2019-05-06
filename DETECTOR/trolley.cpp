@@ -22,7 +22,6 @@ TROLLEY::TROLLEY(cCriticalSection *cs): _timeCorrection(0),
     _lastCoordDiscrepancy = 0.0;
     _currentVCorrection = 0.0;
     _targetV = 0.0;
-    _movingDirection = Test::DirNotDefined;
     _trolleyTimer1ms.setInterval(1);
     _trolleyTimer1ms.start();
     connect(&_trolleyTimer1ms, SIGNAL(timeout()), this, SLOT(proc1ms()));
