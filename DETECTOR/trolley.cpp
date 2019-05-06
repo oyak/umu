@@ -22,6 +22,7 @@ TROLLEY::TROLLEY(cCriticalSection *cs): _timeCorrection(0),
     _lastCoordDiscrepancy = 0.0;
     _currentVCorrection = 0.0;
     _targetV = 0.0;
+    _movingDirection = Test::DirNotDefined;
     _trolleyTimer1ms.setInterval(1);
     _trolleyTimer1ms.start();
     connect(&_trolleyTimer1ms, SIGNAL(timeout()), this, SLOT(proc1ms()));
@@ -50,6 +51,9 @@ tMovingTarget target;
     target.StartCoordR = coordR;
     target.TargetSpeed = (double)targetSpeed / 1000.0; // мм/с -> мм/мс
     _targets.push_back(target);
+
+//    if (abs(coordL - coordR) > 10) qDebug() << "MovPar:" << "coordL =" << coordL << "coordR =" << coordR << "diff =" << coordL - coordR;
+
     _cs->Release();
 }
 
@@ -86,7 +90,9 @@ int c = _coordinate / step;
     {
     QTime curT;
     double shift = _rotationDegree * 0.5;
+
         emit pathStep(c - _stepCoordinate, (int)(_coordinate + shift), (int)(_coordinate - shift));
+//        emit pathStep(c - _stepCoordinate, (int)_coordinate, (int)_coordinate);
 
         curT = QTime::currentTime();
 //        qDebug() << "msec = " << curT.msec() << "step = " << c - _stepCoordinate << " path = " << _coordinate << "mm";
@@ -104,15 +110,10 @@ void TROLLEY::setTrolleyTargetRotation(double targetCoordL, double targetCoordR)
 {
     _targetRotationDegree = targetCoordL - targetCoordR;
 
-    if (_targetRotationDegree != 0.0)
-    {
-        _targetRotationDegree += 0.1;
-        _targetRotationDegree -= 0.1;
-    }
-
     if (_targetCoordinate != _coordinate) _rotationCoefficient = (_targetRotationDegree - _rotationDegree) / (_targetCoordinate - _coordinate);
         else _rotationCoefficient = 0.0;
     _memCoordinate = _coordinate;
+    _memRotationDegree = _rotationDegree;
 }
 
 void TROLLEY::proc1ms()
@@ -150,9 +151,13 @@ if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
         if (_targetV != 0.0) _currentV = _targetV;
             else
             {// должны остановитьс€
+
+                qDebug()<< "need to stop";
+
                 if ((_currentV * coordDiscrepancy) >= 0)
                 { // если либо уже добежали, либо бежим в переди паровоза
                     _currentV = 0.0;
+                    qDebug() << "Stopped without delay on coordinate" << _coordinate;
                 }
             }
         _currentVCorrection = 0.0;
@@ -191,7 +196,10 @@ if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
             _lastCoordDiscrepancy = coordDiscrepancy;
         }
 
-        setTrolleyTargetRotation((double)_targets.front().StartCoordL, (double)_targets.front().StartCoordR);
+        if (_targetV != 0.0)
+        {
+            setTrolleyTargetRotation((double)_targets.front().StartCoordL, (double)_targets.front().StartCoordR);
+        }
    } //
     _targets.pop_front();
 }
@@ -207,13 +215,18 @@ if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
             else
             {
                _coordinate -= coordDiscrepancy;
+               _currentV = 0.0;
 //               qDebug() << "stopping: _coordinate changed to " << _coordinate << "by coordDiscrepancy = " << coordDiscrepancy;
             }
     }
         else _coordinate += _currentV; // за интервал 1 м—
 //
-    _rotationDegree = _rotationCoefficient * (_coordinate - _memCoordinate);
-//
+    if (_coordinate < _targetCoordinate)
+    {
+        _rotationDegree = _rotationCoefficient * (_coordinate - _memCoordinate) + _memRotationDegree;
+    }
+        else _rotationDegree = _targetRotationDegree;
+    //
     if (_coordinate != _lastCoordinate)
     {
 //        qDebug() << "Coordinate = " << _coordinate;
@@ -265,6 +278,3 @@ bool res = true;
     }
     return res;
 }
-
-
-
