@@ -6,6 +6,7 @@
 #include <QTime>
 #include <QVector>
 #include "CriticalSection_Lin.h"
+#include "test.h"
 
 
 
@@ -36,6 +37,7 @@ public:
     void setCoordinate(int coord, int coordL, int coordR);
     void stopTrolley();
 
+
 signals:
     void pathStep(int shift, int coordinateLInMM, int coordinateRInMM);
 
@@ -48,9 +50,10 @@ private:
     int _startStepCoordinate;
     double _coordinate;
     double _memCoordinate;
+    double _memRotationDegree;
     double _rotationCoefficient; // рассчитываем в момент прихода данных от ПК (_targetRotationDegree - _rotationDegree) / (_targetCoordinate - _coordinate)
 //                               // _memCoordinate = _coordinate
-//  rotationDegree = (_coordinate - _memCoordinate) * _rotationCoefficient
+//  rotationDegree = (_coordinate - _memCoordinate) * _rotationCoefficient + _memRotationDegree
     double _rotationDegree; //  _coordinateL - _coordinateR
     double _lastCoordinate;
 
@@ -67,6 +70,7 @@ private:
 
 //
     QVector<tMovingTarget> _targets;
+
 //
     cCriticalSection *_cs;
     QTimer _trolleyTimer1ms;

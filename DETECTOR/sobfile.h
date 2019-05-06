@@ -47,7 +47,7 @@ class SOBFile
 {
 
 public:
-    static void compileFileName(QString& fileName, unsigned int objectId);
+    static void compileFileName(QString& fileName, unsigned int objectId, Test::eMovingDir movingDirection);
 
     SOBFile(QString& filePathAndName, QIODevice::OpenMode modeFlags);
     ~SOBFile();

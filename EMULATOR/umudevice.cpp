@@ -739,14 +739,14 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                     {// данные для левой стороны
                       bool res;
 
-                        res = _pEmulator->onMessageId(id, coord, usLeft);
+                        res = _pEmulator->onMessageId(id, coord, usLeft, _movingDirection);
                         if (res) qDebug() << "left side flaw: id = " << id << ", coord = " << coord;
                             else qDebug() << "left side flaw: id = " << id << ", coord = " << coord << " - ignored";
                     }
                        else
                        {
                            bool res;
-                           res = _pEmulator->onMessageId(id, coord, usRight);
+                           res = _pEmulator->onMessageId(id, coord, usRight, _movingDirection);
                            if (res) qDebug() << "right side flaw: id = " << id << ", coord = " << coord;
                                else qDebug() << "right side flaw: id = " << id << ", coord = " << coord << " - ignored";
                        }

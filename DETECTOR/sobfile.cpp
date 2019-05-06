@@ -5,11 +5,13 @@
 const QString SOBFileExtension("sob");
 const char SOBFileSignature[] = {"sobv"};
 
-void SOBFile::compileFileName(QString& fileName, unsigned int objectId)
+void SOBFile::compileFileName(QString& fileName, unsigned int objectId, Test::eMovingDir movingDirection)
 {
+    assert(movingDirection != Test::DirNotDefined);
     fileName.clear();
     fileName = "obj";
-    fileName += "d";
+    if (movingDirection != Test::DirUpWard) fileName += "d";
+        else fileName += "r";
     fileName += QString::number(objectId) + "." + SOBFileExtension;
 }
 

@@ -23,7 +23,7 @@ SOBFMAKER::~SOBFMAKER()
     delete _pFileParser;
 }
 
-bool SOBFMAKER::createFile(unsigned int objectId)
+bool SOBFMAKER::createFile(unsigned int objectId, Test::eMovingDir movingDirection)
 {
 bool res = false;
 tSCANOBJECT_EX object;
@@ -40,7 +40,7 @@ QString filePath;
 
 //        qDebug() << "offset coord = " << _pFileParser->countCoordUntilFileOffet(81, 0x67c4fe);
 
-    if (_pFileParser->extractObject(lib, objectId, object) )
+    if (_pFileParser->extractObject(lib, objectId, object, movingDirection) )
     {
         header.ObjectOrder = object.ObjectOrder;
         header.Size = object.Size;
@@ -50,7 +50,7 @@ QString filePath;
     }
         else return false;
 //
-    SOBFile::compileFileName(fileName, objectId);
+    SOBFile::compileFileName(fileName, objectId, movingDirection);
     filePath = _destinationFilePath + "/" + fileName;
     _pFile = new SOBFile(filePath, QIODevice::ReadWrite);
     if (_pFile->writeHeader(&header, true))
@@ -92,7 +92,7 @@ QString filePath;
 }
 
 // создает объект tSCANOBJECT_EX и возвращает на него указатель
-tSCANOBJECT_EX *SOBFMAKER::restoreObjectFromFile(unsigned int objectId)
+tSCANOBJECT_EX *SOBFMAKER::restoreObjectFromFile(unsigned int objectId, Test::eMovingDir movingDirection)
 {
 tSCANOBJECT_EX *pObjectEx = nullptr;
 SCANOBJECT *pObject;
@@ -104,7 +104,7 @@ unsigned char qChannels;
 CID channel;
 
     pObject = new SCANOBJECT;
-    SOBFile::compileFileName(fileName, objectId);
+    SOBFile::compileFileName(fileName, objectId, movingDirection);
     filePath = _destinationFilePath + "/" + fileName;
     _pFile = new SOBFile(filePath, QIODevice::ReadOnly);
     if (_pFile->readHeader(&header, true))
@@ -173,6 +173,8 @@ CID channel;
                 delete pObject;
             }
     }
+    _pFile->close();
+    delete _pFile;
     return pObjectEx;
 }
 //
@@ -183,6 +185,7 @@ QVector<unsigned int>::iterator it;
 OBJECTLIB lib;
     lib.getAllIds(idsOfObjects);
 //
+/*
     if (restoreAbsentFileOnly)
     {
         for(it = idsOfObjects.begin(); it != idsOfObjects.end(); )
@@ -198,6 +201,7 @@ OBJECTLIB lib;
                 else ++it;
         }
     }
+*/
 //
     _cancellFlag = false;
     if (!idsOfObjects.empty())
@@ -207,7 +211,11 @@ OBJECTLIB lib;
             QString nStr;
             nStr.setNum(*it);
             emit resultMessage("Creating " + nStr + " object");
-            if (createFile(*it)) emit resultMessage("OK");
+            if (createFile(*it, Test::DirUpWard)) emit resultMessage("OK");
+                else emit resultMessage("failed");
+            if (_cancellFlag) break;
+//
+            if (createFile(*it, Test::DirDownWard)) emit resultMessage("OK");
                 else emit resultMessage("failed");
             if (_cancellFlag) break;
         }
