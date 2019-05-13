@@ -2534,6 +2534,8 @@ tObjectSourceDescr descriptor;
     table.insert(76, descriptor);
 
     descriptor.LngCutting = 0;
+    descriptor.N0EMSShift = -110;
+    descriptor.Order = ExpandedOverPlacing;
 //
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "180808-113207.a31";
@@ -2544,7 +2546,10 @@ tObjectSourceDescr descriptor;
     descriptor.StartmM = 246;
     descriptor.LengthMM = 1520;
     table.insert(81, descriptor);
-  //
+//
+    descriptor.N0EMSShift = 0;
+    descriptor.Order = OverPlaced;
+//
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usRight;
@@ -4453,7 +4458,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartM = 63;
     descriptor.StartmM = 521;
     descriptor.LengthMM = 1520;
-    table.insert(531, descriptor);
+//    table.insert(531, descriptor);
 //
     descriptor.ObjectName = "Болтовой стык с 53.1";
     descriptor.SourceFileName = "1_170615-113834.a31";

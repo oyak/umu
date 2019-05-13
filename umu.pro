@@ -45,7 +45,8 @@ SOURCES += main.cpp\
     DETECTOR/sobfile.cpp \
     DETECTOR/sobfmaker.cpp \
     DETECTOR/objectsarray.cpp \
-    config.cpp
+    config.cpp \
+    defcoreM/datacontainer/dc_functions.cpp
 
 
 
@@ -79,7 +80,9 @@ HEADERS  += mainwindow.h \
     DETECTOR/sobfile.h \
     DETECTOR/sobfmaker.h \
     DETECTOR/objectsarray.h \
-    config.h
+    config.h \
+    defcoreM/datacontainer/dc_functions.h \
+    defcoreM/datacontainer/dc_definitions.h
 
 
 INCLUDEPATH += UMU3204/MAIN \

@@ -23,7 +23,7 @@ SOBFMAKER::~SOBFMAKER()
     delete _pFileParser;
 }
 
-bool SOBFMAKER::createFile(unsigned int objectId, Test::eMovingDir movingDirection)
+bool SOBFMAKER::createFile(unsigned int objectId)
 {
 bool res = false;
 tSCANOBJECT_EX object;
@@ -40,17 +40,18 @@ QString filePath;
 
 //        qDebug() << "offset coord = " << _pFileParser->countCoordUntilFileOffet(81, 0x67c4fe);
 
-    if (_pFileParser->extractObject(lib, objectId, object, movingDirection) )
+    if (_pFileParser->extractObject(lib, objectId, object) )
     {
         header.ObjectOrder = object.ObjectOrder;
         header.Size = object.Size;
         header.Id = objectId;
+        header.N0EMSShift = object.N0EMSShift;
         header.SOBSize = object.pScanObject->size();
         header.PathStep = object.pScanObject->getPathStep();
     }
         else return false;
 //
-    SOBFile::compileFileName(fileName, objectId, movingDirection);
+    SOBFile::compileFileName(fileName, objectId);
     filePath = _destinationFilePath + "/" + fileName;
     _pFile = new SOBFile(filePath, QIODevice::ReadWrite);
     if (_pFile->writeHeader(&header, true))
@@ -92,7 +93,7 @@ QString filePath;
 }
 
 // создает объект tSCANOBJECT_EX и возвращает на него указатель
-tSCANOBJECT_EX *SOBFMAKER::restoreObjectFromFile(unsigned int objectId, Test::eMovingDir movingDirection)
+tSCANOBJECT_EX *SOBFMAKER::restoreObjectFromFile(unsigned int objectId)
 {
 tSCANOBJECT_EX *pObjectEx = nullptr;
 SCANOBJECT *pObject;
@@ -104,7 +105,7 @@ unsigned char qChannels;
 CID channel;
 
     pObject = new SCANOBJECT;
-    SOBFile::compileFileName(fileName, objectId, movingDirection);
+    SOBFile::compileFileName(fileName, objectId);
     filePath = _destinationFilePath + "/" + fileName;
     _pFile = new SOBFile(filePath, QIODevice::ReadOnly);
     if (_pFile->readHeader(&header, true))
@@ -166,6 +167,7 @@ CID channel;
             pObjectEx = new tSCANOBJECT_EX(pObject);
             pObjectEx->Id = header.Id;
             pObjectEx->ObjectOrder = (eOBJECT_ORDER)header.ObjectOrder;
+            pObjectEx->N0EMSShift = header.N0EMSShift;
             pObjectEx->Size = (eOBJECT_ORDER)header.Size;
         }
             else
@@ -185,7 +187,6 @@ QVector<unsigned int>::iterator it;
 OBJECTLIB lib;
     lib.getAllIds(idsOfObjects);
 //
-/*
     if (restoreAbsentFileOnly)
     {
         for(it = idsOfObjects.begin(); it != idsOfObjects.end(); )
@@ -201,7 +202,6 @@ OBJECTLIB lib;
                 else ++it;
         }
     }
-*/
 //
     _cancellFlag = false;
     if (!idsOfObjects.empty())
@@ -211,11 +211,7 @@ OBJECTLIB lib;
             QString nStr;
             nStr.setNum(*it);
             emit resultMessage("Creating " + nStr + " object");
-            if (createFile(*it, Test::DirUpWard)) emit resultMessage("OK");
-                else emit resultMessage("failed");
-            if (_cancellFlag) break;
-//
-            if (createFile(*it, Test::DirDownWard)) emit resultMessage("OK");
+            if (createFile(*it)) emit resultMessage("OK");
                 else emit resultMessage("failed");
             if (_cancellFlag) break;
         }

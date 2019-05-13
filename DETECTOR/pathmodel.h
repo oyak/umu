@@ -31,9 +31,11 @@ public:
     void deleteObjects();
     bool addObject(unsigned int id, unsigned int startCoord, unsigned int lenInSteps, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject);
     SignalsData *getObject(unsigned int coord, bool &isDataObject);
+    void setMovingDireciton(Test::eMovingDir movingDirection);
 //
 private:
     OBJECTSARRAY *_pObjectsArray[NumOfOrders];
+
 };
 
 #endif // PATHMODEL_H
