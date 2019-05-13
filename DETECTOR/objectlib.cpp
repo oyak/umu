@@ -2535,7 +2535,7 @@ tObjectSourceDescr descriptor;
 
     descriptor.LngCutting = 0;
     descriptor.N0EMSShift = -110;
-    descriptor.Order = ExpandedOverPlaced;
+    descriptor.Order = ExpandedOverPlacing;
 //
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "180808-113207.a31";
@@ -4458,7 +4458,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartM = 63;
     descriptor.StartmM = 521;
     descriptor.LengthMM = 1520;
-    table.insert(531, descriptor);
+//    table.insert(531, descriptor);
 //
     descriptor.ObjectName = "Болтовой стык с 53.1";
     descriptor.SourceFileName = "1_170615-113834.a31";

@@ -30,10 +30,12 @@ struct tSOBHeader
     uint32_t Id; // идентификатор объекта
     uint32_t ObjectOrder;
     uint32_t SOBSize;  // размер объекта в шагах ДП
+    int32_t  N0EMSShift;
     uint32_t Size; // размер в мм
     uint32_t PathStep; // шаг ДП в сотых долях мм
     tSOBHeader():
         MD5Sum(0),
+        N0EMSShift(0),
         FileVersion(cFileVersion)
     {
 

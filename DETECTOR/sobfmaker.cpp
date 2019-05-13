@@ -45,6 +45,7 @@ QString filePath;
         header.ObjectOrder = object.ObjectOrder;
         header.Size = object.Size;
         header.Id = objectId;
+        header.N0EMSShift = object.N0EMSShift;
         header.SOBSize = object.pScanObject->size();
         header.PathStep = object.pScanObject->getPathStep();
     }
@@ -166,6 +167,7 @@ CID channel;
             pObjectEx = new tSCANOBJECT_EX(pObject);
             pObjectEx->Id = header.Id;
             pObjectEx->ObjectOrder = (eOBJECT_ORDER)header.ObjectOrder;
+            pObjectEx->N0EMSShift = header.N0EMSShift;
             pObjectEx->Size = (eOBJECT_ORDER)header.Size;
         }
             else

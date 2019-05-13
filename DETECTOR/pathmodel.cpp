@@ -23,7 +23,7 @@ SignalsData* res;
     res = (_pObjectsArray[OverPlacing])->getObject(coord, isDataObject);
     if (res == nullptr)
     {
-        res = (_pObjectsArray[ExpandedOverPlaced])->getObject(coord, isDataObject);
+        res = (_pObjectsArray[ExpandedOverPlacing])->getObject(coord, isDataObject);
     }
     if (res == nullptr)
     {

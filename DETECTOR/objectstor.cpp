@@ -21,7 +21,7 @@ QMap<QString, tSCANOBJECT_EX*>::iterator it;
 }
 
 // возвращает: objectOrder - порядок объекта, len - длина в мм
-SCANOBJECT *OBJECTSTOR::extractObject(eOBJECT_ORDER& objectOrder, unsigned int& len, unsigned int objectId)
+SCANOBJECT *OBJECTSTOR::extractObject(eOBJECT_ORDER& objectOrder, unsigned int& len, int& N0EMSShift, unsigned int objectId)
 {
 SCANOBJECT *res = nullptr;
 QString key;
@@ -31,6 +31,7 @@ QString key;
         res = _storage[key]->pScanObject;
         objectOrder = _storage[key]->ObjectOrder;
         len = _storage[key]->Size;
+        N0EMSShift = _storage[key]->N0EMSShift;
     }
     return res;
 }

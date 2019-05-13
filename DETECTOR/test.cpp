@@ -60,7 +60,7 @@ int startmM;
         startPk = descriptor.StartPk;
         startM = descriptor.StartM;
         startmM = descriptor.StartmM;
-        if (descriptor.Order == ExpandedOverPlaced)
+        if (descriptor.Order == ExpandedOverPlacing)
         {
             if (descriptor.N0EMSShift < 0)
             { // начальную точку объекта сдвигаем влево
@@ -81,6 +81,7 @@ int startmM;
                     }
                 }
             }
+
         }
     }
 //

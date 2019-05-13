@@ -85,9 +85,15 @@ assert((side == 0) || (side == 1));
 
 eOBJECT_ORDER order;
 unsigned int len;
-SCANOBJECT *pObject = _pStorage->extractObject(order, len, objectId);
+int N0EMSShift;
+SCANOBJECT *pObject = _pStorage->extractObject(order, len, N0EMSShift, objectId);
      if (pObject)
      {
+        if ((order == ExpandedOverPlacing) && (N0EMSShift > 0))
+        {
+            if (startCoordInMM > (unsigned int)N0EMSShift) startCoordInMM -= N0EMSShift;
+                else startCoordInMM = 0;
+        }
         res = _pPathModel[side]->addObject(objectId, startCoordInMM, len, order, pObject);
      }
      return res;

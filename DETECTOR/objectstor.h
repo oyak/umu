@@ -10,7 +10,7 @@ class OBJECTSTOR
 public:
     OBJECTSTOR(QString& pathToFiles);
     ~OBJECTSTOR();
-    SCANOBJECT *extractObject(eOBJECT_ORDER& ObjectOrder, unsigned int& len, unsigned int objectId);
+    SCANOBJECT *extractObject(eOBJECT_ORDER& ObjectOrder, unsigned int& len, int& N0EMSShift, unsigned int objectId);
 
 private:
     QMap<QString, tSCANOBJECT_EX*> _storage;

@@ -7,9 +7,10 @@
 
 enum eOBJECT_ORDER
 {
-    OverPlaced = 0,
-    OverPlacing = 1,
-    ExpandedOverPlaced = 2,
+    OverPlaced = 0, // в порядке увеличения приоритета
+    ExpandedOverPlacing = 1,
+    OverPlacing = 2,
+//
     NumOfOrders = 3
 };
 
@@ -19,6 +20,7 @@ struct tSCANOBJECT_EX
    unsigned int Size; // длина объекта - LastCoordinate = FirstCoordinate + Size
    unsigned int FirstCoordinate; // этой координате соответствет первый элемент SCANOBJECT
    unsigned int LastCoordinate; // этой координате соответствет последний элемент SCANOBJECT
+   int N0EMSShift;
    eOBJECT_ORDER ObjectOrder;
    SCANOBJECT *pScanObject;
    tSCANOBJECT_EX()
