@@ -77,25 +77,15 @@ void EMULATOR::getChannelList(QList<CID>& channelList)
     channelList = _channelList;
 }
 
-bool EMULATOR::onMessageId(unsigned short objectId, unsigned int startCoordInMM, eUMUSide side, Test::eMovingDir movingDirection)
+bool EMULATOR::onMessageId(unsigned short objectId, unsigned int startCoordInMM, eUMUSide side)
 {
 bool res = false;
 
 assert((side == 0) || (side == 1));
 
-/*
-SCANOBJECT *pObject = new SCANOBJECT;
-tSCANOBJECT_EX object(pObject);
-     res = _pFileParser->extractObject(_lib, objectId, object, movingDirection);
-     if (res)
-     {
-         res = _pPathModel[side]->addObject(objectId, startCoordInMM, object.pScanObject->len(), object.ObjectOrder, object.pScanObject);
-     }
-
-*/
 eOBJECT_ORDER order;
 unsigned int len;
-SCANOBJECT *pObject = _pStorage->extractObject(order, len, objectId, movingDirection);
+SCANOBJECT *pObject = _pStorage->extractObject(order, len, objectId);
      if (pObject)
      {
         res = _pPathModel[side]->addObject(objectId, startCoordInMM, len, order, pObject);
@@ -115,3 +105,8 @@ SignalsData* EMULATOR::getScanObject(eUMUSide side, unsigned int coordInMM, bool
     return _pPathModel[side]->getObject(coordInMM, isDataObject);
 }
 
+void EMULATOR::setMovingDirection(Test::eMovingDir movingDirection)
+{
+    _pPathModel[0]->setMovingDireciton(movingDirection);
+    _pPathModel[1]->setMovingDireciton(movingDirection);
+}

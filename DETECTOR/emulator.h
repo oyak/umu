@@ -39,8 +39,9 @@ public:
 
     void getChannelList(QList<CID>& channelList);
 
-    bool onMessageId(unsigned short objectId, unsigned int startCoord, eUMUSide side, Test::eMovingDir movingDirection);
+    bool onMessageId(unsigned short objectId, unsigned int startCoord, eUMUSide side);
     void deletePathObjects();
+    void setMovingDirection(Test::eMovingDir movingDirection);
 
 private:
     PATHMODEL *_pPathModel[2]; // на две нити usLeft, usRight

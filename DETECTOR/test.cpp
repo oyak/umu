@@ -4,11 +4,8 @@
 #include <QtEndian>
 #include "stdio.h"
 #include "test.h"
-#include "dc_definitions.h"
 #include "signalsdata.h"
 #include "ChannelsIds.h"
-
-
 
 #pragma pack(push, 1)
 
@@ -35,11 +32,15 @@ Test::~Test()
     closeFile();
 }
 
-bool Test::extractObject(OBJECTLIB& lib, unsigned int objectId, tSCANOBJECT_EX& object, eMovingDir movingDirection)
+bool Test::extractObject(OBJECTLIB& lib, unsigned int objectId, tSCANOBJECT_EX& object)
 {
 tObjectSourceDescr descriptor;
 bool res;
 sCoordPostMRF post;
+int startKM;
+int startPk;
+int startM;
+int startmM;
 
     res = lib.getRecordData(objectId, descriptor);
 
@@ -55,22 +56,52 @@ sCoordPostMRF post;
 //
     if (res)
     {
+        startKM = descriptor.StartKm;
+        startPk = descriptor.StartPk;
+        startM = descriptor.StartM;
+        startmM = descriptor.StartmM;
+        if (descriptor.Order == ExpandedOverPlaced)
+        {
+            if (descriptor.N0EMSShift < 0)
+            { // начальную точку объекта сдвигаем влево
+                startmM += descriptor.N0EMSShift;
+                if (startmM < 0)
+                {
+                    startmM += 1000;
+                    startM--;
+                    if (startM < 0)
+                    {
+                        tMRFCrd post;
+                        post.Km = startKM;
+                        post.Pk = startPk;
+                        startM += 100;
+                        post = GetPrevMRFPostCrd(post, _Header.MoveDir);
+                        startKM = post.Km;
+                        startPk = post.Pk;
+                    }
+                }
+            }
+        }
+    }
+//
+    if (res)
+    {
         bool condition1;
         bool condition2;
         if (_Header.MoveDir == -1)
         {
-            condition1 = (_Header.StartKM >= descriptor.StartKm);
-            condition2 = (_Header.StartKM > descriptor.StartKm) || (_Header.StartKM == descriptor.StartKm) && (_Header.StartPk > descriptor.StartPk);
+            condition1 = (_Header.StartKM >= startKM);
+            condition2 = (_Header.StartKM > startKM) || (_Header.StartKM == startKM) && (_Header.StartPk > startPk);
         }
             else
-            {// в сторону увеличения путейской координаты
-                condition1 = (_Header.StartKM <= descriptor.StartKm);
-                condition2 = (_Header.StartKM < descriptor.StartKm) || (_Header.StartKM == descriptor.StartKm) && (_Header.StartPk < descriptor.StartPk);
+            {// файл в сторону увеличения путейской координаты
+                condition1 = (_Header.StartKM <= startKM);
+                condition2 = (_Header.StartKM < startKM) || (_Header.StartKM == startKM) && (_Header.StartPk < startPk);
             }
         if (condition1)
         {
-            post.Km[1] = descriptor.StartKm;
-            post.Pk[1] = descriptor.StartPk;
+            post.Km[1] = startKM;
+            post.Pk[1] = startPk;
             unsigned int systemCoord;
             if (condition2)
             {
@@ -80,25 +111,24 @@ sCoordPostMRF post;
                 {
                     _fullCoordinate = currentCoord;
                     qDebug() << "Disared Stolb found - currentCoord = " << _fullCoordinate << "fileOffset = " << _fileOffset;
-                    systemCoord = _fullCoordinate + convertMMToSystemCoord(descriptor.StartM * 1000 + descriptor.StartmM);
+                    systemCoord = _fullCoordinate + convertMMToSystemCoord(startM * 1000 + startmM);
                 }
             }
                 else
                 {// начинаем на начальном пикете файла
-                    if (_Header.StartMetre <= descriptor.StartM)
+                    if (_Header.StartMetre <= startM)
                     {
-                        systemCoord = _fullCoordinate + convertMMToSystemCoord((descriptor.StartM - _Header.StartMetre) * 1000 + descriptor.StartmM);
+                        systemCoord = _fullCoordinate + convertMMToSystemCoord((startM - _Header.StartMetre) * 1000 + startmM);
                     }
                        else res = false;
                 }
             if (res)
             {
-               unsigned int objSize = descriptor.LengthMM - descriptor.LngCutting - 2;
-               res = extractScanObject(systemCoord, descriptor.Side, objSize, object, movingDirection);
+               unsigned int objSize = descriptor.LengthMM + abs(descriptor.N0EMSShift) - descriptor.LngCutting - 2;
+               res = extractScanObject(systemCoord, descriptor.Side, objSize, object);
                object.ObjectOrder = descriptor.Order;
                object.Size = objSize;
             }
-
          }
              else res = false;
     }
@@ -212,7 +242,7 @@ bool res;
 // startCoord - начальная системная координата объекта
 // side - сторона, к которой он относится
 // len - длина объекта в мм
-bool Test::extractScanObject(unsigned int startCoord, eUMUSide side, unsigned int len, tSCANOBJECT_EX& object, eMovingDir movingDirectiosn)
+bool Test::extractScanObject(unsigned int startCoord, eUMUSide side, unsigned int len, tSCANOBJECT_EX& object)
 {
 SignalsData signalsData;
 bool res;
@@ -222,7 +252,7 @@ unsigned int offset = 0;
     object.pScanObject->setPathStep(_Header.ScanStep);
     do
     {
-        res = extractSignalsByCoord(startCoord + offset, side, signalsData, movingDirectiosn);
+        res = extractSignalsByCoord(startCoord + offset, side, signalsData);
         if (res)
         {
             object.pScanObject->add(&signalsData);
@@ -272,7 +302,7 @@ CID Test::convertToCID(CID chIdx, eMovingDir movingDirection)
 // для заданной стороны
 // возвращает true, если координата найдена
 // если заданная координата coord меньше текущей в файле, поиск прекращается
-bool Test::extractSignalsByCoord(unsigned int coord, eUMUSide side, SignalsData& signalsData, eMovingDir movingDirection)
+bool Test::extractSignalsByCoord(unsigned int coord, eUMUSide side, SignalsData& signalsData)
 {
 unsigned int currentCoord = 0;
 bool fShort;
@@ -309,10 +339,6 @@ tDaCo_BScanSignals BSSignals; // здесь номер канала в терминах индекса канала в 
             if (res == false) break;
             if ( ((id & 0x80) == 0) && (((id & 0x40) >> 6) == getSideByte(side)) )
             {
-
-
-
-
                 res = readAndParseEventID(id, &BSSignals, false);
                 if (res == false)
                 {
@@ -320,7 +346,7 @@ tDaCo_BScanSignals BSSignals; // здесь номер канала в терминах индекса канала в 
                 }
                    else
                    {
-                       signalsData.addSignals(convertToCID(_Header.ChIdxtoCID[BSSignals.Channel], movingDirection), BSSignals.Count, &BSSignals.Signals);
+                       signalsData.addSignals(_Header.ChIdxtoCID[BSSignals.Channel], BSSignals.Count, &BSSignals.Signals);
                    }
             }
                 else

@@ -712,6 +712,7 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
             default:
                 assert(0);
             }
+            _pEmulator->setMovingDirection(_movingDirection);
             bytePtr += sizeof(int32_t);
 
             byteCount = static_cast<int>(buff.Size - sizeof(int32_t));
@@ -739,14 +740,14 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                     {// данные для левой стороны
                       bool res;
 
-                        res = _pEmulator->onMessageId(id, coord, usLeft, _movingDirection);
+                        res = _pEmulator->onMessageId(id, coord, usLeft);
                         if (res) qDebug() << "left side flaw: id = " << id << ", coord = " << coord;
                             else qDebug() << "left side flaw: id = " << id << ", coord = " << coord << " - ignored";
                     }
                        else
                        {
                            bool res;
-                           res = _pEmulator->onMessageId(id, coord, usRight, _movingDirection);
+                           res = _pEmulator->onMessageId(id, coord, usRight);
                            if (res) qDebug() << "right side flaw: id = " << id << ", coord = " << coord;
                                else qDebug() << "right side flaw: id = " << id << ", coord = " << coord << " - ignored";
                        }

@@ -9,7 +9,8 @@ enum eOBJECT_ORDER
 {
     OverPlaced = 0,
     OverPlacing = 1,
-    NumOfOrders = 2
+    ExpandedOverPlaced = 2,
+    NumOfOrders = 3
 };
 
 struct tSCANOBJECT_EX
@@ -39,12 +40,19 @@ typedef struct _OBJECT_SOURCE_DESCRIPTOR
     int StartM;
     int StartmM;
     unsigned int LengthMM;
+    int N0EMSShift; // смещение центра в канале 0 гр. относительно центра объекта - LengthMM/2
+// при создании файла объекта длина объекта увеличивается на abs(N0ENSShift), если смещение
+// отрицательное (т.е центр записи в канале 0 находится слева от центра объекта), то файл
+// при создании удлиняется слева, иначе - справа. Если N0EMSShift отлично от нуля,
+// поле Order может иметь значение только ExpandedOverPlaced
+
     unsigned int LngCutting; // укорочение длины
     eOBJECT_ORDER Order; //
     QString ObjectName;
     _OBJECT_SOURCE_DESCRIPTOR()
     {
         Order = OverPlaced;
+        N0EMSShift = 0;
         LngCutting = 0;
     }
 

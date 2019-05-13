@@ -7,6 +7,7 @@
 #include "objectlib.h"
 #include "platforms.h"
 #include "CriticalSection.h"
+#include "test.h"
 
 class cCriticalSection;
 
@@ -39,7 +40,8 @@ public:
     OBJECTSARRAY(cCriticalSection* cs, float pathStep): _cs(cs),
                                      _currentObject(nullptr),
                                      _step(pathStep),
-                                     _lastObject(nullptr)
+                                     _lastObject(nullptr),
+                                     _movingDirection(Test::DirNotDefined)
     {
 
     }
@@ -49,6 +51,7 @@ public:
 //
 
     SignalsData *getObject(unsigned int coord, bool &isDataObject);
+    void setMovingDirection(Test::eMovingDir movingDirection);
 private:
     float _step; // ראד ִֿ
     QVector<tSCANOBJECT_EX> _objectArray;
@@ -59,13 +62,13 @@ private:
     QVector<tSCANOBJECT_EX>::iterator _lastObject;
 
     cCriticalSection* _cs;
+    Test::eMovingDir _movingDirection;
 
     QVector<tSCANOBJECT_EX>::iterator findOverCrossCoordinate(unsigned int startCoord, unsigned int endCoord, QVector<tSCANOBJECT_EX>::iterator startElement);
     QVector<tSCANOBJECT_EX>::iterator findBiggerCoordinate(unsigned int endCoord);
 
     bool insertSCANOBJECT_EXBefore(QVector<tSCANOBJECT_EX>::iterator whereToIt, unsigned int id, unsigned int firstCoord, unsigned int lastCoord, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject);
     unsigned int convertMMtoPathStep(unsigned int pathInMM);
-
 };
 
 

@@ -23,9 +23,19 @@ SignalsData* res;
     res = (_pObjectsArray[OverPlacing])->getObject(coord, isDataObject);
     if (res == nullptr)
     {
+        res = (_pObjectsArray[ExpandedOverPlaced])->getObject(coord, isDataObject);
+    }
+    if (res == nullptr)
+    {
         res = (_pObjectsArray[OverPlaced])->getObject(coord, isDataObject);
     }
     return res;
 }
 
-
+void PATHMODEL::setMovingDireciton(Test::eMovingDir movingDirection)
+{
+    for(int ii = 0; ii < NumOfOrders; ++ii)
+    {
+        (_pObjectsArray[ii])->setMovingDirection(movingDirection);
+    }
+}

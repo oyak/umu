@@ -81,7 +81,15 @@ int seekDir = 0; // 0- не определено, -1 - к началу массива, 1 - к концу массива
                 QVector<tSCANOBJECT_EX>::iterator it;
                 isDataObject = true;
                 unsigned int offsetInData;
-                offsetInData = (coord - _currentObject->FirstCoordinate) * 100 / _currentObject->pScanObject->getPathStep();
+                assert(_movingDirection != Test::DirNotDefined);
+                if (_movingDirection == Test::DirUpWard)
+                {
+                    offsetInData = (coord - _currentObject->FirstCoordinate) * 100 / _currentObject->pScanObject->getPathStep();
+                }
+                    else
+                    {// движение в сторону уменьшения координаты
+                        offsetInData = (_currentObject->LastCoordinate - coord) * 100 / _currentObject->pScanObject->getPathStep();
+                    }
                 res = _currentObject->pScanObject->data(offsetInData);
                 break;
             }
@@ -194,5 +202,8 @@ unsigned int OBJECTSARRAY::convertMMtoPathStep(unsigned int pathInMM)
     return static_cast<unsigned int>(pathInMM / _step);
 }
 
-
+void OBJECTSARRAY::setMovingDirection(Test::eMovingDir movingDirection)
+{
+    _movingDirection = movingDirection;
+}
 
