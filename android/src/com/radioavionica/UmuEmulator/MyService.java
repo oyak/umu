@@ -1,4 +1,4 @@
-package com.radioavionica.BackgroundApplication;
+package com.radioavionica.UmuEmulator;
 
 import android.content.Context;
 import android.content.Intent;

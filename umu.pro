@@ -115,7 +115,7 @@ DISTFILES += \
     android/gradlew \
     android/gradlew.bat \
     android/res/values/libs.xml \
-    android/src/com/radioavionica/BackgroundApplication/MyService.java
+    android/src/com/radioavionica/UmuEmulator/MyService.java
 
 contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
     ANDROID_PACKAGE_SOURCE_DIR = \

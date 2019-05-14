@@ -412,6 +412,6 @@ void MainWindow::on_showSettingsButton_released()
 void MainWindow::on_startCduButton_released()
 {
 #ifdef ANDROID
-    QAndroidJniObject::callStaticMethod<void>("com/radioavionica/BackgroundApplication/MyService", "startApplication", "(Landroid/content/Context;)V", QtAndroid::androidContext().object());
+    QAndroidJniObject::callStaticMethod<void>("com/radioavionica/UmuEmulator/MyService", "startApplication", "(Landroid/content/Context;)V", QtAndroid::androidContext().object());
 #endif
 }
