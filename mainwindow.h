@@ -91,6 +91,8 @@ private slots:
 
     void on_showSettingsButton_released();
 
+    void on_startCduButton_released();
+
 private:
     Ui::MainWindow* ui;
     UNITLIN* pDevice;

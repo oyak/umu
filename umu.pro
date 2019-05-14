@@ -6,9 +6,14 @@
 
 QT       += core gui
 
+android {
+    message("ANDROID")
+    QT += androidextras
+}
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = umu
+TARGET = UmuEmulator
 TEMPLATE = app
 
 
@@ -109,7 +114,8 @@ DISTFILES += \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew \
     android/gradlew.bat \
-    android/res/values/libs.xml
+    android/res/values/libs.xml \
+    android/src/com/radioavionica/BackgroundApplication/MyService.java
 
 contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
     ANDROID_PACKAGE_SOURCE_DIR = \

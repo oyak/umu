@@ -1,6 +1,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#ifdef ANDROID
+#include <QtAndroid>
+#include <QtAndroidExtras>
+#endif
+
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -62,6 +67,10 @@ MainWindow::MainWindow(QWidget* parent)
     ui->lineEdit->setEnabled(true);
 
     pDevice->start();
+    ui->startButtonwidget->show();
+    ui->settingsWidget->hide();
+
+    QTimer::singleShot(1000, this, &MainWindow::on_startCduButton_released);
 }
 
 MainWindow::~MainWindow()
@@ -398,4 +407,11 @@ void MainWindow::on_showSettingsButton_released()
 {
     ui->startButtonwidget->hide();
     ui->settingsWidget->show();
+}
+
+void MainWindow::on_startCduButton_released()
+{
+#ifdef ANDROID
+    QAndroidJniObject::callStaticMethod<void>("com/radioavionica/BackgroundApplication/MyService", "startApplication", "(Landroid/content/Context;)V", QtAndroid::androidContext().object());
+#endif
 }
