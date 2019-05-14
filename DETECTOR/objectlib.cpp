@@ -2547,9 +2547,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(81, descriptor);
 //
-    descriptor.N0EMSShift = 0;
-    descriptor.Order = OverPlaced;
-//
+    descriptor.N0EMSShift = -137;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usRight;
@@ -2560,6 +2558,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(82, descriptor);
 //
+    descriptor.N0EMSShift = -141;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
@@ -2570,6 +2569,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(83, descriptor);
 //
+    descriptor.N0EMSShift = -231;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usRight;
@@ -2580,6 +2580,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(84, descriptor);
 //
+    descriptor.N0EMSShift = -135;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usLeft;
@@ -2590,6 +2591,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(85, descriptor);
 //
+    descriptor.N0EMSShift = -99;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "21.a31";
     descriptor.Side = usLeft;
@@ -2599,7 +2601,8 @@ tObjectSourceDescr descriptor;
     descriptor.StartmM = 518;
     descriptor.LengthMM = 1520;
     table.insert(86, descriptor);
-
+//
+    descriptor.N0EMSShift = -43;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "21.a31";
     descriptor.Side = usLeft;
@@ -2610,6 +2613,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(87, descriptor);
 //
+    descriptor.N0EMSShift = -79;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "21.a31";
     descriptor.Side = usRight;
@@ -2620,6 +2624,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(88, descriptor);
 //
+    descriptor.N0EMSShift = -134;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "21.a31";
     descriptor.Side = usRight;
@@ -2630,9 +2635,10 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(89, descriptor);
     //
+    descriptor.N0EMSShift = 19;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "21.a31";
-    descriptor.Side = usRight;
+    descriptor.Side = usLeft;
     descriptor.StartKm = 1206;
     descriptor.StartPk = 2;
     descriptor.StartM = 61;
@@ -2640,6 +2646,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(810, descriptor);
 //
+    descriptor.N0EMSShift = -16;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "21.a31";
     descriptor.Side = usLeft;
@@ -2650,9 +2657,10 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(811, descriptor);
 //
+    descriptor.N0EMSShift = 72;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "21.a31";
-    descriptor.Side = usRight;
+    descriptor.Side = usLeft;
     descriptor.StartKm = 1206;
     descriptor.StartPk = 3;
     descriptor.StartM = 12;
@@ -2660,6 +2668,18 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(812, descriptor);
 //
+    descriptor.N0EMSShift = -30;
+    descriptor.ObjectName = "БС без дефекта";
+    descriptor.SourceFileName = "21.a31";
+    descriptor.Side = usLeft;
+    descriptor.StartKm = 1206;
+    descriptor.StartPk = 3;
+    descriptor.StartM = 25;
+    descriptor.StartmM = 234;
+    descriptor.LengthMM = 1520;
+    table.insert(813, descriptor);
+//
+    descriptor.N0EMSShift = -143;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "21.a31";
     descriptor.Side = usLeft;
@@ -2670,6 +2690,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(814, descriptor);
 //
+    descriptor.N0EMSShift = -38;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "21.a31";
     descriptor.Side = usLeft;
@@ -2680,6 +2701,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(815, descriptor);
 //
+    descriptor.N0EMSShift = -91;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usLeft;
@@ -2690,16 +2712,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(816, descriptor);
 //
-    descriptor.ObjectName = "БС без дефекта";
-    descriptor.SourceFileName = "190208-085216.a31";
-    descriptor.Side = usRight;
-    descriptor.StartKm = 1150;
-    descriptor.StartPk = 5;
-    descriptor.StartM = 83;
-    descriptor.StartmM = 911;
-    descriptor.LengthMM = 1520;
-    table.insert(816, descriptor);
-//
+    descriptor.N0EMSShift = -89;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2710,6 +2723,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(817, descriptor);
 //
+    descriptor.N0EMSShift = -90;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2720,6 +2734,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(818, descriptor);
 //
+    descriptor.N0EMSShift = -74;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2730,6 +2745,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(819, descriptor);
 //
+    descriptor.N0EMSShift = -150;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2740,6 +2756,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(820, descriptor);
 //
+    descriptor.N0EMSShift = -59;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2750,6 +2767,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(821, descriptor);
 //
+    descriptor.N0EMSShift = -256;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2760,26 +2778,29 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(822, descriptor);
 //
+    descriptor.N0EMSShift = 28;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usLeft;
     descriptor.StartKm = 1150;
     descriptor.StartPk = 10;
-    descriptor.StartM = 89;
-    descriptor.StartmM = 303;
+    descriptor.StartM = 87;
+    descriptor.StartmM = 858;
     descriptor.LengthMM = 1520;
     table.insert(823, descriptor);
 //
+    descriptor.N0EMSShift = -45;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
     descriptor.StartKm = 1151;
     descriptor.StartPk = 1;
-    descriptor.StartM = 21;
-    descriptor.StartmM = 51;
+    descriptor.StartM = 19;
+    descriptor.StartmM = 652;
     descriptor.LengthMM = 1520;
     table.insert(824, descriptor);
 //
+    descriptor.N0EMSShift = -59;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2790,6 +2811,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(825, descriptor);
 //
+    descriptor.N0EMSShift = -126;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usLeft;
@@ -2800,6 +2822,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(826, descriptor);
 //
+    descriptor.N0EMSShift = -167;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usLeft;
@@ -2810,6 +2833,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(827, descriptor);
 //
+    descriptor.N0EMSShift = -149;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2820,6 +2844,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(828, descriptor);
 //
+    descriptor.N0EMSShift = -167;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2830,6 +2855,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(829, descriptor);
     //
+    descriptor.N0EMSShift = 2;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usLeft;
@@ -2840,6 +2866,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(830, descriptor);
 //
+    descriptor.N0EMSShift = -160;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2850,6 +2877,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(831, descriptor);
 //
+    descriptor.N0EMSShift = -114;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2860,6 +2888,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(832, descriptor);
 //
+    descriptor.N0EMSShift = -96;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2870,6 +2899,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(833, descriptor);
 //
+    descriptor.N0EMSShift = -172;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2880,6 +2910,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(834, descriptor);
 //
+    descriptor.N0EMSShift = -103;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2890,6 +2921,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(835, descriptor);
 //
+    descriptor.N0EMSShift = -46;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2900,6 +2932,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(836, descriptor);
 //
+    descriptor.N0EMSShift = -94;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2910,6 +2943,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(837, descriptor);
 //
+    descriptor.N0EMSShift = 12;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2920,6 +2954,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(838, descriptor);
 //
+    descriptor.N0EMSShift = -88;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2930,6 +2965,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(839, descriptor);
 //
+    descriptor.N0EMSShift = 72;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2940,6 +2976,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(840, descriptor);
 //
+    descriptor.N0EMSShift = -104;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usLeft;
@@ -2950,6 +2987,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(841, descriptor);
 //
+    descriptor.N0EMSShift = -169;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2960,6 +2998,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(842, descriptor);
 //
+    descriptor.N0EMSShift = -150;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2970,6 +3009,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(843, descriptor);
 //
+    descriptor.N0EMSShift = -83;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2980,6 +3020,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(844, descriptor);
 //
+    descriptor.N0EMSShift = -2;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -2990,6 +3031,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(845, descriptor);
 //
+    descriptor.N0EMSShift = -121;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -3000,6 +3042,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(846, descriptor);
 //
+    descriptor.N0EMSShift = -134;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -3010,6 +3053,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(847, descriptor);
 //
+    descriptor.N0EMSShift = -116;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -3020,6 +3064,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(848, descriptor);
 //
+    descriptor.N0EMSShift = -59;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -3030,6 +3075,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(849, descriptor);
 //
+    descriptor.N0EMSShift = -83;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -3040,6 +3086,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(850, descriptor);
 //
+    descriptor.N0EMSShift = -97;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -3050,6 +3097,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(851, descriptor);
 //
+    descriptor.N0EMSShift = -63;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -3060,6 +3108,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(852, descriptor);
 //
+    descriptor.N0EMSShift = -45;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -3070,6 +3119,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(853, descriptor);
 //
+    descriptor.N0EMSShift = -103;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -3080,6 +3130,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(854, descriptor);
 //
+    descriptor.N0EMSShift = -105;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -3090,6 +3141,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(855, descriptor);
 //
+    descriptor.N0EMSShift = -207;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usLeft;
@@ -3100,6 +3152,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(856, descriptor);
 //
+    descriptor.N0EMSShift = -131;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usLeft;
@@ -3110,6 +3163,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(857, descriptor);
 //
+    descriptor.N0EMSShift = -72;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usLeft;
@@ -3120,6 +3174,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(858, descriptor);
 //
+    descriptor.N0EMSShift = -41;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -3130,6 +3185,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(859, descriptor);
 //
+    descriptor.N0EMSShift = -98;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usLeft;
@@ -3140,6 +3196,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(860, descriptor);
 //
+    descriptor.N0EMSShift = -154;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usLeft;
@@ -3150,6 +3207,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(861, descriptor);
 //
+    descriptor.N0EMSShift = -123;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -3160,6 +3218,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(862, descriptor);
 //
+    descriptor.N0EMSShift = -85;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -3170,6 +3229,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(863, descriptor);
 //
+    descriptor.N0EMSShift = -81;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -3180,6 +3240,9 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(864, descriptor);
 //
+    descriptor.N0EMSShift = 0;
+    descriptor.Order = OverPlaced;
+
     descriptor.ObjectName = "Сварной стык";
     descriptor.SourceFileName = "180808-113207.a31";
     descriptor.Side = usRight;
