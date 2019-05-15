@@ -187,7 +187,6 @@ unsigned char *srcPtr; \
     { \
         *destPtr++ = *srcPtr++; \
      }\
-    dbgPrintfOfBScanMessage(); \
     AddToOutBuffNoSync(&UMUDEVICE::_BScanMessage); \
     UMUDEVICE::_critical_sectionPtr->Release(); \
 }
