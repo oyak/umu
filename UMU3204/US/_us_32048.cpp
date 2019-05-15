@@ -2238,7 +2238,7 @@ tLANMESSAGEHEADER aScanSumMsgHdr;
 tLANMESSAGEHEADER acStateMsgHdr;
 #endif
 
-inline void moveLargeBScanBody(unsigned short *header)
+inline void moveLargeBScanBody(unsigned short *pHeader)
 {
 volatile register DWORD line = 0;
 volatile register USHORT i, j, k, numSignalOffs;
@@ -2449,15 +2449,15 @@ UCHAR fDPMsg;        // не равно 0, если было отослано сообщение ДП(имитатора)
 
                 get_Access(a+hdrsize);
 #ifdef OLD_PACKET_HEADER
-              header[1] = a;
-              header[2] =  ((NumOfSignals & 0xF00) << 4) | ((NumOfSignals & 0xF) << 8)  | (line<<6) | k;
+              pHeader[1] = a;
+              pHeader[2] =  ((NumOfSignals & 0xF00) << 4) | ((NumOfSignals & 0xF) << 8)  | (line<<6) | k;
 #else
-              header[1] = a;
-              ATTACH_MESSAGE_NUMBER(*(UCHAR*)&header[2])
-              header[3] =  ((NumOfSignals & 0xF00) << 4) | ((NumOfSignals & 0xF) << 8)  | (line<<6) | k;
+              pHeader[1] = a;
+              ATTACH_MESSAGE_NUMBER(*(UCHAR*)&pHeader[2])
+              pHeader[3] =  ((NumOfSignals & 0xF00) << 4) | ((NumOfSignals & 0xF) << 8)  | (line<<6) | k;
 #endif
 
-              put_DataByWord(header, sizeof(header));
+              put_DataByWord(pHeader, sizeof(header));
               numSignalOffs = 0;
               for (i=0; i<j; ++i)
               {
