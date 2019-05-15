@@ -129,6 +129,7 @@ int startmM;
                res = extractScanObject(systemCoord, descriptor.Side, objSize, object);
                object.ObjectOrder = descriptor.Order;
                object.Size = objSize;
+               object.N0EMSShift = descriptor.N0EMSShift;
             }
          }
              else res = false;
