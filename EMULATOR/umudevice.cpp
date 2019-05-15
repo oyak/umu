@@ -171,6 +171,11 @@ unsigned char *destPtr;
     }
 }
 
+void dbgPrintfOfBScanMessage()
+{
+    qWarning() << "BScan:"<< hex << UMUDEVICE::_BScanMessage.Id << hex << UMUDEVICE::_BScanMessage.Source << hex << UMUDEVICE::_BScanMessage.Size << hex << \
+        UMUDEVICE::_BScanMessage.MessageCount << hex << UMUDEVICE::_BScanMessage.NotUse << hex << UMUDEVICE::_BScanMessage.Data[0] << hex << UMUDEVICE::_BScanMessage.Data[1] << "...";
+}
 
 #define release_Buffer \
 {\
@@ -182,6 +187,7 @@ unsigned char *srcPtr; \
     { \
         *destPtr++ = *srcPtr++; \
      }\
+    dbgPrintfOfBScanMessage(); \
     AddToOutBuffNoSync(&UMUDEVICE::_BScanMessage); \
     UMUDEVICE::_critical_sectionPtr->Release(); \
 }
