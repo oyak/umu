@@ -4521,7 +4521,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartM = 63;
     descriptor.StartmM = 521;
     descriptor.LengthMM = 1520;
-//    table.insert(531, descriptor);
+    table.insert(531, descriptor);
 //
     descriptor.ObjectName = "Болтовой стык с 53.1";
     descriptor.SourceFileName = "1_170615-113834.a31";
