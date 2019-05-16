@@ -102,7 +102,7 @@ private:
     cCriticalSection* _cs;
 
 
-    void constructAScan(bool blocked);
+    void constructAScan(bool needBlocked);
     unsigned char timeToAScanBufferOffset(unsigned char timeUs, unsigned char timeFrac, unsigned char scale);
 };
 

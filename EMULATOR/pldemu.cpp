@@ -43,26 +43,27 @@ PLDEMULATOR::~PLDEMULATOR()
 }
 #include <QTime>
 
-void PLDEMULATOR::constructAScan(bool blocked)
+void PLDEMULATOR::constructAScan(bool needBlocked)
 {
 unsigned char offsetOfCenterSignal;
 
     assert((_AScanLine == 0) || (_AScanLine == 1));
     assert(_AscanTact < MaxNumOfTacts);
-    if (blocked) _cs->Enter();
+    if (needBlocked) _cs->Enter();
 
 //    for (int ii = QTime::currentTime().msecsSinceStartOfDay() & 0xFF; ii < _AMaxAmplOffset; ++ii)
 //        _AScanBuffer[ii] = ii;
 
 
     memset(_AScanBuffer, 0, sizeof(_AScanBuffer));
-    for (unsigned int ii=0; ii<_BScanBuffer[_AScanLine][_AscanTact][0].SignalCount; ++ii)
-    {
-        unsigned int amplitude = _BScanBuffer[_AScanLine][_AscanTact][ii].MaximumAmpl; // + _pPulsePict->getRandUcharByIndexes(++_randomSampleIndex, 0);
+    if (_BScanBuffer[_AScanLine][_AscanTact][0].SignalCount)
+       for (unsigned int ii=0; ii<_BScanBuffer[_AScanLine][_AscanTact][0].SignalCount; ++ii)
+       {
+       unsigned int amplitude = _BScanBuffer[_AScanLine][_AscanTact][ii].MaximumAmpl; // + _pPulsePict->getRandUcharByIndexes(++_randomSampleIndex, 0);
 //        if (amplitude > 255) amplitude = 255;
-        offsetOfCenterSignal = timeToAScanBufferOffset(_BScanBuffer[_AScanLine][_AscanTact][ii].MaximumDelay, _BScanBuffer[_AScanLine][_AscanTact][ii].MaxAndOutsetTFrac >> 4, _AscanScale);
-        _pPulsePict->drawSample(_AScanBuffer, offsetOfCenterSignal, _AscanScale, amplitude);
-    }
+          offsetOfCenterSignal = timeToAScanBufferOffset(_BScanBuffer[_AScanLine][_AscanTact][ii].MaximumDelay, _BScanBuffer[_AScanLine][_AscanTact][ii].MaxAndOutsetTFrac >> 4, _AscanScale);
+           _pPulsePict->drawSample(_AScanBuffer, offsetOfCenterSignal, _AscanScale, amplitude);
+       }
 
 
     for (unsigned int ii=0; ii < _AMaxAmplOffset; ++ii)
@@ -70,7 +71,7 @@ unsigned char offsetOfCenterSignal;
         if (_AScanBuffer[ii] == 0) _AScanBuffer[ii] = _pPulsePict->getRandUcharByIndexes(++_randomSampleIndex, ii);
     }
 
-    if (blocked) _cs->Release();
+    if (needBlocked) _cs->Release();
 
 }
 
