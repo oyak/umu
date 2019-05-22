@@ -77,6 +77,12 @@ QString filePath;
                        res = pSignalsData->getSignalParamters(*it, amplitude, delay, ii);
                        assert(res);
                        fileBlock.push_back(delay);
+
+//                       if (delay == 0)
+//                       {
+//                           qWarning() << "object Id =" << objectId <<  ", step =" << step << ", CID = " << *it << ", signal =" << ii << "delay == 0";
+//                       }
+
                        fileBlock.push_back(amplitude);
                    }
                }
@@ -139,9 +145,19 @@ CID channel;
                                     {
                                         if (_pFile->readByte(&b) == false) break;
                                         delay = b;
+
+//                                        if (delay == 0)
+//                                        {
+//                                            qWarning() << "object Id =" << objectId <<  ", step =" << step << ", CID = " << channel << ", signal =" << s << "delay == 0";
+//                                        }
+
                                         if (_pFile->readByte(&b) == false) break;
                                         amplitude = b;
-                                        if (pSignalsData->addSignalToList(&signalList, amplitude, delay, s) == false) break;
+                                        if (delay)
+                                        { // сигналы с нулевыми задержками не включаем в список
+                                          // такие сигналы лучше сразу не включать в файл sob
+                                            if (pSignalsData->addSignalToList(&signalList, amplitude, delay, s) == false) break;
+                                        }
                                     }
                                     if (s == qSignals)
                                     {
