@@ -155,6 +155,10 @@ void PLDEMULATOR::writeRegister(unsigned int regAddress, unsigned char regValue)
                  assert(regValue <= MaxNumOfTacts);
                  assert(_started == false);
                  _numOfTacts = regValue;
+                 for(int ii=0; ii< TACT_WORK_AREA_SIZE; ++ii)
+                 {
+                     _workAreaInital[address - TACT_PARAMETERS_AREA_SIZE] = true;
+                 }
              }
                  else
                  {
@@ -250,4 +254,54 @@ void PLDEMULATOR::setPathShft(int shift)
 unsigned int PLDEMULATOR::getNumberOfTacts()
 {
     return static_cast<unsigned int>(_numOfTacts);
+}
+
+void PLDEMULATOR::writeIntoRAM(unsigned short address, unsigned char value)
+{
+    _cs->Enter();
+    address >>= 1;
+    if (address < TACT_PARAMETERS_AREA_SIZE)
+    {
+        _tactParameterArea[address] = value;
+    }
+        else
+        {
+            if (_workAreaInital[address - TACT_PARAMETERS_AREA_SIZE])
+            {
+                _tactWorkAreaInital[address - TACT_PARAMETERS_AREA_SIZE] = value;
+                _workAreaInital[address - TACT_PARAMETERS_AREA_SIZE] = false;
+            }
+            _tactWorkArea[address - TACT_PARAMETERS_AREA_SIZE] = value;
+        }
+    _cs->Release();
+}
+
+unsigned char PLDEMULATOR::readFromRAM(unsigned char address)
+{
+unsigned char res;
+    _cs->Enter();
+    address >>= 1;
+    if (address < TACT_PARAMETERS_AREA_SIZE)
+    {
+        res = _tactParameterArea[address];
+    }
+        else
+        {
+            res = _tactWorkArea[address - TACT_PARAMETERS_AREA_SIZE];
+        }
+    _cs->Release();
+    return res;
+}
+
+// возвращает разницу начального и текущего положени€ аттенюатора в дЅ
+// дл€ линии line и времени timeUs
+int PLDEMULATOR::getATTValueChange(unsigned char line, unsigned char timeUs)
+{
+tTactWorkAreaElement *pElementInital = static_cast<tTactWorkAreaElement*>(_tactWorkAreaInital);
+tTactWorkAreaElement *pElement = static_cast<tTactWorkAreaElement*>(_tactWorkArea);
+    if (line == 0)
+    {
+        return (pElement[timeUs].DACValueLine0 - pElementInital[timeUs].DACValueLine0) / 2;
+    }
+    return (pElement[timeUs].DACValueLine1 - pElementInital[timeUs].DACValueLine1) / 2;
 }

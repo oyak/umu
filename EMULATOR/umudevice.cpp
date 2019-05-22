@@ -198,13 +198,25 @@ unsigned short Rd_RegPLD(unsigned int regAddr)
     return (UMUDEVICE::deviceObjectPtr->readPLDRegister(usLeft, regAddr) << 8) | UMUDEVICE::deviceObjectPtr->readPLDRegister(usRight, regAddr);
 }
 
-void Wr_RegPLD(unsigned int regAddr, unsigned short val)
+void Wr_RegPLD(unsigned int regAddr, unsigned short value)
 {
     assert(UMUDEVICE::deviceObjectPtr);
-    UMUDEVICE::deviceObjectPtr->writePLDRegister(usLeft, regAddr, (unsigned char)(val >> 8));
-    UMUDEVICE::deviceObjectPtr->writePLDRegister(usRight, regAddr, (unsigned char)(val & 0xFF));
+    UMUDEVICE::deviceObjectPtr->writePLDRegister(usLeft, regAddr, (unsigned char)(value >> 8));
+    UMUDEVICE::deviceObjectPtr->writePLDRegister(usRight, regAddr, (unsigned char)(value & 0xFF));
 }
 
+void writeIntoRAM(unsigned short address, unsigned short value)
+{
+    assert(UMUDEVICE::deviceObjectPtr);
+    UMUDEVICE::deviceObjectPtr->writeIntoRAM(usLeft, address, (unsigned char)(value >> 8));
+    UMUDEVICE::deviceObjectPtr->writeIntoRAM(usRight, address, (unsigned char)(value & 0xFF));
+}
+
+unsigned short readFromRAM(unsigned short address)
+{
+    assert(UMUDEVICE::deviceObjectPtr);
+    return (UMUDEVICE::deviceObjectPtr->readFromRAM(usLeft, address) << 8) | UMUDEVICE::deviceObjectPtr->readFromRAM(usRight, address);
+}
 
 unsigned short get_devicenumber(void)
 {

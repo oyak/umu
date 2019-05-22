@@ -32,8 +32,22 @@ const unsigned int PLDVerId = 0x2048; // верси€ эмулируемой прошивки ѕЋ»—
 #define _AMaxDelayOffset 0xE9
 #define _AMaxDelayFracOffset 0xEA
 
-
 #pragma pack(push, 1)
+
+typedef struct
+{
+    unsigned char Reserved1;
+    unsigned char DACValueLine0;
+    unsigned char DACValueLine1;
+    unsigned char StrobsMark; // бит 0 - соответствует стробу 0 и т.д.
+} tTactWorkAreaElement; // элемент рабочей области тактов, соответствующий каждой микросекунде развертки
+
+#define SAMPLE_DURATION 255
+
+#define TACT_PARAMETERS_AREA_SIZE 256
+
+#define TACT_WORK_AREA_SIZE ((SAMPLE_DURATION + 1) * sizeof(tTactWorkAreaElement))
+
 typedef struct
 {
     unsigned char SignalCount;
@@ -45,7 +59,6 @@ typedef struct
     unsigned char MaxAndOutsetTFrac; // MaxTFrac - старша€ тетрада
     unsigned char Reserved2;
 } tMaximumParameters;
-
 
 #pragma pack(pop)
 
@@ -63,6 +76,11 @@ public:
 
     unsigned char readRegister(unsigned int regAddress);
     void writeRegister(unsigned int regAddress, unsigned char regValue);
+
+    void writeIntoRAM(unsigned short address, unsigned char value);
+    unsigned char readFromRAM(unsigned char address);
+    int getATTValueChange(unsigned char line, unsigned char timeUs);
+
 
 signals:
     void _AScanStarted(void);
@@ -83,7 +101,7 @@ private:
 //
     class ASCANPULSE *_pPulsePict;
 
-    unsigned char _AScanBuffer[255];
+    unsigned char _AScanBuffer[SAMPLE_DURATION];
     QTimer *_pAScanTimer;
     unsigned char _AScanLine;
     unsigned char _AscanTact;
@@ -101,6 +119,11 @@ private:
 
     cCriticalSection* _cs;
 
+    bool _workAreaInital[TACT_WORK_AREA_SIZE];
+    unsigned char _tactParameterArea[TACT_PARAMETERS_AREA_SIZE];
+    unsigned char _tactWorkAreaInital[TACT_WORK_AREA_SIZE]; // начальные значени€, записываемые в область
+    // параметров такта после установки числа тактов
+    unsigned char _tactWorkArea[TACT_WORK_AREA_SIZE];
 
     void constructAScan(bool needBlocked);
     unsigned char timeToAScanBufferOffset(unsigned char timeUs, unsigned char timeFrac, unsigned char scale);
