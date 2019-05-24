@@ -7,10 +7,13 @@
 #include "ustyp468.h"
 #include "ascanpulse.h"
 
+extern const UCHAR mask[8];
+
 const unsigned int PLDVerId = 0x2048; // версия эмулируемой прошивки ПЛИС
 
 #define MaxNumOfTacts 8
 #define MaxNumOfSignals 8
+#define MaxNumOfStrobs 4
 
 //#define BScanASDBaseAddr 0x11
 //#define AScanStartAddr1 0x20
@@ -46,7 +49,7 @@ typedef struct
 
 #define TACT_PARAMETERS_AREA_SIZE 256
 
-#define TACT_WORK_AREA_SIZE ((SAMPLE_DURATION + 1) * sizeof(tTactWorkAreaElement))
+#define TACT_WORK_AREA_SIZE ((SAMPLE_DURATION + 1) * sizeof(tTactWorkAreaElement) * MaxNumOfTacts)
 
 typedef struct
 {
@@ -62,6 +65,12 @@ typedef struct
 
 #pragma pack(pop)
 
+typedef struct
+{
+    unsigned char Start;
+    unsigned char End;
+
+} tStrobLimit;
 
 class PLDEMULATOR: public QObject
 {
@@ -93,7 +102,7 @@ public slots:
 
 private:
     bool _started; // автомат PLD работает
-    bool _RAMAccessed; // для контроллера доступна микросхема ОЗУ
+    bool _RAMAccessible; // для контроллера доступна микросхема ОЗУ
     unsigned char _numOfTacts; // установленное число тактов
 
     tMaximumParameters _BScanBuffer[2][MaxNumOfTacts][MaxNumOfSignals]; // линия-такт-сигналы
@@ -112,6 +121,14 @@ private:
 
     bool _cycledAScan;
     bool _AScanReady;
+
+// буфер АСД - в каждом байте - мл.тетрада - данные линии 0, ст.тетрада - линии 1
+// в пределах тетрады: мл.бит - сигналы в стробе 0, ст.бит - присутствуют сигналы в стробе 3
+    unsigned char _ASDBuffer[MaxNumOfTacts];
+    bool _ASDBufferAccessible;
+
+    tStrobLimit _strobLimits[2][MaxNumOfTacts][MaxNumOfStrobs];
+
     unsigned char _randomSampleIndex;  // UCHAR !
 
 
@@ -120,13 +137,15 @@ private:
     cCriticalSection* _cs;
 
     bool _workAreaInital[TACT_WORK_AREA_SIZE];
-    unsigned char _tactParameterArea[TACT_PARAMETERS_AREA_SIZE];
+    unsigned char _tactParameterArea[TACT_PARAMETERS_AREA_SIZE * MaxNumOfTacts];
     unsigned char _tactWorkAreaInital[TACT_WORK_AREA_SIZE]; // начальные значения, записываемые в область
     // параметров такта после установки числа тактов
     unsigned char _tactWorkArea[TACT_WORK_AREA_SIZE];
 
     void constructAScan(bool needBlocked);
     unsigned char timeToAScanBufferOffset(unsigned char timeUs, unsigned char timeFrac, unsigned char scale);
+    void defineStrobLimits(unsigned int tactNumber, unsigned int strobNumber, unsigned int line);
+    void defineStrobsLimits();
 };
 
 

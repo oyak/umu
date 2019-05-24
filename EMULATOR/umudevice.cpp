@@ -68,7 +68,6 @@ int xTaskGetTickCount(void)
 #define TBD
 #define PARAM_UNDEFINED
 
-#define extramstart (0x5000 << 1)
 
 typedef class cCriticalSection* xSemaphoreHandle;
 #define xTaskHandle int
@@ -629,6 +628,29 @@ unsigned char UMUDEVICE::readPLDRegister(eUMUSide side, unsigned int regAddress)
     return _pldr->readRegister(regAddress);
 }
 
+void UMUDEVICE::writeIntoRAM(eUMUSide side, unsigned int regAddress, unsigned char value)
+{
+    if (side == usLeft)
+    {
+        _pldl->writeIntoRAM(regAddress, value);
+    }
+        else
+        {
+            _pldr->writeIntoRAM(regAddress, value);
+        }
+}
+
+unsigned char UMUDEVICE::readFromRAM(eUMUSide side, unsigned int regAddress)
+{
+    if (side == usLeft)
+    {
+        return _pldl->readFromRAM(regAddress);
+    }
+    return _pldr->readFromRAM(regAddress);
+}
+
+
+
 
 void UMUDEVICE::readPCMessageHead(unsigned int& res, bool& fRepeat)
 {
@@ -863,6 +885,7 @@ void UMUDEVICE::_onPLDInt()
 {
     if (_enablePLDInt)
     {
+        if (EnableASD)  ReadASD();
         shiftValue = getShiftSensorValue(mainShiftSensorNumber);
         moveLargeBScan(0);
     }

@@ -8,14 +8,17 @@ PLDEMULATOR::PLDEMULATOR(cCriticalSection *cs): _cycledAScan(false),
                              _numOfTacts(1),
                              _AScanLine(0),
                              _started(false),
-                             _RAMAccessed(false),
+                             _RAMAccessible(false),
                              _AscanTact(0),
                              _BScanLine(0),
-                             _DPShift(0)
+                             _DPShift(0),
+                             _ASDBufferAccessible(false)
 {
     _cs = cs;
     memset(_AScanBuffer, 0, sizeof(_AScanBuffer));
     memset(reinterpret_cast<unsigned char*>(_BScanBuffer), 0, sizeof(_BScanBuffer));
+    memset (reinterpret_cast<unsigned char*>(_strobLimits), 0, sizeof(_strobLimits));
+    memset (reinterpret_cast<unsigned char*>(_ASDBuffer), 0, sizeof(_ASDBuffer));
     _pAScanTimer = nullptr;
     connect(this, SIGNAL(_AScanStarted(void)), this, SLOT(_onAScanStarted(void)));
 
@@ -121,23 +124,24 @@ unsigned int regAddressMasked = regAddress & ~LineMaskForAScan;
                      res = _AScanBuffer[(regAddressMasked >> 1) & 0xFF];
                  }
              }
-                 else if( (regAddress >= BScanASD_0) && ((regAddress >> 1) <= ( (BScanASD_0 >> 1) + sizeof(tMaximumParameters) * MaxNumOfTacts * MaxNumOfSignals) ))
+                 else if ( (!_ASDBufferAccessible) && (regAddress >= BScanASD_0) && ((regAddress >> 1) <= ( (BScanASD_0 >> 1) + sizeof(tMaximumParameters) * MaxNumOfTacts * MaxNumOfSignals) ))
                       {
                          unsigned char *pUCHAR = (unsigned char*)&_BScanBuffer[_BScanLine];
                          res = pUCHAR[(regAddress - BScanASD_0) >> 1];
                       }
-                          else if (regAddress == LENGTHDPVALUEADR)
+                          else if((_ASDBufferAccessible) && (regAddress >= BScanASD_0) && ( ((regAddress >> 1) < (BScanASD_0 >> 1) + MaxNumOfTacts )) )
                                {
-                                   res = _DPShift;
-                                   if (_DPShift)
-                                   {
-                                   _DPShift = 0;
-                                   }
+                                   res = _ASDBuffer[(regAddress - BScanASD_0) >> 1];
                                }
                                    else if (regAddress == LENGTHDPVALUEADR)
                                         {
-                                            res = 0;
+                                            res = _DPShift;
+                                            _DPShift = 0;
                                         }
+                                            else if (regAddress == LENGTHDPVALUEADR)
+                                                 {
+                                                     res = 0;
+                                                 }
 
     _cs->Release();
     return res;
@@ -148,7 +152,7 @@ void PLDEMULATOR::writeRegister(unsigned int regAddress, unsigned char regValue)
     if (regAddress == a0x1300)
     {
         _started = (regValue & 0x02) ? true:false;
-        _RAMAccessed = (regValue & 0x01) ? true:false;
+        _RAMAccessible = (regValue & 0x01) ? true:false;
     }
         else if (regAddress == a0x1301)
              {
@@ -157,12 +161,12 @@ void PLDEMULATOR::writeRegister(unsigned int regAddress, unsigned char regValue)
                  _numOfTacts = regValue;
                  for(int ii=0; ii< TACT_WORK_AREA_SIZE; ++ii)
                  {
-                     _workAreaInital[address - TACT_PARAMETERS_AREA_SIZE] = true;
+                     _workAreaInital[regAddress - TACT_PARAMETERS_AREA_SIZE] = true;
                  }
              }
                  else
                  {
-                     if (!_RAMAccessed)
+                     if (!_RAMAccessible)
                      {
                      unsigned int regAddressMasked = regAddress & ~LineMaskForAScan;
                          if (regAddressMasked ==  Aaddr1 + (0xFE<<1))
@@ -181,7 +185,7 @@ void PLDEMULATOR::writeRegister(unsigned int regAddress, unsigned char regValue)
                                           }
                                               else if (regAddressMasked ==  Aaddr1 + (0xFF<<1))
                                                    {
-                                                       assert(_started);
+//                                                       assert(_started);
                                                        _AscanStrobForMax = (regValue >> 2) & 0x3;
                                                        _AScanReady = false;
 
@@ -197,18 +201,21 @@ void PLDEMULATOR::writeRegister(unsigned int regAddress, unsigned char regValue)
                                                    }
                                                        else  if(regAddress ==  BScanASDCRegAddr)
                                                              {
-                                                                 if (regValue == 2) _BScanLine = 0;
-                                                                     else if (regValue == 3) _BScanLine = 1;
+                                                                 if ((regValue & 0x7F) == 0)
+                                                                 {
+                                                                     _ASDBufferAccessible = true;
+                                                                 }
+                                                                     else
+                                                                     {
+                                                                         _ASDBufferAccessible = false;
+                                                                         if (regValue == 2) _BScanLine = 0;
+                                                                             else if (regValue == 3) _BScanLine = 1;
+                                                                     }
                                                              }
-
-
-
 
                     }
                  }
-
     _cs->Release();
-
 }
 
 unsigned char PLDEMULATOR::timeToAScanBufferOffset(unsigned char timeUs, unsigned char timeFrac, unsigned char scale)
@@ -258,20 +265,29 @@ unsigned int PLDEMULATOR::getNumberOfTacts()
 
 void PLDEMULATOR::writeIntoRAM(unsigned short address, unsigned char value)
 {
+unsigned int tactParameterAreaSize = TACT_PARAMETERS_AREA_SIZE * MaxNumOfTacts; // _numOfTacts;
+    assert (_RAMAccessible);
+    assert (_numOfTacts);
     _cs->Enter();
-    address >>= 1;
-    if (address < TACT_PARAMETERS_AREA_SIZE)
+    address -= ExtRamStartAdr;
+    assert((address & 0x8000) == 0);
+    if (address < tactParameterAreaSize)
     {
         _tactParameterArea[address] = value;
+        qDebug() << "writeIntoRAM: address =" << hex << address + ExtRamStartAdr << "value =" << value << "into _tactParameterArea, offset = " << address;
     }
         else
         {
-            if (_workAreaInital[address - TACT_PARAMETERS_AREA_SIZE])
+            if (_workAreaInital[address - tactParameterAreaSize])
             {
-                _tactWorkAreaInital[address - TACT_PARAMETERS_AREA_SIZE] = value;
-                _workAreaInital[address - TACT_PARAMETERS_AREA_SIZE] = false;
+                _tactWorkAreaInital[address - tactParameterAreaSize] = value;
+                _workAreaInital[address - tactParameterAreaSize] = false;
             }
-            _tactWorkArea[address - TACT_PARAMETERS_AREA_SIZE] = value;
+            _tactWorkArea[address - tactParameterAreaSize] = value;
+
+            qDebug() << "writeIntoRAM: address =" << hex << address + ExtRamStartAdr << "value =" << value << "into _tactWorkArea, offset = " << address - tactParameterAreaSize;
+
+            defineStrobsLimits();
         }
     _cs->Release();
 }
@@ -279,15 +295,19 @@ void PLDEMULATOR::writeIntoRAM(unsigned short address, unsigned char value)
 unsigned char PLDEMULATOR::readFromRAM(unsigned char address)
 {
 unsigned char res;
+
+    assert (_RAMAccessible);
+    assert (_numOfTacts);
+
     _cs->Enter();
-    address >>= 1;
-    if (address < TACT_PARAMETERS_AREA_SIZE)
+    address -= ExtRamStartAdr;
+    if (address < TACT_PARAMETERS_AREA_SIZE * MaxNumOfTacts) //_numOfTacts)
     {
         res = _tactParameterArea[address];
     }
         else
         {
-            res = _tactWorkArea[address - TACT_PARAMETERS_AREA_SIZE];
+            res = _tactWorkArea[address - TACT_PARAMETERS_AREA_SIZE * MaxNumOfTacts]; //_numOfTacts];
         }
     _cs->Release();
     return res;
@@ -297,11 +317,66 @@ unsigned char res;
 // для линии line и времени timeUs
 int PLDEMULATOR::getATTValueChange(unsigned char line, unsigned char timeUs)
 {
-tTactWorkAreaElement *pElementInital = static_cast<tTactWorkAreaElement*>(_tactWorkAreaInital);
-tTactWorkAreaElement *pElement = static_cast<tTactWorkAreaElement*>(_tactWorkArea);
+tTactWorkAreaElement *pElementInital = reinterpret_cast<tTactWorkAreaElement*>(_tactWorkAreaInital);
+tTactWorkAreaElement *pElement = reinterpret_cast<tTactWorkAreaElement*>(_tactWorkArea);
     if (line == 0)
     {
         return (pElement[timeUs].DACValueLine0 - pElementInital[timeUs].DACValueLine0) / 2;
     }
     return (pElement[timeUs].DACValueLine1 - pElementInital[timeUs].DACValueLine1) / 2;
 }
+
+void PLDEMULATOR::defineStrobLimits(unsigned int tactNumber, unsigned int strobNumber, unsigned int line)
+{
+unsigned int stage;
+tTactWorkAreaElement *pElement = reinterpret_cast<tTactWorkAreaElement*>(_tactWorkArea);
+unsigned char byteMask;
+
+    if (line == 0)
+    {
+        byteMask = mask[(strobNumber & 0x03)];
+    }
+        else
+        {
+            byteMask = mask[(strobNumber & 0x03) | 0x04];
+        }
+
+    stage = 0;
+    for(unsigned int ii= 0; ii <= SAMPLE_DURATION; ++ii)
+    {
+        if (stage == 0)
+        {
+            if(pElement[tactNumber * (SAMPLE_DURATION + 1) + ii].StrobsMark & byteMask)
+            {
+                _strobLimits[line][tactNumber][strobNumber].Start = ii;
+                stage = 1;
+            }
+        }
+            else
+            {
+                if((pElement[tactNumber * (SAMPLE_DURATION + 1) + ii].StrobsMark & byteMask) == 0)
+                {
+                    if (ii)
+                    {
+                        _strobLimits[line][tactNumber][strobNumber].End = ii - 1;
+                    }
+                        else
+                        {
+                            _strobLimits[line][tactNumber][strobNumber].End = 0;
+                        }
+                    break;
+                }
+            }
+    }
+}
+
+void PLDEMULATOR::defineStrobsLimits()
+{
+    for(unsigned int tact=0; tact < _numOfTacts; ++tact)
+        for(unsigned int strobNum=0; strobNum < MaxNumOfStrobs; ++strobNum)
+        {
+            defineStrobLimits(tact, strobNum, 0); // линия 0
+            defineStrobLimits(tact, strobNum, 1);
+        }
+}
+

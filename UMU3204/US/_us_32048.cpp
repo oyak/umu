@@ -1028,7 +1028,7 @@ unsigned char *p;
          b = *BA++;
          a = *BA;
 #else
-         BA = parreg_sz * (takt-1) + _WSALmask);
+         BA = parreg_sz * (takt-1) + _WSALmask;
          b = readFromRAM(BA++);
          a = readFromRAM(BA);
 #endif
@@ -1214,7 +1214,13 @@ unsigned char *p;
 //-------------------------------------------------------------------
 void ChangeVRU(UCHAR *p)
 {
-USHORT *BA,WSA,a;
+#ifndef DEVICE_EMULATION
+USHORT *BA;
+#else
+USHORT BA;
+#endif
+
+USHORT WSA,a;
 UCHAR sideidx,lineidx,a1,a2;
 uint i,tmp,tmp2, duration;
 float quoeff;
@@ -1286,7 +1292,7 @@ float quoeff;
 #ifndef DEVICE_EMULATION
       *BA = a;
 #else
-      writeIntorRAM(BA, a);
+      writeIntoRAM(BA, a);
 #endif
   }
   Start_PLD_Work();
@@ -1296,7 +1302,13 @@ float quoeff;
 //
 void ChangeStrobs(UCHAR *p)
 {
-USHORT *BA,WSA,a;
+#ifndef DEVICE_EMULATION
+USHORT *BA;
+#else
+USHORT BA;
+#endif
+
+USHORT WSA,a;
 UCHAR sideidx,lineidx,takt,a1,a2;
 USHORT i,tmp,tmp2;
 USHORT razvLen;

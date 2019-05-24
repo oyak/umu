@@ -6,10 +6,7 @@
 // misc46.c
 // добавлены константы extramstart DPValueAdr из misc464.h 
 
-
-#ifndef DEVICE_EMULATION
 #define extramstart (0x5000 << 1)
-#endif
 
 // регистры датчика пути, старший байт ПЛИС
 #define LENGTHDPVALUEADR  (ramstart + (0x13D0 << 1) )    // чтение,адрес регистра "значение основного датчика пути"  - после чтения значение регистра сбрасывается
