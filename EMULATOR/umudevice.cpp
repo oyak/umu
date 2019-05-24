@@ -963,7 +963,7 @@ SignalsData *pSignalsData;
                             delayMS = pSignals->Signals[ii].Delay / 3;
                             delayFrac = pSignals->Signals[ii].Delay % 3;
                         }
-                    _pldl->addBScanSignal(strokeAndLine.Stroke, strokeAndLine.Line, delayMS, delayFrac, _pEmulator->codeToAmpl(pSignals->Signals[ii].Ampl));
+                    _pldl->addBScanSignal(strokeAndLine.Stroke, strokeAndLine.Line, delayMS, delayFrac, pSignals->Signals[ii].Ampl);
                 }
             }
         }

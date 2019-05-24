@@ -982,6 +982,7 @@ unsigned char *p;
 #else
       BA = jj + _WSALmask;
       writeIntoRAM(BA, 0);
+      BA += 2;
 #endif
      a = extramstart + parreg_sz * NumOfTacts; // low byte = 0 here
 
@@ -1006,7 +1007,10 @@ unsigned char *p;
             BA[((b + pData->Duration) << 2) + 1] = (correctDACValue(pData->ACATTLn1L) << 8) | correctDACValue(pData->ACATTLn1R);
             BA[((b + pData->Duration) << 2) + 2] = (correctDACValue(pData->ACATTLn2L) << 8) | correctDACValue(pData->ACATTLn2R);
         }
+/*
 #else
+// если DEVICE_EMULATION  - рабочую область тактов здесь не обнуляем
+
         BA = a & 0xFF00;
         for(b=0; b<256*4; ++b)
         {
@@ -1017,6 +1021,7 @@ unsigned char *p;
             writeIntoRAM(BA + ((b + pData->Duration) << 2) + 1, (correctDACValue(pData->ACATTLn1L) << 8) | correctDACValue(pData->ACATTLn1R));
             writeIntoRAM(BA + ((b + pData->Duration) << 2) + 2, (correctDACValue(pData->ACATTLn2L) << 8) | correctDACValue(pData->ACATTLn2R));
         }
+*/
 #endif
     }
 //     smprintf("\nSetTacktParam: takt - wraddr = %x", BA);
@@ -1028,8 +1033,9 @@ unsigned char *p;
          b = *BA++;
          a = *BA;
 #else
-         BA = parreg_sz * (takt-1) + _WSALmask;
-         b = readFromRAM(BA++);
+         BA = extramstart + parreg_sz * (takt-1) + _WSALmask;
+         b = readFromRAM(BA);
+         BA += 2;
          a = readFromRAM(BA);
 #endif
           if ( (b == 0) && (a != 0) )
@@ -1039,8 +1045,8 @@ unsigned char *p;
               BA=(USHORT*)(parreg_sz * (takt-1) + ExtRamStartAdr + _RazvCRmask);
               b = *BA + AContactZone; // не должно превысить 255
 #else
-              BA = (parreg_sz * (takt-1) + _RazvCRmask);
-              b = readFromRAM(BA + AContactZone); // не должно превысить 255
+              BA = (extramstart + parreg_sz * (takt-1) + _RazvCRmask);
+              b = readFromRAM(BA) + AContactZone; // не должно превысить 255
 #endif
               a += ((b & 0xFF) * 4 + 100) << 1;  // "<<1", i.e word addressing
               if (a & 0xFF) a += 0x100; // ceiling
@@ -1055,7 +1061,8 @@ unsigned char *p;
               *BA = a;
 #else
               BA = jj + _WSALmask;
-              writeIntoRAM(BA++, 0);
+              writeIntoRAM(BA, 0);
+              BA += 2;
               writeIntoRAM(BA, a);
 #endif
 //
@@ -1071,7 +1078,10 @@ unsigned char *p;
                      BA[((b + pData->Duration) << 2) + 1] = (correctDACValue(pData->ACATTLn1L) << 8) | correctDACValue(pData->ACATTLn1R);
                      BA[((b + pData->Duration) << 2) + 2] = (correctDACValue(pData->ACATTLn2L) << 8) | correctDACValue(pData->ACATTLn2R);
                  }
+/*
 #else
+// если DEVICE_EMULATION  - рабочую область тактов здесь не обнуляем
+
                  BA = a & 0xFF00;
                  for(b=0; b<256*4; ++b)
                  {
@@ -1082,6 +1092,7 @@ unsigned char *p;
                      writeIntoRAM(BA + ((b + pData->Duration) << 2) + 1, (correctDACValue(pData->ACATTLn1L) << 8) | correctDACValue(pData->ACATTLn1R));
                      writeIntoRAM(BA + ((b + pData->Duration) << 2) + 2, (correctDACValue(pData->ACATTLn2L) << 8) | correctDACValue(pData->ACATTLn2R));
                  }
+*/
 #endif
              }
          }
@@ -1243,12 +1254,13 @@ float quoeff;
   a=*BA;
   Hi(WSA)=(UCHAR)a;
 #else
-  BA = parreg_sz * (*p & tactbitmsk) + _RazvCRmask;
+  BA = extramstart + parreg_sz * (*p & tactbitmsk) + _RazvCRmask;
   duration = readFromRAM(BA) & 0xFF;
 // WSA address is the same for both sides - use left side WSA value
-  BA = parreg_sz * (*p & tactbitmsk) + _WSALmask;
-  a = readFromRAM(BA++);
+  BA = extramstart + parreg_sz * (*p & tactbitmsk) + _WSALmask;
+  a = readFromRAM(BA);
   Lo(WSA)=(UCHAR)a;
+  BA += 2;
   a = readFromRAM(BA);
   Hi(WSA)=(UCHAR)a;
 #endif
@@ -1274,7 +1286,7 @@ float quoeff;
       BA = (USHORT*)(WSA+(((i<<2)+lineidx+1)<<1) + ramstart);
       a = *BA;
 #else
-      BA = WSA + (((i<<2)+lineidx+1)<<1) + ramstart;
+      BA = WSA + (((i<<2)+lineidx+1)<<1);
       a = readFromRAM(BA);
 #endif
       //      simprintf("\nChangeVRU: BA = %x",BA);
@@ -1330,9 +1342,10 @@ USHORT razvLen;
   a=*BA;
   Hi(WSA)=(UCHAR)a;
 #else
-  BA = parreg_sz * takt + _WSALmask;
-  a = readFromRAM(BA++);
+  BA = extramstart + parreg_sz * takt + _WSALmask;
+  a = readFromRAM(BA);
   Lo(WSA)=(UCHAR)a;
+  BA += 2;
   a = readFromRAM(BA);
   Hi(WSA)=(UCHAR)a;
 #endif
@@ -1361,6 +1374,7 @@ USHORT razvLen;
   *BA = a;
 //
 //   simplePrintf("\nChangeStrobs: takt = %d, strob = %d, addr = 0x%x, level = 0x%x ",takt, *p, (DWORD)BA,a );
+#endif
 
   if (lineidx!=0)
   {
@@ -1385,7 +1399,6 @@ USHORT razvLen;
     }
 
   ASD_Buffer[takt] = ASDtype[takt];
-#endif
 
   tmp =  *(p+1);  // strob start
   tmp2 = *(p+2);  // strob end
@@ -1397,7 +1410,7 @@ USHORT razvLen;
      BA = (USHORT*)(parreg_sz * takt + ExtRamStartAdr + _RazvCRmask);
      razvLen = *BA & 0xFF;
 #else
-     BA = parreg_sz * takt + _RazvCRmask;
+     BA = extramstart + parreg_sz * takt + _RazvCRmask;
      razvLen = readFromRAM(BA) & 0xFF;
 #endif
       for (i=0; i<razvLen; ++i)

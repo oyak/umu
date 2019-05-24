@@ -47,7 +47,7 @@ typedef struct
 
 #define SAMPLE_DURATION 255
 
-#define TACT_PARAMETERS_AREA_SIZE 256
+//#define TACT_PARAMETERS_AREA_SIZE 256
 
 #define TACT_WORK_AREA_SIZE ((SAMPLE_DURATION + 1) * sizeof(tTactWorkAreaElement) * MaxNumOfTacts)
 
@@ -79,16 +79,16 @@ public:
     PLDEMULATOR(cCriticalSection* cs);
     ~PLDEMULATOR();
     void resetSignals(unsigned char tact, unsigned int line);
-    bool addBScanSignal(unsigned int tact, unsigned int line, unsigned int delayMS,  unsigned int delayFrac, unsigned int ampl);
+    bool addBScanSignal(unsigned int tact, unsigned int line, unsigned int delayMS,  unsigned int delayFrac, unsigned int amplInDB);
     unsigned int getNumberOfTacts();
     void setPathShft(int shift);
 
     unsigned char readRegister(unsigned int regAddress);
     void writeRegister(unsigned int regAddress, unsigned char regValue);
 
-    void writeIntoRAM(unsigned short address, unsigned char value);
-    unsigned char readFromRAM(unsigned char address);
-    int getATTValueChange(unsigned char line, unsigned char timeUs);
+    void writeIntoRAM(unsigned int address, unsigned char value);
+    unsigned char readFromRAM(unsigned int address);
+    int getATTValueChange(unsigned int tactNumber, unsigned char line, unsigned char timeUs);
 
 
 signals:
@@ -104,6 +104,7 @@ private:
     bool _started; // автомат PLD работает
     bool _RAMAccessible; // для контроллера доступна микросхема ОЗУ
     unsigned char _numOfTacts; // установленное число тактов
+    unsigned int _tactParameterAreaSize; // текущий размер области параметров тактов, зависит от числа установленных тактов
 
     tMaximumParameters _BScanBuffer[2][MaxNumOfTacts][MaxNumOfSignals]; // линия-такт-сигналы
     unsigned char _BScanLine;
@@ -135,17 +136,23 @@ private:
     unsigned char _DPShift; //
 
     cCriticalSection* _cs;
+    unsigned char _ampl[16];
 
     bool _workAreaInital[TACT_WORK_AREA_SIZE];
-    unsigned char _tactParameterArea[TACT_PARAMETERS_AREA_SIZE * MaxNumOfTacts];
+    unsigned char _tactParameterArea[parreg_sz * MaxNumOfTacts];
     unsigned char _tactWorkAreaInital[TACT_WORK_AREA_SIZE]; // начальные значения, записываемые в область
     // параметров такта после установки числа тактов
     unsigned char _tactWorkArea[TACT_WORK_AREA_SIZE];
 
+    unsigned char codeToAmpl(unsigned int code)
+    {
+        return _ampl[code & 0xF];
+    }
     void constructAScan(bool needBlocked);
     unsigned char timeToAScanBufferOffset(unsigned char timeUs, unsigned char timeFrac, unsigned char scale);
     void defineStrobLimits(unsigned int tactNumber, unsigned int strobNumber, unsigned int line);
     void defineStrobsLimits();
+    bool isInstantInStrob(unsigned char timeUS, unsigned int tactNumber, unsigned int strobNum, unsigned int line);
 };
 
 

@@ -23,6 +23,14 @@ PLDEMULATOR::PLDEMULATOR(cCriticalSection *cs): _cycledAScan(false),
     connect(this, SIGNAL(_AScanStarted(void)), this, SLOT(_onAScanStarted(void)));
 
     _pPulsePict = new ASCANPULSE(_AMaxAmplOffset);
+    _tactParameterAreaSize = parreg_sz * MaxNumOfTacts;
+
+    // таблица перевода кодирования дБ относительно порога в 32
+    // отсчета  в амплитуду
+    for (int ii = 0; ii < (int) sizeof(_ampl); ++ii) {
+        float bell = (ii * 2 - 12.0) / 20.0;
+        _ampl[ii] = (unsigned char) (pow(10.0, bell) * 32.0);
+    }
 
 /*
     for(int ii = 0; ii < MaxNumOfTacts; ++ii)
@@ -78,22 +86,34 @@ unsigned char offsetOfCenterSignal;
 
 }
 
-bool PLDEMULATOR::addBScanSignal(unsigned int tact, unsigned int line, unsigned int delayMS, unsigned int delayFrac, unsigned int ampl)
+bool PLDEMULATOR::addBScanSignal(unsigned int tact, unsigned int line, unsigned int delayMS, unsigned int delayFrac, unsigned int amplitudeCode)
 {
     assert((line == 0) || (line == 1));
 unsigned int numOfSignals = _BScanBuffer[line][tact][0].SignalCount;
 bool res = true;
 
     _cs->Enter();
+
     if (numOfSignals < MaxNumOfSignals)
     {
-        _BScanBuffer[line][tact][numOfSignals].MaximumAmpl = ampl;
+        int correctedAmplitudeInDB = (int)amplitudeCode + getATTValueChange(tact, line, delayMS);
+        if (correctedAmplitudeInDB < 0) correctedAmplitudeInDB = 0;
+            else
+
+        _BScanBuffer[line][tact][numOfSignals].MaximumAmpl = dBtoAmpl(correctedAmplitudeInDB);
         _BScanBuffer[line][tact][numOfSignals].MaximumDelay = delayMS;
         _BScanBuffer[line][tact][numOfSignals].MaxAndOutsetTFrac = (unsigned char)((delayFrac & 0xFF) << 4);
-
         _BScanBuffer[line][tact][0].SignalCount++;
     }
         else res = false;
+//
+    if (isInstantInStrob(delayMS, tact, 0, line))
+    {
+         unsigned char a = 1;
+         if (line) a <<= 4;
+        _ASDBuffer[tact] = a;
+    }
+//
     _cs->Release();
     return res;
 }
@@ -103,6 +123,7 @@ void PLDEMULATOR::resetSignals(unsigned char tact, unsigned int line)
     assert((line == 0) || (line == 1));
     _cs->Enter();
     _BScanBuffer[line][tact][0].SignalCount = 0;
+    memset (reinterpret_cast<unsigned char*>(_ASDBuffer), 0, sizeof(_ASDBuffer));
     _cs->Release();
 }
 //
@@ -158,10 +179,11 @@ void PLDEMULATOR::writeRegister(unsigned int regAddress, unsigned char regValue)
              {
                  assert(regValue <= MaxNumOfTacts);
                  assert(_started == false);
-                 _numOfTacts = regValue;
+                 _numOfTacts = regValue + 1; // в ПЛИС записываем максимальный номер такта
+                 _tactParameterAreaSize = parreg_sz * _numOfTacts;
                  for(int ii=0; ii< TACT_WORK_AREA_SIZE; ++ii)
                  {
-                     _workAreaInital[regAddress - TACT_PARAMETERS_AREA_SIZE] = true;
+                     _workAreaInital[ii] = true;
                  }
              }
                  else
@@ -263,36 +285,36 @@ unsigned int PLDEMULATOR::getNumberOfTacts()
     return static_cast<unsigned int>(_numOfTacts);
 }
 
-void PLDEMULATOR::writeIntoRAM(unsigned short address, unsigned char value)
+void PLDEMULATOR::writeIntoRAM(unsigned int address, unsigned char value)
 {
-unsigned int tactParameterAreaSize = TACT_PARAMETERS_AREA_SIZE * MaxNumOfTacts; // _numOfTacts;
+
     assert (_RAMAccessible);
     assert (_numOfTacts);
     _cs->Enter();
     address -= ExtRamStartAdr;
     assert((address & 0x8000) == 0);
-    if (address < tactParameterAreaSize)
+    if (address < _tactParameterAreaSize)
     {
-        _tactParameterArea[address] = value;
+        _tactParameterArea[address >> 1] = value;
         qDebug() << "writeIntoRAM: address =" << hex << address + ExtRamStartAdr << "value =" << value << "into _tactParameterArea, offset = " << address;
     }
         else
         {
-            if (_workAreaInital[address - tactParameterAreaSize])
+            if (_workAreaInital[(address - _tactParameterAreaSize) >> 1])
             {
-                _tactWorkAreaInital[address - tactParameterAreaSize] = value;
-                _workAreaInital[address - tactParameterAreaSize] = false;
+                _tactWorkAreaInital[(address - _tactParameterAreaSize) >> 1] = value;
+                _workAreaInital[(address - _tactParameterAreaSize) >> 1] = false;
             }
-            _tactWorkArea[address - tactParameterAreaSize] = value;
+            _tactWorkArea[(address - _tactParameterAreaSize) >> 1] = value;
 
-            qDebug() << "writeIntoRAM: address =" << hex << address + ExtRamStartAdr << "value =" << value << "into _tactWorkArea, offset = " << address - tactParameterAreaSize;
+            qDebug() << "writeIntoRAM: address =" << hex << address + ExtRamStartAdr << "value =" << value << "into _tactWorkArea, offset = " << ((address - _tactParameterAreaSize) >> 1);
 
             defineStrobsLimits();
         }
     _cs->Release();
 }
 
-unsigned char PLDEMULATOR::readFromRAM(unsigned char address)
+unsigned char PLDEMULATOR::readFromRAM(unsigned int address)
 {
 unsigned char res;
 
@@ -301,13 +323,13 @@ unsigned char res;
 
     _cs->Enter();
     address -= ExtRamStartAdr;
-    if (address < TACT_PARAMETERS_AREA_SIZE * MaxNumOfTacts) //_numOfTacts)
+    if (address < _tactParameterAreaSize)
     {
-        res = _tactParameterArea[address];
+        res = _tactParameterArea[address >> 1];
     }
         else
         {
-            res = _tactWorkArea[address - TACT_PARAMETERS_AREA_SIZE * MaxNumOfTacts]; //_numOfTacts];
+            res = _tactWorkArea[(address - _tactParameterAreaSize) >> 1];
         }
     _cs->Release();
     return res;
@@ -315,21 +337,21 @@ unsigned char res;
 
 // возвращает разницу начального и текущего положения аттенюатора в дБ
 // для линии line и времени timeUs
-int PLDEMULATOR::getATTValueChange(unsigned char line, unsigned char timeUs)
+int PLDEMULATOR::getATTValueChange(unsigned int tactNumber, unsigned char line, unsigned char timeUs)
 {
-tTactWorkAreaElement *pElementInital = reinterpret_cast<tTactWorkAreaElement*>(_tactWorkAreaInital);
-tTactWorkAreaElement *pElement = reinterpret_cast<tTactWorkAreaElement*>(_tactWorkArea);
+tTactWorkAreaElement *pElementInital = reinterpret_cast<tTactWorkAreaElement*>(&_tactWorkAreaInital[tactNumber * (SAMPLE_DURATION + 1) + timeUs]);
+tTactWorkAreaElement *pElement = reinterpret_cast<tTactWorkAreaElement*>(&_tactWorkArea[tactNumber * (SAMPLE_DURATION + 1) + timeUs]);
     if (line == 0)
     {
-        return (pElement[timeUs].DACValueLine0 - pElementInital[timeUs].DACValueLine0) / 2;
+        return (pElement->DACValueLine0 - pElementInital->DACValueLine0) / 2;
     }
-    return (pElement[timeUs].DACValueLine1 - pElementInital[timeUs].DACValueLine1) / 2;
+    return (pElement->DACValueLine1 - pElementInital->DACValueLine1) / 2;
 }
 
 void PLDEMULATOR::defineStrobLimits(unsigned int tactNumber, unsigned int strobNumber, unsigned int line)
 {
 unsigned int stage;
-tTactWorkAreaElement *pElement = reinterpret_cast<tTactWorkAreaElement*>(_tactWorkArea);
+tTactWorkAreaElement *pElement = reinterpret_cast<tTactWorkAreaElement*>(&_tactWorkArea[tactNumber * (SAMPLE_DURATION + 1)]);
 unsigned char byteMask;
 
     if (line == 0)
@@ -346,7 +368,7 @@ unsigned char byteMask;
     {
         if (stage == 0)
         {
-            if(pElement[tactNumber * (SAMPLE_DURATION + 1) + ii].StrobsMark & byteMask)
+            if(pElement->StrobsMark & byteMask)
             {
                 _strobLimits[line][tactNumber][strobNumber].Start = ii;
                 stage = 1;
@@ -354,7 +376,7 @@ unsigned char byteMask;
         }
             else
             {
-                if((pElement[tactNumber * (SAMPLE_DURATION + 1) + ii].StrobsMark & byteMask) == 0)
+                if((pElement->StrobsMark & byteMask) == 0)
                 {
                     if (ii)
                     {
@@ -367,6 +389,7 @@ unsigned char byteMask;
                     break;
                 }
             }
+            ++pElement;
     }
 }
 
@@ -380,3 +403,7 @@ void PLDEMULATOR::defineStrobsLimits()
         }
 }
 
+bool PLDEMULATOR::isInstantInStrob(unsigned char timeUS, unsigned int tactNumber, unsigned int strobNumber, unsigned int line)
+{
+    return ((timeUs >= _strobLimits[line][tactNumber][strobNumber].Start) && (timeUs <= _strobLimits[line][tactNumber][strobNumber].End));
+}
