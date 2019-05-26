@@ -3,6 +3,7 @@
 
 #include <QTimer>
 #include <QObject>
+#include <assert.h>
 #include "CriticalSection.h"
 #include "ustyp468.h"
 #include "ascanpulse.h"
@@ -31,9 +32,9 @@ const unsigned int PLDVerId = 0x2048; // версия эмулируемой прошивки ПЛИС
 //#define a0x1301 (0x1301<<1) // число тактов
 
 //  смещения данных о найденном максимуме А развертки в _AScanBuffer
-#define _AMaxAmplOffset 0xE8
-#define _AMaxDelayOffset 0xE9
-#define _AMaxDelayFracOffset 0xEA
+#define AMaxAmplOffset 0xE8
+#define AMaxDelayOffset 0xE9
+#define AMaxDelayFracOffset 0xEA
 
 #pragma pack(push, 1)
 
@@ -114,11 +115,11 @@ private:
     unsigned char _AScanBuffer[SAMPLE_DURATION];
     QTimer *_pAScanTimer;
     unsigned char _AScanLine;
-    unsigned char _AscanTact;
-    unsigned char _AscanScale;
-    unsigned char _AscanStart;
+    unsigned char _AScanTact;
+    unsigned char _AScanScale;
+    unsigned char _AScanStart;
 //
-    unsigned char _AscanStrobForMax;
+    unsigned char _AScanStrobForMax;
 
     bool _cycledAScan;
     bool _AScanReady;
@@ -136,7 +137,9 @@ private:
     unsigned char _DPShift; //
 
     cCriticalSection* _cs;
-    unsigned char _ampl[16];
+    int _amplInDB[16];
+    int _ampl[31];
+
 
     bool _workAreaInital[TACT_WORK_AREA_SIZE];
     unsigned char _tactParameterArea[parreg_sz * MaxNumOfTacts];
@@ -144,15 +147,23 @@ private:
     // параметров такта после установки числа тактов
     unsigned char _tactWorkArea[TACT_WORK_AREA_SIZE];
 
-    unsigned char codeToAmpl(unsigned int code)
+    unsigned char codeToDB(unsigned int code)
     {
-        return _ampl[code & 0xF];
+        return _amplInDB[code & 0xF];
     }
+
+    unsigned char DBToAmplitude(int dB)
+    {
+        assert((dB <= -12) && (dB >= 18));
+        return _ampl[dB + 12];
+    }
+
     void constructAScan(bool needBlocked);
     unsigned char timeToAScanBufferOffset(unsigned char timeUs, unsigned char timeFrac, unsigned char scale);
     void defineStrobLimits(unsigned int tactNumber, unsigned int strobNumber, unsigned int line);
     void defineStrobsLimits();
     bool isInstantInStrob(unsigned char timeUS, unsigned int tactNumber, unsigned int strobNum, unsigned int line);
+    int findMaxBScanSignal(unsigned int tact, unsigned line, unsigned int strob);
 };
 
 

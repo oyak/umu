@@ -9,7 +9,7 @@ PLDEMULATOR::PLDEMULATOR(cCriticalSection *cs): _cycledAScan(false),
                              _AScanLine(0),
                              _started(false),
                              _RAMAccessible(false),
-                             _AscanTact(0),
+                             _AScanTact(0),
                              _BScanLine(0),
                              _DPShift(0),
                              _ASDBufferAccessible(false)
@@ -22,13 +22,32 @@ PLDEMULATOR::PLDEMULATOR(cCriticalSection *cs): _cycledAScan(false),
     _pAScanTimer = nullptr;
     connect(this, SIGNAL(_AScanStarted(void)), this, SLOT(_onAScanStarted(void)));
 
-    _pPulsePict = new ASCANPULSE(_AMaxAmplOffset);
+    _pPulsePict = new ASCANPULSE(AMaxAmplOffset);
     _tactParameterAreaSize = parreg_sz * MaxNumOfTacts;
+
+// таблица перевода кода амплитуды в децибелы относительно порога 32
+    _amplInDB[0] = -12;
+    _amplInDB[1] = -10;
+    _amplInDB[2] = -8;
+    _amplInDB[3] = -6;
+    _amplInDB[4] = -4;
+    _amplInDB[5] = -2;
+    _amplInDB[6] = 0;
+    _amplInDB[7] = 2;
+    _amplInDB[8] = 4;
+    _amplInDB[9] = 6;
+    _amplInDB[10] = 8;
+    _amplInDB[11] = 10;
+    _amplInDB[12] = 12;
+    _amplInDB[13] = 14;
+    _amplInDB[14] = 16;
+    _amplInDB[15] = 18;
+
 
     // таблица перевода кодирования дБ относительно порога в 32
     // отсчета  в амплитуду
     for (int ii = 0; ii < (int) sizeof(_ampl); ++ii) {
-        float bell = (ii * 2 - 12.0) / 20.0;
+        float bell = (ii - 12) / 20.0;
         _ampl[ii] = (unsigned char) (pow(10.0, bell) * 32.0);
     }
 
@@ -57,33 +76,46 @@ PLDEMULATOR::~PLDEMULATOR()
 void PLDEMULATOR::constructAScan(bool needBlocked)
 {
 unsigned char offsetOfCenterSignal;
+int indexOfBScanSignal;
 
     assert((_AScanLine == 0) || (_AScanLine == 1));
-    assert(_AscanTact < MaxNumOfTacts);
+    assert(_AScanTact < MaxNumOfTacts);
     if (needBlocked) _cs->Enter();
 
 //    for (int ii = QTime::currentTime().msecsSinceStartOfDay() & 0xFF; ii < _AMaxAmplOffset; ++ii)
 //        _AScanBuffer[ii] = ii;
 
-
     memset(_AScanBuffer, 0, sizeof(_AScanBuffer));
-    if (_BScanBuffer[_AScanLine][_AscanTact][0].SignalCount)
-       for (unsigned int ii=0; ii<_BScanBuffer[_AScanLine][_AscanTact][0].SignalCount; ++ii)
+    if (_BScanBuffer[_AScanLine][_AScanTact][0].SignalCount)
+    {
+       for (unsigned int ii=0; ii<_BScanBuffer[_AScanLine][_AScanTact][0].SignalCount; ++ii)
        {
-       unsigned int amplitude = _BScanBuffer[_AScanLine][_AscanTact][ii].MaximumAmpl; // + _pPulsePict->getRandUcharByIndexes(++_randomSampleIndex, 0);
+       unsigned int amplitude = _BScanBuffer[_AScanLine][_AScanTact][ii].MaximumAmpl; // + _pPulsePict->getRandUcharByIndexes(++_randomSampleIndex, 0);
 //        if (amplitude > 255) amplitude = 255;
-          offsetOfCenterSignal = timeToAScanBufferOffset(_BScanBuffer[_AScanLine][_AscanTact][ii].MaximumDelay, _BScanBuffer[_AScanLine][_AscanTact][ii].MaxAndOutsetTFrac >> 4, _AscanScale);
-           _pPulsePict->drawSample(_AScanBuffer, offsetOfCenterSignal, _AscanScale, amplitude);
+          offsetOfCenterSignal = timeToAScanBufferOffset(_BScanBuffer[_AScanLine][_AScanTact][ii].MaximumDelay, _BScanBuffer[_AScanLine][_AScanTact][ii].MaxAndOutsetTFrac >> 4, _AScanScale);
+           _pPulsePict->drawSample(_AScanBuffer, offsetOfCenterSignal, _AScanScale, amplitude);
        }
-
-
-    for (unsigned int ii=0; ii < _AMaxAmplOffset; ++ii)
+    }
+    for (unsigned int ii=0; ii < AMaxAmplOffset; ++ii)
     {
         if (_AScanBuffer[ii] == 0) _AScanBuffer[ii] = _pPulsePict->getRandUcharByIndexes(++_randomSampleIndex, ii);
     }
 
-    if (needBlocked) _cs->Release();
+    indexOfBScanSignal = findMaxBScanSignal(_AScanTact, _AScanLine, _AScanStrobForMax);
 
+    if (indexOfBScanSignal >= 0)
+    {
+        _AScanBuffer[AMaxAmplOffset] = _BScanBuffer[_AScanLine][_AScanTact][indexOfBScanSignal].MaximumAmpl;
+        _AScanBuffer[AMaxDelayOffset] = _BScanBuffer[_AScanLine][_AScanTact][indexOfBScanSignal].MaximumDelay;
+        _AScanBuffer[AMaxDelayFracOffset] = _BScanBuffer[_AScanLine][_AScanTact][indexOfBScanSignal].MaxAndOutsetTFrac >> 4;
+    }
+        else
+        {
+            _AScanBuffer[AMaxAmplOffset] = 0;
+            _AScanBuffer[AMaxDelayOffset] = 0;
+            _AScanBuffer[AMaxDelayFracOffset] = 0;
+        }
+    if (needBlocked) _cs->Release();
 }
 
 bool PLDEMULATOR::addBScanSignal(unsigned int tact, unsigned int line, unsigned int delayMS, unsigned int delayFrac, unsigned int amplitudeCode)
@@ -97,10 +129,13 @@ bool res = true;
     if (numOfSignals < MaxNumOfSignals)
     {
         int correctedAmplitudeInDB = (int)amplitudeCode + getATTValueChange(tact, line, delayMS);
-        if (correctedAmplitudeInDB < 0) correctedAmplitudeInDB = 0;
+        if (correctedAmplitudeInDB < -12) correctedAmplitudeInDB = -12;
             else
+            {
+                if (correctedAmplitudeInDB > 18) correctedAmplitudeInDB = 18;
+            }
 
-        _BScanBuffer[line][tact][numOfSignals].MaximumAmpl = dBtoAmpl(correctedAmplitudeInDB);
+        _BScanBuffer[line][tact][numOfSignals].MaximumAmpl = DBToAmplitude(correctedAmplitudeInDB);
         _BScanBuffer[line][tact][numOfSignals].MaximumDelay = delayMS;
         _BScanBuffer[line][tact][numOfSignals].MaxAndOutsetTFrac = (unsigned char)((delayFrac & 0xFF) << 4);
         _BScanBuffer[line][tact][0].SignalCount++;
@@ -140,7 +175,7 @@ unsigned int regAddressMasked = regAddress & ~LineMaskForAScan;
     }
         else if (regAddressMasked >= Aaddr1)
              {
-                 if  (regAddressMasked <=  Aaddr1 + (_AMaxDelayFracOffset<<1))
+                 if  (regAddressMasked <=  Aaddr1 + (AMaxDelayFracOffset<<1))
                  {
                      res = _AScanBuffer[(regAddressMasked >> 1) & 0xFF];
                  }
@@ -193,22 +228,22 @@ void PLDEMULATOR::writeRegister(unsigned int regAddress, unsigned char regValue)
                      unsigned int regAddressMasked = regAddress & ~LineMaskForAScan;
                          if (regAddressMasked ==  Aaddr1 + (0xFE<<1))
                          {
-                             _AscanScale = regValue;
+                             _AScanScale = regValue;
                          }
                             else if (regAddressMasked ==  Aaddr1 + (0xFD<<1))
                                  {
-                                     _AscanStart = regValue;
+                                     _AScanStart = regValue;
                                  }
                                      else if (regAddressMasked ==  Aaddr1 + (0xFC<<1))
                                           {
                                               assert((regValue & tactbitmsk) < MaxNumOfTacts);
-                                              _AscanTact = regValue & tactbitmsk;
+                                              _AScanTact = regValue & tactbitmsk;
                                               _AScanLine = (regValue & 0x80) ? 1:0;
                                           }
                                               else if (regAddressMasked ==  Aaddr1 + (0xFF<<1))
                                                    {
 //                                                       assert(_started);
-                                                       _AscanStrobForMax = (regValue >> 2) & 0x3;
+                                                       _AScanStrobForMax = (regValue >> 2) & 0x3;
                                                        _AScanReady = false;
 
 /*
@@ -249,7 +284,6 @@ unsigned int res;
     return (unsigned char)res;
 }
 
-
 // сигнал о запуске А-развертки
 void PLDEMULATOR::_onAScanStarted(void)
 {
@@ -258,21 +292,20 @@ void PLDEMULATOR::_onAScanStarted(void)
 
 }
 
-
 // слот на срабатывание таймера _AScanTimer
 void PLDEMULATOR::_onAscanTimer()
 {
     _cs->Enter();
 //    _pAScanTimer->stop();
 
-    if (_AscanScale != 0)
+    if (_AScanScale != 0)
     {
        constructAScan(false);
        _AScanReady = true;
     }
     _cs->Release();
-
 }
+
 void PLDEMULATOR::setPathShft(int shift)
 {
     _cs->Enter();
@@ -405,5 +438,40 @@ void PLDEMULATOR::defineStrobsLimits()
 
 bool PLDEMULATOR::isInstantInStrob(unsigned char timeUS, unsigned int tactNumber, unsigned int strobNumber, unsigned int line)
 {
-    return ((timeUs >= _strobLimits[line][tactNumber][strobNumber].Start) && (timeUs <= _strobLimits[line][tactNumber][strobNumber].End));
+    return ((timeUS >= _strobLimits[line][tactNumber][strobNumber].Start) && (timeUS <= _strobLimits[line][tactNumber][strobNumber].End));
+}
+//
+// находит в сигналах B-развертки для заданного такта максимальный сигнал(его индекс), лежащий в пределах
+// заданного строба
+// если сигналов в стробе нет - возвращает -1
+int PLDEMULATOR::findMaxBScanSignal(unsigned int tact, unsigned line, unsigned int strob)
+{
+unsigned int currentMaxAmplitude;
+unsigned int signalCount;
+int res = -1;
+
+    if (_BScanBuffer[line][tact][0].SignalCount == 0) return -1;
+
+    for(signalCount=0; signalCount < _BScanBuffer[line][tact][0].SignalCount; ++signalCount)
+    {
+        if(isInstantInStrob(_BScanBuffer[line][tact][signalCount].MaximumDelay, tact, strob, line))
+        {
+            currentMaxAmplitude = _BScanBuffer[line][tact][signalCount].MaximumAmpl;
+            break;
+        }
+    }
+    if (signalCount < _BScanBuffer[line][tact][0].SignalCount - 1)
+    {
+        for(unsigned int ii=signalCount+1; ii < _BScanBuffer[line][tact][0].SignalCount; ++ii)
+        {
+            if ((currentMaxAmplitude < _BScanBuffer[line][tact][ii].MaximumAmpl) &&
+                isInstantInStrob(_BScanBuffer[line][tact][signalCount].MaximumDelay, tact, strob, line))
+            {
+                currentMaxAmplitude = _BScanBuffer[line][tact][ii].MaximumAmpl;
+                signalCount = ii;
+            }
+        }
+       return signalCount;
+   }
+   return -1;
 }
