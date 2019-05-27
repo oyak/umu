@@ -368,17 +368,29 @@ unsigned char res;
     return res;
 }
 
+unsigned short PLDEMULATOR::getTactWorkAreaOffset(unsigned int tact)
+{
+unsigned short res;
+    res = ((_tactParameterArea[parreg_sz * tact + (_WSALmask >> 1)+1] << 8) | _tactParameterArea[(parreg_sz * tact + _WSALmask) >> 1]);
+    if (res >= ExtRamStartAdr) res -= ExtRamStartAdr;
+        else res = 0;
+    return res;
+}
+
 // возвращает разницу начального и текущего положени€ аттенюатора в дЅ
 // дл€ линии line и времени timeUs
-int PLDEMULATOR::getATTValueChange(unsigned int tactNumber, unsigned char line, unsigned char timeUs)
+int PLDEMULATOR::getATTValueChange(unsigned int tactNumber, unsigned char line, unsigned char timeUS)
 {
-tTactWorkAreaElement *pElementInital = reinterpret_cast<tTactWorkAreaElement*>(&_tactWorkAreaInital[tactNumber * (SAMPLE_DURATION + 1) + timeUs]);
-tTactWorkAreaElement *pElement = reinterpret_cast<tTactWorkAreaElement*>(&_tactWorkArea[tactNumber * (SAMPLE_DURATION + 1) + timeUs]);
+tTactWorkAreaElement *pElementInital = reinterpret_cast<tTactWorkAreaElement*>(&_tactWorkAreaInital[getTactWorkAreaOffset(tactNumber)]);
+tTactWorkAreaElement *pElement = reinterpret_cast<tTactWorkAreaElement*>(&_tactWorkArea[getTactWorkAreaOffset(tactNumber)]);
+
     if (line == 0)
     {
-        return (pElement->DACValueLine0 - pElementInital->DACValueLine0) / 2;
+        return (pElement[timeUS].DACValueLine0 - pElementInital[timeUS].DACValueLine0) / 2;
+//        return (pElement->DACValueLine0 - pElementInital->DACValueLine0) / 2;
     }
-    return (pElement->DACValueLine1 - pElementInital->DACValueLine1) / 2;
+    return (pElement[timeUS].DACValueLine1 - pElementInital[timeUS].DACValueLine1) / 2;
+//    return (pElement->DACValueLine1 - pElementInital->DACValueLine1) / 2;
 }
 
 void PLDEMULATOR::defineStrobLimits(unsigned int tactNumber, unsigned int strobNumber, unsigned int line)

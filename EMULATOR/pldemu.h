@@ -89,7 +89,7 @@ public:
 
     void writeIntoRAM(unsigned int address, unsigned char value);
     unsigned char readFromRAM(unsigned int address);
-    int getATTValueChange(unsigned int tactNumber, unsigned char line, unsigned char timeUs);
+    int getATTValueChange(unsigned int tactNumber, unsigned char line, unsigned char timeUS);
 
 
 signals:
@@ -164,6 +164,8 @@ private:
     void defineStrobsLimits();
     bool isInstantInStrob(unsigned char timeUS, unsigned int tactNumber, unsigned int strobNum, unsigned int line);
     int findMaxBScanSignal(unsigned int tact, unsigned line, unsigned int strob);
+
+    unsigned short getTactWorkAreaOffset(unsigned int tact);
 };
 
 
