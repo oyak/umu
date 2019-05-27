@@ -18,8 +18,8 @@ struct tSCANOBJECT_EX
 {
    unsigned int Id;
    unsigned int Size; // длина объекта - LastCoordinate = FirstCoordinate + Size
-   unsigned int FirstCoordinate; // этой координате соответствет первый элемент SCANOBJECT
-   unsigned int LastCoordinate; // этой координате соответствет последний элемент SCANOBJECT
+   int FirstCoordinate; // этой координате соответствет первый элемент SCANOBJECT
+   int LastCoordinate; // этой координате соответствет последний элемент SCANOBJECT
    int N0EMSShift;
    eOBJECT_ORDER ObjectOrder;
    SCANOBJECT *pScanObject;

@@ -3,15 +3,15 @@
 
 //условия включения нового элемента в _ObjectArray
 //1. координаты нового элемента не пересекаются ни с одним элементом _ObjectArray
-//2. или начальная координата нового элемента пересекается с конечной координатой последнего элементом _ObjectArray -
+//2. или начальная координата нового элемента пересекается с конечной координатой последнего элементa _ObjectArray -
 //производим усечение ранее включенного элемента
 
-bool OBJECTSARRAY::addObject(unsigned int id, unsigned int startCoordInMM, unsigned int lenInMM, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject)
+bool OBJECTSARRAY::addObject(unsigned int id, int startCoordInMM, unsigned int lenInMM, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject)
 {
 bool res = true;
 QVector<tSCANOBJECT_EX>::iterator overCrossedElement;
 QVector<tSCANOBJECT_EX>::iterator temp;
-unsigned int endCoordInMM = startCoordInMM + lenInMM;
+int endCoordInMM = startCoordInMM + (int)lenInMM;
 
     _cs->Enter();
 
@@ -34,8 +34,8 @@ unsigned int endCoordInMM = startCoordInMM + lenInMM;
             ++temp;
             if (temp == _objectArray.end())
             {// пересекающийся элемент последний в списке
-                if ((overCrossedElement->FirstCoordinate > 0) && ((overCrossedElement->FirstCoordinate + 1) < startCoordInMM))
-                { // производим усечение ранее всключенного
+                if (((overCrossedElement->FirstCoordinate + 1) < startCoordInMM))
+                { // производим усечение ранее всключенного объекта, если его начало находится раньше, чем startCoordInMM
                     overCrossedElement->LastCoordinate = startCoordInMM - 1;
                     res = insertSCANOBJECT_EXBefore(_objectArray.end(), id, startCoordInMM, endCoordInMM, objectOrder, pObject);
                 }
@@ -60,7 +60,7 @@ void OBJECTSARRAY::deleteObjects()
 //
 // coord - коодината в мм
 // если найдены сигналы, соответствующие координате - SignalsData, возвращается указатель на них и
-SignalsData* OBJECTSARRAY::getObject(unsigned int coord, bool& isDataObject)
+SignalsData* OBJECTSARRAY::getObject(int coord, bool& isDataObject)
 {
 SignalsData* res = 0;
 int seekDir = 0; // 0- не определено, -1 - к началу массива, 1 - к концу массива
@@ -156,7 +156,7 @@ int seekDir = 0; // 0- не определено, -1 - к началу массива, 1 - к концу массива
 }
 
 // ищет элемент с пересекающимися координатами
-QVector<tSCANOBJECT_EX>::iterator OBJECTSARRAY::findOverCrossCoordinate(unsigned int startCoord, unsigned int endCoord, QVector<tSCANOBJECT_EX>::iterator startElement)
+QVector<tSCANOBJECT_EX>::iterator OBJECTSARRAY::findOverCrossCoordinate(int startCoord, int endCoord, QVector<tSCANOBJECT_EX>::iterator startElement)
 {
 QVector<tSCANOBJECT_EX>::iterator res;
     res = startElement;
@@ -170,7 +170,7 @@ QVector<tSCANOBJECT_EX>::iterator res;
 }
 
 // ищет первый элемент с большими координатами, при условии, что нет элементов с пересекающимися координатами
-QVector<tSCANOBJECT_EX>::iterator OBJECTSARRAY::findBiggerCoordinate(unsigned int endCoord)
+QVector<tSCANOBJECT_EX>::iterator OBJECTSARRAY::findBiggerCoordinate(int endCoord)
 {
 QVector<tSCANOBJECT_EX>::iterator res;
     res = _objectArray.begin();
@@ -184,7 +184,7 @@ QVector<tSCANOBJECT_EX>::iterator res;
 }
 
 
-bool OBJECTSARRAY::insertSCANOBJECT_EXBefore(QVector<tSCANOBJECT_EX>::iterator whereToIt, unsigned int id, unsigned int firstCoord, unsigned int lastCoord, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject)
+bool OBJECTSARRAY::insertSCANOBJECT_EXBefore(QVector<tSCANOBJECT_EX>::iterator whereToIt, unsigned int id, int firstCoord, int lastCoord, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject)
 {
 tSCANOBJECT_EX temp;
     temp.FirstCoordinate = firstCoord;

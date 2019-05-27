@@ -77,7 +77,7 @@ void EMULATOR::getChannelList(QList<CID>& channelList)
     channelList = _channelList;
 }
 
-bool EMULATOR::onMessageId(unsigned short objectId, unsigned int startCoordInMM, eUMUSide side)
+bool EMULATOR::onMessageId(unsigned short objectId, int startCoordInMM, eUMUSide side)
 {
     bool res = false;
 
@@ -89,10 +89,7 @@ bool EMULATOR::onMessageId(unsigned short objectId, unsigned int startCoordInMM,
     SCANOBJECT* pObject = _pStorage->extractObject(order, len, N0EMSShift, objectId);
     if (pObject) {
         if ((order == ExpandedOverPlacing) && (N0EMSShift > 0)) {
-            if (startCoordInMM > (unsigned int) N0EMSShift)
                 startCoordInMM -= N0EMSShift;
-            else
-                startCoordInMM = 0;
         }
         res = _pPathModel[side]->addObject(objectId, startCoordInMM, len, order, pObject);
     }
@@ -105,7 +102,7 @@ void EMULATOR::deletePathObjects()
 }
 
 
-SignalsData* EMULATOR::getScanObject(eUMUSide side, unsigned int coordInMM, bool& isDataObject)
+SignalsData* EMULATOR::getScanObject(eUMUSide side, int coordInMM, bool& isDataObject)
 {
     assert((side == 0) || (side == 1));
     return _pPathModel[side]->getObject(coordInMM, isDataObject);

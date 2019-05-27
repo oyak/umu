@@ -35,11 +35,11 @@ public:
         return _config[channel];
     }
 
-    SignalsData* getScanObject(eUMUSide side, unsigned int coord, bool &isDataObject);
+    SignalsData* getScanObject(eUMUSide side, int coord, bool &isDataObject);
 
     void getChannelList(QList<CID>& channelList);
 
-    bool onMessageId(unsigned short objectId, unsigned int startCoord, eUMUSide side);
+    bool onMessageId(unsigned short objectId, int startCoord, eUMUSide side);
     void deletePathObjects();
     void setMovingDirection(Test::eMovingDir movingDirection);
 

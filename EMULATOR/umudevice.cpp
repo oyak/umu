@@ -737,10 +737,6 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                     bytePtr += sizeof(coord);
                     id = ReadLE16U (bytePtr);
                     bytePtr += sizeof(id);
-
-                    if (coord >= 0)
-                    {
-
                     if (jj == 0)
                     {// данные дл€ левой стороны
                       bool res;
@@ -757,7 +753,6 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                                else qDebug() << "right side flaw: id = " << id << ", coord = " << coord << " - ignored";
                        }
 
-                    }
                 }
                 byteCount -= IdCount * (sizeof(coord) + sizeof(id));
             }
@@ -877,8 +872,6 @@ SignalsData *pSignalsData;
  tSignalObject *pSignals;
  tStrokeConfig strokeAndLine;
  bool isDataObject; // данной координате соответствует объект, но нет сигналов
- unsigned int positiveCoordL;
- unsigned int positiveCoordR;
 
 // предполагаетс€, что координата coordInMM соответствует центру искательной системы
 // получим координату ѕЁѕ 0 гр.
@@ -893,18 +886,8 @@ SignalsData *pSignalsData;
             coordLInMM -= N0EMS_SENSOR_SHIFT_mm;
             coordRInMM -= N0EMS_SENSOR_SHIFT_mm;
         }
-    if (coordLInMM >= 0)
-    {
-        positiveCoordL = (unsigned int)coordLInMM;
-    }
-        else positiveCoordL = 0;
-    if (coordRInMM >= 0)
-    {
-        positiveCoordR = (unsigned int)coordRInMM;
-    }
-        else positiveCoordR = 0;
 //
-    pSignalsData = _pEmulator->getScanObject(usLeft, positiveCoordL, isDataObject);
+    pSignalsData = _pEmulator->getScanObject(usLeft, coordLInMM, isDataObject);
     if (pSignalsData)
     {
         for (it=_channelList.begin(); it != _channelList.end(); ++it)
@@ -942,7 +925,7 @@ SignalsData *pSignalsData;
                  }
              }
 //
-    pSignalsData = _pEmulator->getScanObject(usRight, positiveCoordR, isDataObject);
+    pSignalsData = _pEmulator->getScanObject(usRight, coordRInMM, isDataObject);
     if (pSignalsData)
     {
         for (it=_channelList.begin(); it != _channelList.end(); ++it)

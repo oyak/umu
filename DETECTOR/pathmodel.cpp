@@ -8,7 +8,7 @@ void PATHMODEL::deleteObjects()
     }
 }
 //
-bool PATHMODEL::addObject(unsigned int id, unsigned int startCoord, unsigned int lenInSteps, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject)
+bool PATHMODEL::addObject(unsigned int id, int startCoord, unsigned int lenInSteps, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject)
 {
     (_pObjectsArray[objectOrder])->addObject(id, startCoord, lenInSteps, objectOrder, pObject);
 }

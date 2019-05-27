@@ -47,10 +47,10 @@ public:
     }
 
     void deleteObjects();
-    bool addObject(unsigned int id, unsigned int startCoord, unsigned int lenInSteps, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject);
+    bool addObject(unsigned int id, int startCoord, unsigned int lenInSteps, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject);
 //
 
-    SignalsData *getObject(unsigned int coord, bool &isDataObject);
+    SignalsData *getObject(int coord, bool &isDataObject);
     void setMovingDirection(Test::eMovingDir movingDirection);
 private:
     float _step; // ראד ִֿ
@@ -64,10 +64,10 @@ private:
     cCriticalSection* _cs;
     Test::eMovingDir _movingDirection;
 
-    QVector<tSCANOBJECT_EX>::iterator findOverCrossCoordinate(unsigned int startCoord, unsigned int endCoord, QVector<tSCANOBJECT_EX>::iterator startElement);
-    QVector<tSCANOBJECT_EX>::iterator findBiggerCoordinate(unsigned int endCoord);
+    QVector<tSCANOBJECT_EX>::iterator findOverCrossCoordinate(int startCoord, int endCoord, QVector<tSCANOBJECT_EX>::iterator startElement);
+    QVector<tSCANOBJECT_EX>::iterator findBiggerCoordinate(int endCoord);
 
-    bool insertSCANOBJECT_EXBefore(QVector<tSCANOBJECT_EX>::iterator whereToIt, unsigned int id, unsigned int firstCoord, unsigned int lastCoord, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject);
+    bool insertSCANOBJECT_EXBefore(QVector<tSCANOBJECT_EX>::iterator whereToIt, unsigned int id, int firstCoord, int lastCoord, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject);
     unsigned int convertMMtoPathStep(unsigned int pathInMM);
 };
 

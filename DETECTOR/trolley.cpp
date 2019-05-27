@@ -87,13 +87,12 @@ void TROLLEY::ifPathEvent()
 int c = _coordinate / step;
     if (c != _stepCoordinate)
     {
-    QTime curT;
-    double shift = _rotationDegree * 0.5;
+//    QTime curT;
+        double shift = _rotationDegree * 0.5;
 
         emit pathStep(c - _stepCoordinate, (int)(_coordinate + shift), (int)(_coordinate - shift));
-//        emit pathStep(c - _stepCoordinate, (int)_coordinate, (int)_coordinate);
 
-        curT = QTime::currentTime();
+//        curT = QTime::currentTime();
 //        qDebug() << "msec = " << curT.msec() << "step = " << c - _stepCoordinate << " path = " << _coordinate << "mm";
 
         _stepCoordinate = c;
