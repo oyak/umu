@@ -61,7 +61,8 @@ typedef struct
     unsigned char MaximumDelay;
     unsigned char EndDelay;
     unsigned char MaxAndOutsetTFrac; // MaxTFrac - старшая тетрада
-    unsigned char Reserved2;
+    unsigned char Reserved2; // это поле используем для сохранения амплитуды максимума, полученного изначально
+// в виде кода из объекта сигналов и преобразованного в dB
 } tMaximumParameters;
 
 #pragma pack(pop)
@@ -105,7 +106,7 @@ private:
     bool _started; // автомат PLD работает
     bool _RAMAccessible; // для контроллера доступна микросхема ОЗУ
     unsigned char _numOfTacts; // установленное число тактов
-    unsigned int _tactParameterAreaSize; // текущий размер области параметров тактов, зависит от числа установленных тактов
+    unsigned short _tactParameterAreaSize; // текущий размер области параметров тактов, зависит от числа установленных тактов
 
     tMaximumParameters _BScanBuffer[2][MaxNumOfTacts][MaxNumOfSignals]; // линия-такт-сигналы
     unsigned char _BScanLine;
@@ -154,7 +155,11 @@ private:
 
     unsigned char DBToAmplitude(int dB)
     {
-        assert((dB >= -12) && (dB <= 18));
+        if (dB < -12) dB = -12;
+            else
+            {
+                if (dB > 18) dB = 18;
+            }
         return _ampl[dB + 12];
     }
 
@@ -166,6 +171,8 @@ private:
     int findMaxBScanSignal(unsigned int tact, unsigned line, unsigned int strob);
 
     unsigned short getTactWorkAreaOffset(unsigned int tact);
+    void redefineSignalAmplitudes();
+    void redefineSignalAmplitudes(unsigned int line);
 };
 
 
