@@ -154,7 +154,7 @@ private:
 
     unsigned char DBToAmplitude(int dB)
     {
-        assert((dB <= -12) && (dB >= 18));
+        assert((dB >= -12) && (dB <= 18));
         return _ampl[dB + 12];
     }
 
