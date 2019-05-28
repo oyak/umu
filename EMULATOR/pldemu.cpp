@@ -142,11 +142,16 @@ bool res = true;
     }
         else res = false;
 //
-    if (isInstantInStrob(delayMS, tact, 0, line))
+    for (unsigned int strob=0; strob<MaxNumOfStrobs; ++strob)
     {
-         unsigned char a = 1;
-         if (line) a <<= 4;
-        _ASDBuffer[tact] = a;
+        if (isInstantInStrob(delayMS, tact, strob, line))
+        {
+            unsigned char a = 1 << strob;
+            if (line) a <<= 4;
+            _ASDBuffer[tact] |= a;
+
+//            qWarning() << "_ASDBuffer: tact =" << tact << "data =" << _ASDBuffer[tact];
+        }
     }
 //
     _cs->Release();
@@ -178,7 +183,10 @@ void PLDEMULATOR::resetSignals(unsigned char tact, unsigned int line)
     assert((line == 0) || (line == 1));
     _cs->Enter();
     _BScanBuffer[line][tact][0].SignalCount = 0;
-    memset (reinterpret_cast<unsigned char*>(_ASDBuffer), 0, sizeof(_ASDBuffer));
+
+    if (line == 0) _ASDBuffer[tact] &= 0x0F;
+        else _ASDBuffer[tact] &= 0xF0;
+
     _cs->Release();
 }
 //
@@ -208,6 +216,9 @@ unsigned int regAddressMasked = regAddress & ~LineMaskForAScan;
                           else if((_ASDBufferAccessible) && (regAddress >= BScanASD_0) && ( ((regAddress >> 1) < (BScanASD_0 >> 1) + MaxNumOfTacts )) )
                                {
                                    res = _ASDBuffer[(regAddress - BScanASD_0) >> 1];
+
+                                   if (res)
+                                       qWarning() << "readRegister: _ASDBuffer - Offset =" << ((regAddress - BScanASD_0) >> 1) << "Data =" << res;
                                }
                                    else if (regAddress == LENGTHDPVALUEADR)
                                         {
