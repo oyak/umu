@@ -163,7 +163,7 @@ if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
     }
         else
         {
-            if (fabs(coordDiscrepancy) > _absDiscrepancyMaxOfCoord)
+            if ((fabs(coordDiscrepancy) > _absDiscrepancyMaxOfCoord) && (_targetV != 0.0) )
             {
                 if ((fabs(coordDiscrepancy) >= abs(_lastCoordDiscrepancy)) || ((coordDiscrepancy * _lastCoordDiscrepancy) < 0))
                 {
