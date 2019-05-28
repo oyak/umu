@@ -4453,6 +4453,8 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 200;
     table.insert(9120, descriptor);
 //
+    descriptor.Order = ExpandedOverPlacing;
+    descriptor.N0EMSShift = -23;
     descriptor.ObjectName = "Болтовой стык с 10.1";
     descriptor.SourceFileName = "21.a31";
     descriptor.Side = usRight;
@@ -4463,6 +4465,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(10101, descriptor);
 //
+    descriptor.N0EMSShift = -134;
     descriptor.ObjectName = "Болтовой стык с 10.1";
     descriptor.SourceFileName = "190208-085216.a31";
     descriptor.Side = usRight;
@@ -4473,6 +4476,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(10102, descriptor);
 //
+    descriptor.N0EMSShift = 263;
     descriptor.ObjectName = "Болтовой стык с 11.1";
     descriptor.SourceFileName = "180926-115613.a31";
     descriptor.Side = usLeft;
@@ -4483,6 +4487,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(10111, descriptor);
 //
+    descriptor.N0EMSShift = 284;
     descriptor.ObjectName = "Болтовой стык с 31.1";
     descriptor.SourceFileName = "16.10.2018  13 км 9 пк 21.A31";
     descriptor.Side = usRight;
@@ -4493,6 +4498,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(10131, descriptor);
 //
+    descriptor.N0EMSShift = 169;
     descriptor.ObjectName = "Болтовой стык с 31.1";
     descriptor.SourceFileName = "16.10.2018  13 км 9 пк 21.A31";
     descriptor.Side = usLeft;
@@ -4503,6 +4509,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(10132, descriptor);
 //
+    descriptor.N0EMSShift = -141;
     descriptor.ObjectName = "Болтовой стык с 33.1";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usRight;
@@ -4513,6 +4520,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(331, descriptor);
 //
+    descriptor.N0EMSShift = -124;
     descriptor.ObjectName = "Болтовой стык с 53.1";
     descriptor.SourceFileName = "040118_631 км 1 пк 53.1 АВ31№17027.a31";
     descriptor.Side = usLeft;
@@ -4523,6 +4531,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(531, descriptor);
 //
+    descriptor.N0EMSShift = -141;
     descriptor.ObjectName = "Болтовой стык с 53.1";
     descriptor.SourceFileName = "1_170615-113834.a31";
     descriptor.Side = usLeft;
@@ -4533,6 +4542,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(532, descriptor);
 //
+    descriptor.N0EMSShift = 125;
     descriptor.ObjectName = "Болтовой стык с 53.1";
     descriptor.SourceFileName = "190220-102137.a31";
     descriptor.Side = usLeft;
@@ -4543,6 +4553,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(533, descriptor);
 //
+    descriptor.Order = OverPlacing;
 // стрелочные переводы
 // 1
     descriptor.ObjectName = "От болтового стыка до остряка";
