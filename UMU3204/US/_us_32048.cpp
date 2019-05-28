@@ -933,17 +933,16 @@ if (value < c_dacminval) value = c_dacminval;
     return  value + c_dacCorrection;
 }
 //-------------------------------------------------------------------
-void SetTactParameter(unsigned char tactNumber, unsigned int parameterOffset, unsigned short parameterValue)
-{
-
-}
-//-------------------------------------------------------------------
 // очиститка области параметров такта не производится, т.к.
 // п.п может вызываться, когда B-развертка включена, а здесь время
 // в призме не устанавливается
 void SetTacktParam(tTACTPARAMSCMD *pData)
 {
+#ifndef DEVICE_EMULATION
 unsigned short *BA;
+#else
+unsigned short BA;
+#endif
 unsigned short a;
 unsigned short b;
 unsigned short ii;
@@ -973,26 +972,34 @@ unsigned char *p;
 
   if (pData->Duration > MaxAScanDuration) pData->Duration = MaxAScanDuration; // ограничить длительность развертки
 
-#ifndef DEVICE_EMULATION
-
-
-  jj = parreg_sz * takt +ExtRamStartAdr;
+  jj = parreg_sz * takt + ExtRamStartAdr;
 //
   if (!takt)
   {
+#ifndef DEVICE_EMULATION
      BA=(USHORT*)(jj + _WSALmask); // offset WSALmask
      *BA++ = 0;
+#else
+      BA = jj + _WSALmask;
+      writeIntoRAM(BA, 0);
+      BA += 2;
+#endif
      a = extramstart + parreg_sz * NumOfTacts; // low byte = 0 here
 
-      smprintf("\nSetTacktParam: takt 0, WSA = %x", a);
+     smprintf("\nSetTacktParam: takt 0, WSA = %x", a);
 
      a = a | (a >> 8);
+#ifndef DEVICE_EMULATION
      *BA=a;
+#else
+     writeIntoRAM(BA, a);
+#endif
 
 //очистить рабочую область такта, считая ее максимально длинной, если
 // B-развертка не включена
     if (EnableBScan == 0)
     {
+#ifndef DEVICE_EMULATION
         BA = (USHORT*)( (a & 0xFF00) + ramstart) ;
         for(b=0; b<256*4; ++b) BA[b] = 0;
         for(b=0; b < AContactZone; ++b)
@@ -1000,20 +1007,47 @@ unsigned char *p;
             BA[((b + pData->Duration) << 2) + 1] = (correctDACValue(pData->ACATTLn1L) << 8) | correctDACValue(pData->ACATTLn1R);
             BA[((b + pData->Duration) << 2) + 2] = (correctDACValue(pData->ACATTLn2L) << 8) | correctDACValue(pData->ACATTLn2R);
         }
+/*
+#else
+// если DEVICE_EMULATION  - рабочую область тактов здесь не обнуляем
+
+        BA = a & 0xFF00;
+        for(b=0; b<256*4; ++b)
+        {
+            writeIntoRAM(BA + b, 0);
+        }
+        for(b=0; b < AContactZone; ++b)
+        {
+            writeIntoRAM(BA + ((b + pData->Duration) << 2) + 1, (correctDACValue(pData->ACATTLn1L) << 8) | correctDACValue(pData->ACATTLn1R));
+            writeIntoRAM(BA + ((b + pData->Duration) << 2) + 2, (correctDACValue(pData->ACATTLn2L) << 8) | correctDACValue(pData->ACATTLn2R));
+        }
+*/
+#endif
     }
 //     smprintf("\nSetTacktParam: takt - wraddr = %x", BA);
   }
     else
     {
-         BA=(USHORT*)( parreg_sz * (takt-1)  + ExtRamStartAdr + _WSALmask); // offset WSALmask v parametrah predydushego takta
+#ifndef DEVICE_EMULATION
+         BA = (USHORT*)(parreg_sz * (takt-1) + ExtRamStartAdr + _WSALmask); // offset WSALmask v parametrah predydushego takta
          b = *BA++;
          a = *BA;
-
+#else
+         BA = extramstart + parreg_sz * (takt-1) + _WSALmask;
+         b = readFromRAM(BA);
+         BA += 2;
+         a = readFromRAM(BA);
+#endif
           if ( (b == 0) && (a != 0) )
           {
-              BA=(USHORT*)(parreg_sz * (takt-1) + ExtRamStartAdr + _RazvCRmask);
               a <<= 8;
+#ifndef DEVICE_EMULATION
+              BA=(USHORT*)(parreg_sz * (takt-1) + ExtRamStartAdr + _RazvCRmask);
               b = *BA + AContactZone; // не должно превысить 255
+#else
+              BA = (extramstart + parreg_sz * (takt-1) + _RazvCRmask);
+              b = readFromRAM(BA) + AContactZone; // не должно превысить 255
+#endif
               a += ((b & 0xFF) * 4 + 100) << 1;  // "<<1", i.e word addressing
               if (a & 0xFF) a += 0x100; // ceiling
               a &= 0xFF00;
@@ -1021,14 +1055,22 @@ unsigned char *p;
               smprintf("\nSetTacktParam: takt %d, WSA = %x", takt,a);
 
               a = a | (a>>8);
+#ifndef DEVICE_EMULATION
               BA=(USHORT*)(jj + _WSALmask); // offset WSALmask
               *BA++ = 0;
               *BA = a;
+#else
+              BA = jj + _WSALmask;
+              writeIntoRAM(BA, 0);
+              BA += 2;
+              writeIntoRAM(BA, a);
+#endif
 //
 //очистить рабочую область такта, считая ее максимально длинной, если
 // B-развертка не включена
              if (EnableBScan == 0)
              {
+#ifndef DEVICE_EMULATION
                  BA = (USHORT*)( (a & 0xFF00) + ramstart) ;
                  for(b=0; b<256*4; ++b) BA[b] = 0;
                  for(b=0; b < AContactZone; ++b)
@@ -1036,14 +1078,31 @@ unsigned char *p;
                      BA[((b + pData->Duration) << 2) + 1] = (correctDACValue(pData->ACATTLn1L) << 8) | correctDACValue(pData->ACATTLn1R);
                      BA[((b + pData->Duration) << 2) + 2] = (correctDACValue(pData->ACATTLn2L) << 8) | correctDACValue(pData->ACATTLn2R);
                  }
+/*
+#else
+// если DEVICE_EMULATION  - рабочую область тактов здесь не обнуляем
+
+                 BA = a & 0xFF00;
+                 for(b=0; b<256*4; ++b)
+                 {
+                     writeIntoRAM(BA + b, 0);
+                 }
+                 for(b=0; b < AContactZone; ++b)
+                 {
+                     writeIntoRAM(BA + ((b + pData->Duration) << 2) + 1, (correctDACValue(pData->ACATTLn1L) << 8) | correctDACValue(pData->ACATTLn1R));
+                     writeIntoRAM(BA + ((b + pData->Duration) << 2) + 2, (correctDACValue(pData->ACATTLn2L) << 8) | correctDACValue(pData->ACATTLn2R));
+                 }
+*/
+#endif
              }
          }
             else
             { // WSA takta ii-1 ne opredelen
               simplePrintf("\nSetTacktParam: takt's %d WSA not defined and HiByte = %x, LoByte = %x",takt-1, a,b);
             }
-         }
+    }
 //
+#ifndef DEVICE_EMULATION
   BA=(USHORT*)(jj + _ChLCRmask); // offset ChLCRmask
 
 #ifndef AC_dis
@@ -1093,14 +1152,20 @@ unsigned char *p;
 //  smprintf("\nSetTacktParam: line 2, genr-rcvr - genl-rcvl = %x", a);
 //
   *BA=a;
-//
-  BA=(USHORT*)(jj + _RazvCRmask); // offset RazvCRmask
+#endif
 //
   a =  pData->Duration;
   a =  a | (a << 8);
-  *BA=a;    
+#ifndef DEVICE_EMULATION
+  BA=(USHORT*)(jj + _RazvCRmask); // offset RazvCRmask
+  *BA=a;
+#else
+  BA = jj + _RazvCRmask;
+  writeIntoRAM(BA, a);
+#endif
   smprintf("\nSetTacktParam: AScan length = 0x%x", a);
 //
+#ifndef DEVICE_EMULATION
 // з бв®в  ‡€ «Ё­Ёп 1,2
   {
     BA=(USHORT*)(jj + _FreqL1mask); 
@@ -1154,16 +1219,19 @@ unsigned char *p;
    }
    xSemaphoreGive(s_asd);
 //
-#else
-// DEVICE_EMULATION defined
-    SetTactParameter(takt, 0, 0);
 #endif
   Start_PLD_Work();
 }
 //-------------------------------------------------------------------
 void ChangeVRU(UCHAR *p)
 {
-USHORT *BA,WSA,a;
+#ifndef DEVICE_EMULATION
+USHORT *BA;
+#else
+USHORT BA;
+#endif
+
+USHORT WSA,a;
 UCHAR sideidx,lineidx,a1,a2;
 uint i,tmp,tmp2, duration;
 float quoeff;
@@ -1177,7 +1245,7 @@ float quoeff;
   lineidx = getLineIndex(p);
 //
 #ifndef DEVICE_EMULATION
-  BA = (USHORT*)(parreg_sz*(*p & tactbitmsk)+ExtRamStartAdr + _RazvCRmask);
+  BA = (USHORT*)(parreg_sz * (*p & tactbitmsk) + ExtRamStartAdr + _RazvCRmask);
   duration = *BA & 0xFF;
 // WSA address is the same for both sides - use left side WSA value
   BA = (USHORT*)(parreg_sz*(*p & tactbitmsk)+ExtRamStartAdr + _WSALmask);
@@ -1185,7 +1253,17 @@ float quoeff;
   Lo(WSA)=(UCHAR)a;
   a=*BA;
   Hi(WSA)=(UCHAR)a;
-
+#else
+  BA = extramstart + parreg_sz * (*p & tactbitmsk) + _RazvCRmask;
+  duration = readFromRAM(BA) & 0xFF;
+// WSA address is the same for both sides - use left side WSA value
+  BA = extramstart + parreg_sz * (*p & tactbitmsk) + _WSALmask;
+  a = readFromRAM(BA);
+  Lo(WSA)=(UCHAR)a;
+  BA += 2;
+  a = readFromRAM(BA);
+  Hi(WSA)=(UCHAR)a;
+#endif
 //  simprintf("\nChangeVRU: WSA = %x",WSA);
 
   if (WSA<extramstart) WSA= extramstart;
@@ -1204,11 +1282,15 @@ float quoeff;
 //
   for (i=tmp; i<=tmp2 && i<duration; ++i)
   {
-      BA=(USHORT*)(WSA+(((i<<2)+lineidx+1)<<1)+ramstart);
-
-//      simprintf("\nChangeVRU: BA = %x",BA);
-
+#ifndef DEVICE_EMULATION
+      BA = (USHORT*)(WSA+(((i<<2)+lineidx+1)<<1) + ramstart);
       a = *BA;
+#else
+      BA = WSA + (((i<<2)+lineidx+1)<<1);
+      a = readFromRAM(BA);
+#endif
+      //      simprintf("\nChangeVRU: BA = %x",BA);
+
       if (sideidx)
       { // income data for the right side
          a &= 0xFF;
@@ -1219,10 +1301,12 @@ float quoeff;
          a &= 0xFF00;
          a |= (a1+(uchar)(quoeff*(i-tmp)));
        }
+#ifndef DEVICE_EMULATION
       *BA = a;
-  }
-#lse
+#else
+      writeIntoRAM(BA, a);
 #endif
+  }
   Start_PLD_Work();
 //
 }
@@ -1230,7 +1314,13 @@ float quoeff;
 //
 void ChangeStrobs(UCHAR *p)
 {
-USHORT *BA,WSA,a;
+#ifndef DEVICE_EMULATION
+USHORT *BA;
+#else
+USHORT BA;
+#endif
+
+USHORT WSA,a;
 UCHAR sideidx,lineidx,takt,a1,a2;
 USHORT i,tmp,tmp2;
 USHORT razvLen;
@@ -1246,13 +1336,23 @@ USHORT razvLen;
 //
 #ifndef DEVICE_EMULATION
 // WSA address is the same for both sides - use left side WSA value
-  BA = (USHORT*)(parreg_sz*takt+ExtRamStartAdr + _WSALmask);
+  BA = (USHORT*)(parreg_sz * takt + ExtRamStartAdr + _WSALmask);
   a = *BA++;
   Lo(WSA)=(UCHAR)a;
   a=*BA;
   Hi(WSA)=(UCHAR)a;
+#else
+  BA = extramstart + parreg_sz * takt + _WSALmask;
+  a = readFromRAM(BA);
+  Lo(WSA)=(UCHAR)a;
+  BA += 2;
+  a = readFromRAM(BA);
+  Hi(WSA)=(UCHAR)a;
+#endif
+
   if (WSA<extramstart) WSA= extramstart;
 //
+#ifndef DEVICE_EMULATION
 // uroven stroba
   if (lineidx) BA=(USHORT*)(parreg_sz*takt+ExtRamStartAdr + _LevStrR0mask);
     else  BA= (USHORT*)(parreg_sz*takt+ExtRamStartAdr + _LevStrL0mask);
@@ -1274,6 +1374,7 @@ USHORT razvLen;
   *BA = a;
 //
 //   simplePrintf("\nChangeStrobs: takt = %d, strob = %d, addr = 0x%x, level = 0x%x ",takt, *p, (DWORD)BA,a );
+#endif
 
   if (lineidx!=0)
   {
@@ -1301,21 +1402,26 @@ USHORT razvLen;
 
   tmp =  *(p+1);  // strob start
   tmp2 = *(p+2);  // strob end
-//
-
 
 //      simplePrintf("\nStrob: WSA = %x   ",WSA);
 //      simplePrintf("\nStrob:  start = %d   ",tmp);
 //      simplePrintf("\nStrob:  end = %d   ",tmp2);
-
-     BA=(USHORT*)(parreg_sz * takt + ExtRamStartAdr + _RazvCRmask);
-
+#ifndef DEVICE_EMULATION
+     BA = (USHORT*)(parreg_sz * takt + ExtRamStartAdr + _RazvCRmask);
      razvLen = *BA & 0xFF;
-
+#else
+     BA = extramstart + parreg_sz * takt + _RazvCRmask;
+     razvLen = readFromRAM(BA) & 0xFF;
+#endif
       for (i=0; i<razvLen; ++i)
       {
-        BA=(USHORT*)(WSA+(((i<<2)+3)<<1)+ramstart);
-        a=*BA;
+#ifndef DEVICE_EMULATION
+        BA=(USHORT*)(WSA + (((i<<2)+3)<<1) + ramstart);
+        a = *BA;
+#else
+          BA= WSA + (((i<<2)+3)<<1);
+          a = readFromRAM(BA);
+#endif
         if ((i>=tmp) && (i < tmp2))
         {
             if (sideidx)  a |= (a1 << 8);
@@ -1327,10 +1433,12 @@ USHORT razvLen;
               else a &= a2 | 0xFF00;
          }
 //
+#ifndef DEVICE_EMULATION
         *BA = a;
-     }
 #else
+        writeIntoRAM(BA, a);
 #endif
+     }
   Start_PLD_Work();
 }
 //-------------------------------------------------------------------
@@ -2238,7 +2346,7 @@ tLANMESSAGEHEADER aScanSumMsgHdr;
 tLANMESSAGEHEADER acStateMsgHdr;
 #endif
 
-inline void moveLargeBScanBody(unsigned short *pHeader)
+inline void moveLargeBScanBody(unsigned short *header)
 {
 volatile register DWORD line = 0;
 volatile register USHORT i, j, k, numSignalOffs;
@@ -2449,15 +2557,15 @@ UCHAR fDPMsg;        // не равно 0, если было отослано сообщение ДП(имитатора)
 
                 get_Access(a+hdrsize);
 #ifdef OLD_PACKET_HEADER
-              pHeader[1] = a;
-              pHeader[2] =  ((NumOfSignals & 0xF00) << 4) | ((NumOfSignals & 0xF) << 8)  | (line<<6) | k;
+              header[1] = a;
+              header[2] =  ((NumOfSignals & 0xF00) << 4) | ((NumOfSignals & 0xF) << 8)  | (line<<6) | k;
 #else
-              pHeader[1] = a;
-              ATTACH_MESSAGE_NUMBER(*(UCHAR*)&pHeader[2])
-              pHeader[3] =  ((NumOfSignals & 0xF00) << 4) | ((NumOfSignals & 0xF) << 8)  | (line<<6) | k;
+              header[1] = a;
+              ATTACH_MESSAGE_NUMBER(*(UCHAR*)&header[2])
+              header[3] =  ((NumOfSignals & 0xF00) << 4) | ((NumOfSignals & 0xF) << 8)  | (line<<6) | k;
 #endif
 
-              put_DataByWord(pHeader, sizeof(header));
+              put_DataByWord(header, sizeof(header));
               numSignalOffs = 0;
               for (i=0; i<j; ++i)
               {

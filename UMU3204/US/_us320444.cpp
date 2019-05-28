@@ -259,18 +259,16 @@ DWORD i;
     PINSEL4 |= (1<<26); // EINT3 - P2.13
 #endif
 //
+#ifndef DEVICE_EMULATION
    Wr_RegPLD(a0x1300,0x101);
 
   for (i=ExtRamStartAdr;i<ramstart+(0xD000<<1);i+=2)
   {
-//    r=(USHORT*)(i);
-//    *r= 0;
-      Wr_RegPLD(i, 0);
+    r=(USHORT*)(i);
+    *r= 0;
   }
-//
    Wr_RegPLD(a0x1300,0);
 //
-#ifndef DEVICE_EMULATION
 #ifdef CONFIGURATION_PRINT
     simplePrintf("\n Hardware DP procession");
 #endif

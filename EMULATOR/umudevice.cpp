@@ -68,7 +68,6 @@ int xTaskGetTickCount(void)
 #define TBD
 #define PARAM_UNDEFINED
 
-#define extramstart (0x5000 << 1)
 
 typedef class cCriticalSection* xSemaphoreHandle;
 #define xTaskHandle int
@@ -198,13 +197,25 @@ unsigned short Rd_RegPLD(unsigned int regAddr)
     return (UMUDEVICE::deviceObjectPtr->readPLDRegister(usLeft, regAddr) << 8) | UMUDEVICE::deviceObjectPtr->readPLDRegister(usRight, regAddr);
 }
 
-void Wr_RegPLD(unsigned int regAddr, unsigned short val)
+void Wr_RegPLD(unsigned int regAddr, unsigned short value)
 {
     assert(UMUDEVICE::deviceObjectPtr);
-    UMUDEVICE::deviceObjectPtr->writePLDRegister(usLeft, regAddr, (unsigned char)(val >> 8));
-    UMUDEVICE::deviceObjectPtr->writePLDRegister(usRight, regAddr, (unsigned char)(val & 0xFF));
+    UMUDEVICE::deviceObjectPtr->writePLDRegister(usLeft, regAddr, (unsigned char)(value >> 8));
+    UMUDEVICE::deviceObjectPtr->writePLDRegister(usRight, regAddr, (unsigned char)(value & 0xFF));
 }
 
+void writeIntoRAM(unsigned short address, unsigned short value)
+{
+    assert(UMUDEVICE::deviceObjectPtr);
+    UMUDEVICE::deviceObjectPtr->writeIntoRAM(usLeft, address, (unsigned char)(value >> 8));
+    UMUDEVICE::deviceObjectPtr->writeIntoRAM(usRight, address, (unsigned char)(value & 0xFF));
+}
+
+unsigned short readFromRAM(unsigned short address)
+{
+    assert(UMUDEVICE::deviceObjectPtr);
+    return (UMUDEVICE::deviceObjectPtr->readFromRAM(usLeft, address) << 8) | UMUDEVICE::deviceObjectPtr->readFromRAM(usRight, address);
+}
 
 unsigned short get_devicenumber(void)
 {
@@ -617,6 +628,29 @@ unsigned char UMUDEVICE::readPLDRegister(eUMUSide side, unsigned int regAddress)
     return _pldr->readRegister(regAddress);
 }
 
+void UMUDEVICE::writeIntoRAM(eUMUSide side, unsigned int regAddress, unsigned char value)
+{
+    if (side == usLeft)
+    {
+        _pldl->writeIntoRAM(regAddress, value);
+    }
+        else
+        {
+            _pldr->writeIntoRAM(regAddress, value);
+        }
+}
+
+unsigned char UMUDEVICE::readFromRAM(eUMUSide side, unsigned int regAddress)
+{
+    if (side == usLeft)
+    {
+        return _pldl->readFromRAM(regAddress);
+    }
+    return _pldr->readFromRAM(regAddress);
+}
+
+
+
 
 void UMUDEVICE::readPCMessageHead(unsigned int& res, bool& fRepeat)
 {
@@ -846,6 +880,7 @@ void UMUDEVICE::_onPLDInt()
 {
     if (_enablePLDInt)
     {
+        if (EnableASD)  ReadASD();
         shiftValue = getShiftSensorValue(mainShiftSensorNumber);
         moveLargeBScan(0);
     }
@@ -911,7 +946,7 @@ SignalsData *pSignalsData;
                             delayMS = pSignals->Signals[ii].Delay / 3;
                             delayFrac = pSignals->Signals[ii].Delay % 3;
                         }
-                    _pldl->addBScanSignal(strokeAndLine.Stroke, strokeAndLine.Line, delayMS, delayFrac, _pEmulator->codeToAmpl(pSignals->Signals[ii].Ampl));
+                    _pldl->addBScanSignal(strokeAndLine.Stroke, strokeAndLine.Line, delayMS, delayFrac, pSignals->Signals[ii].Ampl);
                 }
             }
         }
@@ -949,7 +984,7 @@ SignalsData *pSignalsData;
                               delayMS = pSignals->Signals[ii].Delay / 3;
                               delayFrac = pSignals->Signals[ii].Delay % 3;
                           }
-                    _pldr->addBScanSignal(strokeAndLine.Stroke, strokeAndLine.Line, delayMS, delayFrac, _pEmulator->codeToAmpl(pSignals->Signals[ii].Ampl));
+                    _pldr->addBScanSignal(strokeAndLine.Stroke, strokeAndLine.Line, delayMS, delayFrac, pSignals->Signals[ii].Ampl);
                 }
             }
         }

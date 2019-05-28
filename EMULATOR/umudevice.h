@@ -32,6 +32,7 @@
 #endif
 
 
+
 #define N0EMS_SENSOR_SHIFT_mm 80 // смещение ПЭП 0гр в искательной системе относительно ее
 // центра (между БР1 и БР2), мм
 
@@ -254,6 +255,9 @@ public:
 
     void writePLDRegister(eUMUSide side, unsigned int regAddress, unsigned char value);
     unsigned char readPLDRegister(eUMUSide side, unsigned int regAddress);
+
+    void writeIntoRAM(eUMUSide side, unsigned int regAddress, unsigned char value);
+    unsigned char readFromRAM(eUMUSide side, unsigned int regAddress);
 
     unsigned int getNumberOfTacts();
 
