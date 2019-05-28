@@ -44,15 +44,97 @@ const unsigned int lengthPathEncoderDividerOffPar = 0;
 // в проекте QT определить DEVICE_EMULATION
 #define AC_dis
 
+void dbgPrintOfMessage(tLAN_CDUMessage* _out_block)
+{
+    switch(_out_block->Size)
+    {
+        case 0:
+        qWarning() << "LanMessage:"<< hex << _out_block->Id << _out_block->Source <<  _out_block->Size << "0" << \
+                                         _out_block->MessageCount << _out_block->NotUse;
+        break;
+        case 1:
+        qWarning() << "LanMessage:"<< hex << _out_block->Id << _out_block->Source <<  _out_block->Size << "0" << \
+                                         _out_block->MessageCount << _out_block->NotUse << \
+                                         _out_block->Data[0];
+        break;
+        case 2:
+        qWarning() << "LanMessage:"<< hex << _out_block->Id << _out_block->Source <<  _out_block->Size << "0" << \
+                                         _out_block->MessageCount << _out_block->NotUse << \
+                                         _out_block->Data[0] << _out_block->Data[1];
+        break;
+        case 3:
+        qWarning() << "LanMessage:"<< hex << _out_block->Id << _out_block->Source <<  _out_block->Size << "0" << \
+                                         _out_block->MessageCount << _out_block->NotUse << \
+                                         _out_block->Data[0] << _out_block->Data[1] << _out_block->Data[2];
+        break;
+        case 4:
+        qWarning() << "LanMessage:"<< hex << _out_block->Id << _out_block->Source <<  _out_block->Size << "0" << \
+                                         _out_block->MessageCount << _out_block->NotUse << \
+                                         _out_block->Data[0] << _out_block->Data[1] << _out_block->Data[2] << _out_block->Data[3];
+        break;
+        case 5:
+        qWarning() << "LanMessage:"<< hex << _out_block->Id << _out_block->Source <<  _out_block->Size << "0" << \
+                                         _out_block->MessageCount << _out_block->NotUse << \
+                                         _out_block->Data[0] << _out_block->Data[1] << _out_block->Data[2] << _out_block->Data[3] << \
+                                         _out_block->Data[4];
+        break;
+        case 6:
+        qWarning() << "LanMessage:"<< hex << _out_block->Id << _out_block->Source <<  _out_block->Size << "0" << \
+                                         _out_block->MessageCount << _out_block->NotUse << \
+                                         _out_block->Data[0] << _out_block->Data[1] << _out_block->Data[2] << _out_block->Data[3] << \
+                                         _out_block->Data[4] << _out_block->Data[5];
+        break;
+        case 7:
+        qWarning() << "LanMessage:"<< hex << _out_block->Id << _out_block->Source <<  _out_block->Size << "0" << \
+                                         _out_block->MessageCount << _out_block->NotUse << \
+                                         _out_block->Data[0] << _out_block->Data[1] << _out_block->Data[2] << _out_block->Data[3] << \
+                                         _out_block->Data[4] << _out_block->Data[5] << _out_block->Data[6];
+        break;
+        case 8:
+        qWarning() << "LanMessage:"<< hex << _out_block->Id << _out_block->Source <<  _out_block->Size << "0" << \
+                                         _out_block->MessageCount << _out_block->NotUse << \
+                                         _out_block->Data[0] << _out_block->Data[1] << _out_block->Data[2] << _out_block->Data[3] << \
+                                         _out_block->Data[4] << _out_block->Data[5] << _out_block->Data[6] << _out_block->Data[7];
+        break;
+        case 9:
+        qWarning() << "LanMessage:"<< hex << _out_block->Id << _out_block->Source <<  _out_block->Size << "0" << \
+                                         _out_block->MessageCount << _out_block->NotUse << \
+                                         _out_block->Data[0] << _out_block->Data[1] << _out_block->Data[2] << _out_block->Data[3] << \
+                                         _out_block->Data[4] << _out_block->Data[5] << _out_block->Data[6] << _out_block->Data[7] << \
+                                         _out_block->Data[8];
+        case 10:
+        qWarning() << "LanMessage:"<< hex << _out_block->Id << _out_block->Source <<  _out_block->Size << "0" << \
+                                         _out_block->MessageCount << _out_block->NotUse << \
+                                         _out_block->Data[0] << _out_block->Data[1] << _out_block->Data[2] << _out_block->Data[3] << \
+                                         _out_block->Data[4] << _out_block->Data[5] << _out_block->Data[6] << _out_block->Data[7] << \
+                                         _out_block->Data[8] << _out_block->Data[9];
+        //
+        default:
+        qWarning() << "LanMessage:"<< hex << _out_block->Id << _out_block->Source <<  _out_block->Size << "0" << \
+                                         _out_block->MessageCount << _out_block->NotUse << \
+                                         _out_block->Data[0] << _out_block->Data[1] << _out_block->Data[2] << _out_block->Data[3] << \
+                                         _out_block->Data[4] << _out_block->Data[5] << _out_block->Data[6] << _out_block->Data[7] << \
+                                         _out_block->Data[8] << _out_block->Data[9] << "...";
+        break;
+    }
+}
+
 static void AddToOutBuffSync(tLAN_CDUMessage* _out_block)
 {
     UMUDEVICE::_critical_sectionPtr->Enter();
+
+//    if (_out_block->Id == 0x83)
+//        dbgPrintOfMessage(_out_block);
+
     UMUDEVICE::_out_bufferPtr->push(*_out_block);
     UMUDEVICE::_critical_sectionPtr->Release();
 }
 //
 static void AddToOutBuffNoSync(tLAN_CDUMessage* _out_block)
 {
+//    if (_out_block->Id == 0x83)
+//        dbgPrintOfMessage(_out_block);
+
     UMUDEVICE::_out_bufferPtr->push(*_out_block);
 }
 
@@ -168,12 +250,6 @@ unsigned char *destPtr;
             UMUDEVICE::_BScanMessageCounter += 2;
         }
     }
-}
-
-void dbgPrintfOfBScanMessage()
-{
-    qWarning() << "BScan:"<< hex << UMUDEVICE::_BScanMessage.Id << hex << UMUDEVICE::_BScanMessage.Source << hex << UMUDEVICE::_BScanMessage.Size << hex << \
-        UMUDEVICE::_BScanMessage.MessageCount << hex << UMUDEVICE::_BScanMessage.NotUse << hex << UMUDEVICE::_BScanMessage.Data[0] << hex << UMUDEVICE::_BScanMessage.Data[1] << "...";
 }
 
 #define release_Buffer \
