@@ -108,6 +108,9 @@ int indexOfBScanSignal;
         _AScanBuffer[AMaxAmplOffset] = _BScanBuffer[_AScanLine][_AScanTact][indexOfBScanSignal].MaximumAmpl;
         _AScanBuffer[AMaxDelayOffset] = _BScanBuffer[_AScanLine][_AScanTact][indexOfBScanSignal].MaximumDelay;
         _AScanBuffer[AMaxDelayFracOffset] = _BScanBuffer[_AScanLine][_AScanTact][indexOfBScanSignal].MaxAndOutsetTFrac >> 4;
+
+//        qDebug() << "Label data: Delay = " <<  _AScanBuffer[AMaxDelayOffset] << "Amplitude = " << _AScanBuffer[AMaxAmplOffset];
+
     }
         else
         {
@@ -346,7 +349,7 @@ void PLDEMULATOR::writeIntoRAM(unsigned int address, unsigned char value)
     if (address < (unsigned int)_tactParameterAreaSize)
     {
         _tactParameterArea[address >> 1] = value;
-        qDebug() << "writeIntoRAM: address =" << hex << address + ExtRamStartAdr << "value =" << value << "into _tactParameterArea, offset = " << address;
+//        qDebug() << "writeIntoRAM: address =" << hex << address + ExtRamStartAdr << "value =" << value << "into _tactParameterArea, offset = " << address;
     }
         else
         {
@@ -357,7 +360,7 @@ void PLDEMULATOR::writeIntoRAM(unsigned int address, unsigned char value)
             }
             _tactWorkArea[(address - _tactParameterAreaSize) >> 1] = value;
 
-            qDebug() << "writeIntoRAM: address =" << hex << address + ExtRamStartAdr << "value =" << value << "into _tactWorkArea, offset = " << ((address - _tactParameterAreaSize) >> 1);
+//            qDebug() << "writeIntoRAM: address =" << hex << address + ExtRamStartAdr << "value =" << value << "into _tactWorkArea, offset = " << ((address - _tactParameterAreaSize) >> 1);
 
             defineStrobsLimits();
             redefineSignalAmplitudes();
@@ -495,6 +498,7 @@ int res = -1;
             break;
         }
     }
+    if (_BScanBuffer[line][tact][0].SignalCount == 1) return signalCount;
     if (signalCount < _BScanBuffer[line][tact][0].SignalCount - 1)
     {
         for(unsigned int ii=signalCount+1; ii < _BScanBuffer[line][tact][0].SignalCount; ++ii)
