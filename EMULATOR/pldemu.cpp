@@ -217,8 +217,8 @@ unsigned int regAddressMasked = regAddress & ~LineMaskForAScan;
                                {
                                    res = _ASDBuffer[(regAddress - BScanASD_0) >> 1];
 
-                                   if (res)
-                                       qWarning() << "readRegister: _ASDBuffer - Offset =" << ((regAddress - BScanASD_0) >> 1) << "Data =" << res;
+//                                   if (res)
+//                                       qWarning() << "readRegister: _ASDBuffer - Offset =" << ((regAddress - BScanASD_0) >> 1) << "Data =" << res;
                                }
                                    else if (regAddress == LENGTHDPVALUEADR)
                                         {
