@@ -123,9 +123,19 @@ int timeDiscrepancy;
 
     _cs->Enter();
 
-// определение смещения за прошедший период между вызовами
-//double deltaS = _currentV; // * period;
-
+while(1)
+{
+    if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
+    {
+        timeDiscrepancy = currentms - _targets.front().Time;
+        if ((timeDiscrepancy > 10) && (_targets.size() != 1))
+        {// выкидываем "слишком старые" элементы, кроме последнего
+            _targets.pop_front();
+            continue;
+        }
+    }
+    break;
+}
 if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
 {
     timeDiscrepancy = currentms - _targets.front().Time;
@@ -133,8 +143,7 @@ if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
     {
 //        qDebug() << "target time discrepancy = " << currentms - _targets.front().Time;
     }
-   if ((timeDiscrepancy < 10) || (_targets.size() == 1))
-   { //
+//
     _targetCoordinate = _targets.front().StartCoord * 1.0;
     coordDiscrepancy = _coordinate - _targetCoordinate;
 
@@ -198,7 +207,6 @@ if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
         {
             setTrolleyTargetRotation((double)_targets.front().StartCoordL, (double)_targets.front().StartCoordR);
         }
-   } //
     _targets.pop_front();
 }
     if ((_targetV == 0.0) && (_currentV != 0.0))
