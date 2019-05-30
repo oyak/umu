@@ -184,8 +184,8 @@ void PLDEMULATOR::resetSignals(unsigned char tact, unsigned int line)
     _cs->Enter();
     _BScanBuffer[line][tact][0].SignalCount = 0;
 
-    if (line == 0) _ASDBuffer[tact] &= 0x0F;
-        else _ASDBuffer[tact] &= 0xF0;
+    if (line == 0) _ASDBuffer[tact] &= 0xF0;
+        else _ASDBuffer[tact] &= 0x0F;
 
     _cs->Release();
 }
@@ -509,6 +509,7 @@ int res = -1;
             break;
         }
     }
+    if (signalCount == _BScanBuffer[line][tact][0].SignalCount) return -1; // нет сигналов в стробе
     if (_BScanBuffer[line][tact][0].SignalCount == 1) return signalCount;
     if (signalCount < _BScanBuffer[line][tact][0].SignalCount - 1)
     {
