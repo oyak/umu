@@ -10,7 +10,7 @@
 
 extern const UCHAR mask[8];
 
-const unsigned int PLDVerId = 0x2048; // версия эмулируемой прошивки ПЛИС
+const unsigned int PLDVerId = 0x02000408; // версия эмулируемой прошивки ПЛИС - 2.0.4.8
 
 #define MaxNumOfTacts 8
 #define MaxNumOfSignals 8
