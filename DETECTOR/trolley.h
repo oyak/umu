@@ -64,7 +64,6 @@ private:
     double _currentV; // текуща€ скорость, мм/мс
     double _targetV;
     double _lastCoordDiscrepancy; // нев€зка по координате на прошлом проходе proc1ms()
-    double _currentVCorrection; // коррекци€ текущей скорости
 
     int _timeCorrection; // поправка времени, если здесь врем€ опережает
 

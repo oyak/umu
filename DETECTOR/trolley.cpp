@@ -20,7 +20,6 @@ TROLLEY::TROLLEY(cCriticalSection *cs): _timeCorrection(0),
      setCoordinate(0.0, 0.0, 0.0);
 
     _lastCoordDiscrepancy = 0.0;
-    _currentVCorrection = 0.0;
     _targetV = 0.0;
     _trolleyTimer1ms.setInterval(1);
     _trolleyTimer1ms.start();
@@ -159,45 +158,48 @@ if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
             else
             {// должны остановиться
 
-                qDebug()<< "need to stop";
+//                qDebug()<< "need to stop in _targetCoordinate = " << _targetCoordinate << "_coordinate" << _coordinate;
 
-                if ((_currentV * coordDiscrepancy) >= 0)
+                if ((_currentV * coordDiscrepancy) >= 0.0)
                 { // если либо уже добежали, либо бежим в переди паровоза
                     _currentV = 0.0;
-                    qDebug() << "Stopped without delay on coordinate" << _coordinate;
+//                    qDebug() << "Stopped without delay on coordinate" << _coordinate << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
                 }
             }
-        _currentVCorrection = 0.0;
 //        qDebug() << "targetV set to " << _targetV;
     }
         else
         {
-            if ((fabs(coordDiscrepancy) > _absDiscrepancyMaxOfCoord) && (_targetV != 0.0) )
+            double currentVCorrection;
+            if (fabs(coordDiscrepancy) > _absDiscrepancyMaxOfCoord)
             {
-                if ((fabs(coordDiscrepancy) >= abs(_lastCoordDiscrepancy)) || ((coordDiscrepancy * _lastCoordDiscrepancy) < 0))
-                {
-//                    qDebug() << "prepare to coorect _currentV =" << _currentV;
-                    _currentVCorrection = (coordDiscrepancy - _lastCoordDiscrepancy) / -10.0;
-                    if (fabs(_currentVCorrection) > fabs(_targetV) * 0.2)
+                if ((fabs(coordDiscrepancy) >= fabs(_lastCoordDiscrepancy)) || ((coordDiscrepancy * _lastCoordDiscrepancy) < 0))
+                {// невязка координаты увеличилась или изменила знак
+//                 qDebug() << "coordDiscrepancy =" << coordDiscrepancy << "_lastCoordDiscrepancy" << _lastCoordDiscrepancy;
+                    currentVCorrection = (coordDiscrepancy - _lastCoordDiscrepancy) / -10.0;
+                    if (_targetV != 0.0)
                     {
-                        if (_currentVCorrection > 0) _currentVCorrection = fabs(_targetV) * 0.2;
-                            else _currentVCorrection = fabs(_targetV) * (-0.2);
-                    }
-// следим, чтобы _currentV не сменило знак
-                    if (_currentV * _currentVCorrection < 0)
-                    {
-                        if (fabs(_currentVCorrection) > fabs(_currentV))
-                            _currentV /= 2.0;
-                    }
-                        else
+                        if (fabs(currentVCorrection) > fabs(_targetV) * 0.2)
                         {
-                            if (fabs(_currentVCorrection) == fabs(_currentV))
-                            {
-                                _currentV /= 2.0;
-                            }
+                            if (currentVCorrection > 0) currentVCorrection = fabs(_targetV) * 0.2;
+                                else currentVCorrection = fabs(_targetV) * (-0.2);
                         }
-                    _currentV += _currentVCorrection;
-//                    qDebug() << "V corrected to " << _currentV << "by correction = " << _currentVCorrection;
+// следим, чтобы _currentV не сменило знак
+                        if (_currentV * currentVCorrection < 0)
+                        {
+                            if (fabs(currentVCorrection) > fabs(_currentV))
+                                _currentV /= 2.0;
+                        }
+                            else
+                            {
+                                if (fabs(currentVCorrection) == fabs(_currentV))
+                                {
+                                    _currentV /= 2.0;
+                                }
+                            }
+                    }
+                    _currentV += currentVCorrection;
+//                    qDebug() << "V corrected to " << _currentV << "by correction = " << currentVCorrection;
                 }
             }
             _lastCoordDiscrepancy = coordDiscrepancy;
@@ -222,7 +224,7 @@ if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
             {
                _coordinate -= coordDiscrepancy;
                _currentV = 0.0;
-//               qDebug() << "stopping: _coordinate changed to " << _coordinate << "by coordDiscrepancy = " << coordDiscrepancy;
+//               qDebug() << "stopped: _coordinate changed to " << _coordinate << "by coordDiscrepancy = " << coordDiscrepancy << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
             }
     }
         else _coordinate += _currentV; // за интервал 1 мС
