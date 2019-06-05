@@ -8,19 +8,19 @@
 const float TROLLEY::step = 1.83;
 const unsigned int TROLLEY::_timerPeriod = 1;
 const double TROLLEY::_absDiscrepancyMaxOfCoord = 2.0; // максимальная невязка координаты
-const int TROLLEY::_TimeLag = 10;
 
-
-TROLLEY::TROLLEY(cCriticalSection *cs): _timeCorrection(0),
-                    _currentV(0.0)
+TROLLEY::TROLLEY(cCriticalSection *cs): _currentV(0.0),
+                                        _rotationDegree(0.0),
+                                        _extrapolationTime(12.0)
 {
     _cs = cs;
-    _rotationDegree = 0.0;
+    _correctionCounterInit = floor(_extrapolationTime / TROLLEY::_timerPeriod);
 //    setCoordinate(950000.0);
      setCoordinate(0.0, 0.0, 0.0);
 
-    _lastCoordDiscrepancy = 0.0;
+//    _lastCoordDiscrepancy = 0.0;
     _targetV = 0.0;
+    setMovingDirection(Test::DirUpWard);
     _trolleyTimer1ms.setInterval(1);
     _trolleyTimer1ms.start();
     connect(&_trolleyTimer1ms, SIGNAL(timeout()), this, SLOT(proc1ms()));
@@ -40,8 +40,6 @@ void TROLLEY::changeMovingParameters(float targetSpeed, int coord, int coordL, i
 {
 tMovingTarget target;
     _cs->Enter();
-    isTagetTimeCorrect(time);
-//    if (isTargetTimeCorrect() == false) return;
 
     target.Time = time;
     target.StartCoord = coord;
@@ -113,123 +111,150 @@ void TROLLEY::setTrolleyTargetRotation(double targetCoordL, double targetCoordR)
     _memRotationDegree = _rotationDegree;
 }
 
+// расчет скорости мм/мс, которая требуется, чтобы переместиться из currentCoordinate в targetCoordinate за timePeriod
+// координаты задабются в мм, время - в мс
+double TROLLEY::VCalculate(double currentCoordinate, double targetCoordinate, double timePeriod)
+{
+double res = (targetCoordinate - currentCoordinate)/timePeriod;
+    if (fabs(res) > AbsMaxV)
+    {
+        if (res > 0.0)
+        {
+            res = AbsMaxV;
+        }
+            else
+            {
+                res = AbsMaxV * (-1);
+            }
+    }
+    return res;
+}
+
 void TROLLEY::proc1ms()
 {
-float period = 1.0; // мс
-unsigned int currentms =  getCurrentTime(true);
 double coordDiscrepancy;
-int timeDiscrepancy;
+bool skipVCorrection;
 
     _cs->Enter();
-
-while(1)
-{
-    if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
+    skipVCorrection = false;
+    if(!_targets.isEmpty())
     {
-        timeDiscrepancy = currentms - _targets.front().Time;
-        if ((timeDiscrepancy > 10) && (_targets.size() != 1))
-        {// выкидываем "слишком старые" элементы, кроме последнего
-            _targets.pop_front();
-            continue;
-        }
-    }
-    break;
-}
-if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
-{
-    timeDiscrepancy = currentms - _targets.front().Time;
-    if ( timeDiscrepancy > 1)
-    {
-//        qDebug() << "target time discrepancy = " << currentms - _targets.front().Time;
-    }
-//
-    _targetCoordinate = _targets.front().StartCoord * 1.0;
-    coordDiscrepancy = _coordinate - _targetCoordinate;
-
-    if (fabs(coordDiscrepancy) > _absDiscrepancyMaxOfCoord)
-    { // невязка координаты
-//        qDebug() << "coord discrepancy = " << coordDiscrepancy << "_coordinate =" << _coordinate;
-    }
-
-    if (_targetV != _targets.front().TargetSpeed)
-    {
-        _targetV = _targets.front().TargetSpeed;
-        if (_targetV != 0.0) _currentV = _targetV;
-            else
-            {// должны остановиться
-
-//                qDebug()<< "need to stop in _targetCoordinate = " << _targetCoordinate << "_coordinate" << _coordinate;
-
-                if ((_currentV * coordDiscrepancy) >= 0.0)
-                { // если либо уже добежали, либо бежим в переди паровоза
-                    _currentV = 0.0;
-//                    qDebug() << "Stopped without delay on coordinate" << _coordinate << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
-                }
-            }
-//        qDebug() << "targetV set to " << _targetV;
-    }
-        else
-        {
-            double currentVCorrection;
-            if (fabs(coordDiscrepancy) > _absDiscrepancyMaxOfCoord)
-            {
-                if ((fabs(coordDiscrepancy) >= fabs(_lastCoordDiscrepancy)) || ((coordDiscrepancy * _lastCoordDiscrepancy) < 0))
-                {// невязка координаты увеличилась или изменила знак
-//                 qDebug() << "coordDiscrepancy =" << coordDiscrepancy << "_lastCoordDiscrepancy" << _lastCoordDiscrepancy;
-                    currentVCorrection = (coordDiscrepancy - _lastCoordDiscrepancy) / -10.0;
-                    if (_targetV != 0.0)
-                    {
-                        if (fabs(currentVCorrection) > fabs(_targetV) * 0.2)
-                        {
-                            if (currentVCorrection > 0) currentVCorrection = fabs(_targetV) * 0.2;
-                                else currentVCorrection = fabs(_targetV) * (-0.2);
-                        }
-// следим, чтобы _currentV не сменило знак
-                        if (_currentV * currentVCorrection < 0)
-                        {
-                            if (fabs(currentVCorrection) > fabs(_currentV))
-                                _currentV /= 2.0;
-                        }
-                            else
-                            {
-                                if (fabs(currentVCorrection) == fabs(_currentV))
-                                {
-                                    _currentV /= 2.0;
-                                }
-                            }
-                    }
-                    _currentV += currentVCorrection;
-//                    qDebug() << "V corrected to " << _currentV << "by correction = " << currentVCorrection;
-                }
-            }
-            _lastCoordDiscrepancy = coordDiscrepancy;
-        }
-
-        if (_targetV != 0.0)
-        {
-            setTrolleyTargetRotation((double)_targets.front().StartCoordL, (double)_targets.front().StartCoordR);
-        }
-    _targets.pop_front();
-}
-    if ((_targetV == 0.0) && (_currentV != 0.0))
-    {  // coordDiscrepancy и _currentV ранее были разных знаков
-       // иначе бы _currentV была сразу установлена в ноль
-        coordDiscrepancy = _coordinate - _targetCoordinate;
-        if (fabs(coordDiscrepancy) > fabs(_currentV))
-        {
-            _coordinate += _currentV;
-//            qDebug() << "stopping: _coordinate changed to " << _coordinate << "by _currentV = " << _currentV;
-        }
-            else
-            {
-               _coordinate -= coordDiscrepancy;
+       skipVCorrection = true;
+       _targetCoordinate = _targets.back().StartCoord * 1.0;
+       coordDiscrepancy = _coordinate - _targetCoordinate;
+       if (_targets.back().TargetSpeed == 0.0)
+       {
+           if (_targetV != 0.0)
+           {
+               _coordinate += _currentV; // за интервал 1 мС
+               _targetV = 0.0;
+               if ((_currentV * coordDiscrepancy) >= 0.0)
+               { // если либо уже добежали, либо бежим в переди паровоза
                _currentV = 0.0;
-//               qDebug() << "stopped: _coordinate changed to " << _coordinate << "by coordDiscrepancy = " << coordDiscrepancy << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
+                    qDebug() << "Stopped without delay on coordinate" << _coordinate << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
+               _movingState = Normal;
+               }
+                   else
+                   {// пересчет текущей скорости, если она меньше текущей
+                   double v = VCalculate(_coordinate, _targetCoordinate, 2.0);
+                       if (_currentV < v)
+                       {
+                           _currentV = v;
+                       }
+                       _movingState = Stopping;
+                   }
+          }
+              else skipVCorrection = false;
+       }
+           else
+           {
+                _targetV = _targets.back().TargetSpeed;
+                _coordinate += _currentV; // за интервал 1 мС
+                if (fabs(coordDiscrepancy) > _absDiscrepancyMaxOfCoord)
+                {
+                    bool abruptDiminution = false;
+                    double extapolatedCoordinate = _targetCoordinate + _targetV * _extrapolationTime;
+                    if (_movingDirection == Test::DirUpWard)
+                    {
+                        if (extapolatedCoordinate <=  _coordinate)
+                        { // требуется резкое снижение скорости
+                            abruptDiminution = true;
+                        }
+                    }
+                        else
+                        {
+                            if (extapolatedCoordinate >=  _coordinate)
+                            {
+                                abruptDiminution = true;
+                            }
+                        }
+
+                    if (!abruptDiminution)
+                    {
+                        _currentV = VCalculate(_coordinate, extapolatedCoordinate, _extrapolationTime);
+                        qDebug() << "V corrected to" << _currentV;
+
+                    }
+                        else
+                        {
+                            _currentV = _currentV / 4.0;
+                            qDebug() << "V decreaced to" << _currentV;
+                        }
+
+                    _correctionCounter = _correctionCounterInit;
+                    _movingState = Correction;
+                }
+                   else
+                   {
+                       _movingState = Normal;
+                   }
+            }
+       if (_targetV != 0.0)
+       {
+           setTrolleyTargetRotation((double)_targets.back().StartCoordL, (double)_targets.back().StartCoordR);
+       }
+       _targets.clear();
+    }
+//
+    if (!skipVCorrection)
+    {
+            switch(_movingState)
+            {
+                case Stopping:
+                coordDiscrepancy = _coordinate - _targetCoordinate;
+                if (fabs(coordDiscrepancy) > fabs(_currentV))
+                {
+                    _coordinate += _currentV;
+                    qDebug() << "stopping: _coordinate changed to " << _coordinate << "by _currentV = " << _currentV;
+                }
+                    else
+                    {
+                       _coordinate -= coordDiscrepancy;
+                       _currentV = 0.0;
+                       _movingState = Normal;
+                       qDebug() << "stopped: _coordinate changed to " << _coordinate << "by coordDiscrepancy = " << coordDiscrepancy << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
+                    }
+                break;
+                case Correction:
+                    _coordinate += _currentV; // за интервал 1 мС
+                    if (_correctionCounter)
+                    {
+                        _correctionCounter--;
+                    }
+                    if (_correctionCounter == 0)
+                    {
+                        _currentV = _targetV;
+                        _movingState = Normal;
+                        qDebug() << "V restored to" << _currentV;
+                    }
+                break;
+                default: // Normal
+                    _coordinate += _currentV; // за интервал 1 мС
+                break;
             }
     }
-        else _coordinate += _currentV; // за интервал 1 мС
-//
-    if (_coordinate < _targetCoordinate)
+
+    if ((_movingDirection == Test::DirUpWard) && (_coordinate < _targetCoordinate) || (_movingDirection == Test::DirDownWard) && (_coordinate > _targetCoordinate))
     {
         _rotationDegree = _rotationCoefficient * (_coordinate - _memCoordinate) + _memRotationDegree;
     }
@@ -246,43 +271,19 @@ if (!_targets.isEmpty() && (_targets.front().Time <= currentms))
     _cs->Release();
 }
 
+void TROLLEY::setMovingDirection(Test::eMovingDir movingDirection)
+{
+    _movingDirection = movingDirection;
+}
+
+
 // получить текущее время от начала суток с учетом поправки
 unsigned int TROLLEY::getCurrentTime(bool withCorrection)
 {
 unsigned int res;
 QTime currentT = QTime::currentTime();
-    if (withCorrection) currentT = currentT.addMSecs(_timeCorrection);
+//    if (withCorrection) currentT = currentT.addMSecs(_timeCorrection);
     res = currentT.msecsSinceStartOfDay();
     return res;
 }
 
-// timeByMS должно быть не меньше текущего времени с учетом коррекции
-bool TROLLEY::isTagetTimeCorrect(unsigned int timeByMS)
-{
-unsigned int correctedTime = getCurrentTime(true);
-int deltaT = timeByMS - correctedTime;
-bool res = true;
-
-    if ((deltaT < 0) || (deltaT > _TimeLag))
-    {
-        correctedTime = getCurrentTime(false);
-        deltaT = timeByMS - correctedTime;
-        res = false;
-        if (deltaT < 0)
-        {
-            QTime targetT;
-            targetT.fromMSecsSinceStartOfDay(timeByMS);
-            if (targetT.hour() != 0)
-            {
-                _timeCorrection =  deltaT - _TimeLag; // чтобы сделать момент времени timeByMS будущим и отстоящим на 10 мС
-//                qDebug() << "TROLLEY::isTagetTimeCorrect: изменена поправка времени до "<< _timeCorrection << "мС";
-            }
-        }
-            else if (deltaT > _TimeLag)
-                 {
-                     _timeCorrection = deltaT - _TimeLag;
-//                     qDebug() << "TROLLEY::isTagetTimeCorrect: изменена поправка времени до "<< _timeCorrection << "мС";
-                 }
-    }
-    return res;
-}

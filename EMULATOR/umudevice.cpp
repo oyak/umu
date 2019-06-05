@@ -828,6 +828,8 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                 assert(0);
             }
             _pEmulator->setMovingDirection(_movingDirection);
+            _pTrolley->setMovingDirection(_movingDirection);
+
             bytePtr += sizeof(int32_t);
 
             byteCount = static_cast<int>(buff.Size - sizeof(int32_t));

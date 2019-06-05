@@ -9,6 +9,7 @@
 #include "test.h"
 
 
+#define AbsMaxV 1.38 // модуль максимальной разрешенной скорости контроля, мм/мс
 
 typedef struct
 {
@@ -30,12 +31,12 @@ public:
     static const float step;
     static const unsigned int _timerPeriod;
     static const double _absDiscrepancyMaxOfCoord; // максимальное значение невязки по координате в мм
-    static const int _TimeLag; // максимально допустимая положительная разница между системным временем
-// ПК и здесь
 
     void changeMovingParameters(float targetSpeed, int coord, int coordL, int coordR, unsigned int time);
     void setCoordinate(int coord, int coordL, int coordR);
     void stopTrolley();
+    void setMovingDirection(Test::eMovingDir movingDirection);
+
 
 
 signals:
@@ -63,10 +64,24 @@ private:
 
     double _currentV; // текущая скорость, мм/мс
     double _targetV;
-    double _lastCoordDiscrepancy; // невязка по координате на прошлом проходе proc1ms()
+//    double _lastCoordDiscrepancy; // невязка по координате на прошлом проходе proc1ms()
 
-    int _timeCorrection; // поправка времени, если здесь время опережает
+    double _extrapolationTime; // 1/4 от среднего
+// интервала между сообщениями NextTrackCoordinateId. мс - берем 12 мс
+    Test::eMovingDir _movingDirection; // направление движения:
 
+
+    enum eMovingState
+    {
+        Normal = 0, // _currentV == _targetV
+        Correction = 1, // _currentV != _targetV
+        Stopping = 2  // _targetV == 0, _currentV != 0
+    };
+
+    eMovingState _movingState;
+    int _correctionCounter; // счет интервалов по 1 мс удержания скорректированной скорости.
+//    после обнуления устанавливаем _currentV = _targetV
+    int _correctionCounterInit; // начальное значение _correctionCounter
 //
     QVector<tMovingTarget> _targets;
 
@@ -79,9 +94,9 @@ private:
     float getDisplacement(float v0, float a, unsigned int time);
 
     unsigned int getCurrentTime(bool withCorrection);
-    bool isTagetTimeCorrect(unsigned int timeByMS);
     void setCoordinate(double coord, double coordL, double coordR);
     void setTrolleyTargetRotation(double targetCoordL, double targetCoordR);
+    double VCalculate(double currentCoordinate, double targetCoordinate, double timePeriod);
 };
 
 
