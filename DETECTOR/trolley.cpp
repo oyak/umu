@@ -7,11 +7,11 @@
 //
 const float TROLLEY::step = 1.83;
 const unsigned int TROLLEY::_timerPeriod = 1;
-const double TROLLEY::_absDiscrepancyMaxOfCoord = 2.0; // максимальная невязка координаты
+const double TROLLEY::_absDiscrepancyMaxOfCoord = 3.0; // максимальная невязка координаты
 
 TROLLEY::TROLLEY(cCriticalSection *cs): _currentV(0.0),
                                         _rotationDegree(0.0),
-                                        _extrapolationTime(12.0)
+                                        _extrapolationTime(60.0)
 {
     _cs = cs;
     _correctionCounterInit = floor(_extrapolationTime / TROLLEY::_timerPeriod);
@@ -116,6 +116,8 @@ void TROLLEY::setTrolleyTargetRotation(double targetCoordL, double targetCoordR)
 double TROLLEY::VCalculate(double currentCoordinate, double targetCoordinate, double timePeriod)
 {
 double res = (targetCoordinate - currentCoordinate)/timePeriod;
+
+//    qDebug() << "VCalculate: coordinate =" << currentCoordinate << "targetCoordinate =" << targetCoordinate << "res =" << res;
     if (fabs(res) > AbsMaxV)
     {
         if (res > 0.0)
@@ -151,13 +153,13 @@ bool skipVCorrection;
                if ((_currentV * coordDiscrepancy) >= 0.0)
                { // если либо уже добежали, либо бежим в переди паровоза
                _currentV = 0.0;
-                    qDebug() << "Stopped without delay on coordinate" << _coordinate << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
+//                    qDebug() << "Stopped without delay on coordinate" << _coordinate << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
                _movingState = Normal;
                }
                    else
                    {// пересчет текущей скорости, если она меньше текущей
                    double v = VCalculate(_coordinate, _targetCoordinate, 2.0);
-                       if (_currentV < v)
+                       if (fabs(_currentV) < fabs(v))
                        {
                            _currentV = v;
                        }
@@ -192,13 +194,12 @@ bool skipVCorrection;
                     if (!abruptDiminution)
                     {
                         _currentV = VCalculate(_coordinate, extapolatedCoordinate, _extrapolationTime);
-                        qDebug() << "V corrected to" << _currentV;
-
+//                        qDebug() << "V corrected to" << _currentV << "_coordinate =" << _coordinate << "extapolatedCoordinate =" << extapolatedCoordinate << "_targetCoordinate =" << _targetCoordinate;
                     }
                         else
                         {
                             _currentV = _currentV / 4.0;
-                            qDebug() << "V decreaced to" << _currentV;
+//                            qDebug() << "V decreaced to" << _currentV;
                         }
 
                     _correctionCounter = _correctionCounterInit;
@@ -206,7 +207,9 @@ bool skipVCorrection;
                 }
                    else
                    {
+                       _currentV = _targetV;
                        _movingState = Normal;
+//                       qDebug() << "V set to" << _currentV;
                    }
             }
        if (_targetV != 0.0)
@@ -225,14 +228,14 @@ bool skipVCorrection;
                 if (fabs(coordDiscrepancy) > fabs(_currentV))
                 {
                     _coordinate += _currentV;
-                    qDebug() << "stopping: _coordinate changed to " << _coordinate << "by _currentV = " << _currentV;
+//                    qDebug() << "stopping: _coordinate changed to " << _coordinate << "by _currentV = " << _currentV;
                 }
                     else
                     {
                        _coordinate -= coordDiscrepancy;
                        _currentV = 0.0;
                        _movingState = Normal;
-                       qDebug() << "stopped: _coordinate changed to " << _coordinate << "by coordDiscrepancy = " << coordDiscrepancy << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
+//                       qDebug() << "stopped: _coordinate changed to " << _coordinate << "by coordDiscrepancy = " << coordDiscrepancy << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
                     }
                 break;
                 case Correction:
@@ -245,7 +248,7 @@ bool skipVCorrection;
                     {
                         _currentV = _targetV;
                         _movingState = Normal;
-                        qDebug() << "V restored to" << _currentV;
+//                        qDebug() << "V restored to" << _currentV;
                     }
                 break;
                 default: // Normal

@@ -9,7 +9,7 @@
 #include "test.h"
 
 
-#define AbsMaxV 1.38 // модуль максимальной разрешенной скорости контроля, мм/мс
+#define AbsMaxV 1.389 // модуль максимальной разрешенной скорости контроля, мм/мс
 
 typedef struct
 {
@@ -66,8 +66,8 @@ private:
     double _targetV;
 //    double _lastCoordDiscrepancy; // невязка по координате на прошлом проходе proc1ms()
 
-    double _extrapolationTime; // 1/4 от среднего
-// интервала между сообщениями NextTrackCoordinateId. мс - берем 12 мс
+    double _extrapolationTime; // берем значение больше среднего
+// интервала между сообщениями NextTrackCoordinateId. мс
     Test::eMovingDir _movingDirection; // направление движения:
 
 
