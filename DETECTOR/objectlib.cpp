@@ -4553,21 +4553,9 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(533, descriptor);
 //
-    descriptor.Order = OverPlacing;
+    descriptor.Order = OverPlaced;
 // стрелочные переводы
 // 1
-    descriptor.ObjectName = "От болтового стыка до остряка";
-    descriptor.SourceFileName = "190718.a31";
-    descriptor.Side = usLeft;
-    descriptor.StartKm = 7;
-    descriptor.StartPk = 2;
-    descriptor.StartM = 89;
-    descriptor.StartmM = 587;
-    descriptor.LengthMM = 2010;
-    table.insert(12201, descriptor);
-//
-
-
     descriptor.ObjectName = "От болтового стыка до остряка";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usLeft;
@@ -4688,6 +4676,9 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 527;
     table.insert(12321, descriptor);
 //
+    descriptor.N0EMSShift = -121;
+    descriptor.Order = ExpandedOverPlacing;
+
     descriptor.ObjectName = "Болтовой стык см/у остряком и соединительный рельс";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usLeft;
@@ -4698,6 +4689,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(12231, descriptor);
 //
+    descriptor.N0EMSShift = -121;
     descriptor.ObjectName = "Болтовой стык между остряком и соединительный рельс - копия 12321";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usLeft;
@@ -4708,6 +4700,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(12331, descriptor);
 //
+    descriptor.N0EMSShift = -121;
     descriptor.ObjectName = "Болтовой стык между остряком и соединительный рельс - копия 12321";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usLeft;
@@ -4718,6 +4711,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(12232, descriptor);
 //
+    descriptor.N0EMSShift = -121;
     descriptor.ObjectName = "Болтовой стык между остряком и соединительный рельс - копия 12321";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usLeft;
@@ -4728,6 +4722,9 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(12332, descriptor);
 //
+    descriptor.N0EMSShift = 0;
+    descriptor.Order = OverPlaced;
+
     descriptor.ObjectName = "Соединительный рельс";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usRight;
@@ -4788,6 +4785,10 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(12352, descriptor);
 //
+
+    descriptor.N0EMSShift = -121;
+    descriptor.Order = ExpandedOverPlacing;
+
     descriptor.ObjectName = "Болтовой стык после соединительного рельса - копия 12231";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usLeft;
@@ -4798,6 +4799,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(12252, descriptor);
 //
+    descriptor.N0EMSShift = -121;
     descriptor.ObjectName = "Болтовой стык после соединительного рельса - копия 12231";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usLeft;
@@ -4808,6 +4810,9 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(12351, descriptor);
 //
+    descriptor.N0EMSShift = 0;
+    descriptor.Order = OverPlaced;
+
     descriptor.ObjectName = "Чистый рельс перед БС крестовины";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usRight;
@@ -4848,6 +4853,9 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 81;
     table.insert(12362, descriptor);
 //
+    descriptor.N0EMSShift = -121;
+    descriptor.Order = ExpandedOverPlacing;
+
     descriptor.ObjectName = "Болтовой стык перед крестовиной - копия 12231";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usLeft;
@@ -4858,6 +4866,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(12271, descriptor);
 //
+    descriptor.N0EMSShift = -121;
     descriptor.ObjectName = "Болтовой стык перед крестовиной - копия 12231";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usLeft;
@@ -4868,6 +4877,9 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(12372, descriptor);
 //
+    descriptor.N0EMSShift = 0;
+    descriptor.Order = OverPlaced;
+
     descriptor.ObjectName = "Чистый рельс в рамном рельсе - копия 12251";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usRight;
@@ -4928,6 +4940,9 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 3886;
     table.insert(12282, descriptor);
 //
+    descriptor.N0EMSShift = -121;
+    descriptor.Order = ExpandedOverPlacing;
+
     descriptor.ObjectName = "Болтовой стык после крестовины - копия 12231";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usLeft;
@@ -4938,6 +4953,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(12291, descriptor);
 //
+    descriptor.N0EMSShift = -121;
     descriptor.ObjectName = "Болтовой стык после крестовины - копия 12231";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usLeft;
@@ -4948,6 +4964,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(12292, descriptor);
 //
+    descriptor.N0EMSShift = -121;
     descriptor.ObjectName = "Болтовой стык после крестовины - копия 12231";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usLeft;
@@ -4958,6 +4975,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(12391, descriptor);
 //
+    descriptor.N0EMSShift = -121;
     descriptor.ObjectName = "Болтовой стык после крестовины - копия 12231";
     descriptor.SourceFileName = "190718.a31";
     descriptor.Side = usLeft;
@@ -4969,6 +4987,7 @@ tObjectSourceDescr descriptor;
     table.insert(12392, descriptor);
 //
 // стрелочный пеевод 2
+    descriptor.N0EMSShift = -101;
     descriptor.ObjectName = "Болтовой стык перед крестовиной";
     descriptor.SourceFileName = "180712-132103.a31";
     descriptor.Side = usLeft;
@@ -4979,6 +4998,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(22201, descriptor);
 //
+    descriptor.N0EMSShift = -101;
     descriptor.ObjectName = "Болтовой стык перед крестовиной - копия 22201";
     descriptor.SourceFileName = "180712-132103.a31";
     descriptor.Side = usLeft;
@@ -4989,6 +5009,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(22202, descriptor);
 //
+    descriptor.N0EMSShift = -101;
     descriptor.ObjectName = "Болтовой стык перед крестовиной - копия 22201";
     descriptor.SourceFileName = "180712-132103.a31";
     descriptor.Side = usLeft;
@@ -4999,6 +5020,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(23201, descriptor);
 //
+    descriptor.N0EMSShift = -101;
     descriptor.ObjectName = "Болтовой стык перед крестовиной - копия 22201";
     descriptor.SourceFileName = "180712-132103.a31";
     descriptor.Side = usLeft;
@@ -5010,6 +5032,9 @@ tObjectSourceDescr descriptor;
     table.insert(23202, descriptor);
 //
 //
+    descriptor.N0EMSShift = 0;
+    descriptor.Order = OverPlaced;
+
     descriptor.ObjectName = "Крестовина";
     descriptor.SourceFileName = "180712-132103.a31";
     descriptor.Side = usLeft;
@@ -5050,6 +5075,9 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 3886;
     table.insert(23211, descriptor);
 //
+    descriptor.N0EMSShift = -101;
+    descriptor.Order = ExpandedOverPlacing;
+
     descriptor.ObjectName = "Болтовой стык после крестовины - копия 22201";
     descriptor.SourceFileName = "180712-132103.a31";
     descriptor.Side = usLeft;
@@ -5060,6 +5088,7 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(22221, descriptor);
 //
+    descriptor.N0EMSShift = -101;
     descriptor.ObjectName = "Болтовой стык после крестовины - копия 22201";
     descriptor.SourceFileName = "180712-132103.a31";
     descriptor.Side = usLeft;
@@ -5070,6 +5099,9 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(23222, descriptor);
 //
+    descriptor.N0EMSShift = 0;
+    descriptor.Order = OverPlaced;
+
     descriptor.ObjectName = "Чистый рельс после крестовины";
     descriptor.SourceFileName = "180712-132103.a31";
     descriptor.Side = usRight;
@@ -5161,6 +5193,9 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(22242, descriptor);
 //
+    descriptor.N0EMSShift = -101;
+    descriptor.Order = ExpandedOverPlacing;
+
     descriptor.ObjectName = "Болтовой стык перед соединительным рельсом - копия 22201";
     descriptor.SourceFileName = "180712-132103.a31";
     descriptor.Side = usLeft;
@@ -5171,6 +5206,9 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(23241, descriptor);
 //
+    descriptor.N0EMSShift = 0;
+    descriptor.Order = OverPlaced;
+
     descriptor.ObjectName = "Соединительный рельс";
     descriptor.SourceFileName = "180712-132103.a31";
     descriptor.Side = usLeft;
@@ -5211,6 +5249,9 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 10160;
     table.insert(23252, descriptor);
 //
+    descriptor.N0EMSShift = -101;
+    descriptor.Order = ExpandedOverPlacing;
+
     descriptor.ObjectName = "Болтовой стык между соединительным рельсом и остряком - копия 22201";
     descriptor.SourceFileName = "180712-132103.a31";
     descriptor.Side = usLeft;
@@ -5251,6 +5292,9 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 1520;
     table.insert(23262, descriptor);
 //
+    descriptor.N0EMSShift = 0;
+    descriptor.Order = OverPlaced;
+
     descriptor.ObjectName = "Чистый рельс в остряке";
     descriptor.SourceFileName = "180712-132103.a31";
     descriptor.Side = usLeft;
