@@ -76,7 +76,7 @@ void TROLLEY::stopMoving()
 {
     _currentV = 0;
     ifPathEvent();
-    qDebug() << "движение остановлено";
+//    qDebug() << "движение остановлено";
 }
 
 void TROLLEY::ifPathEvent()
@@ -157,7 +157,7 @@ bool skipVCorrection;
                _movingState = Normal;
                }
                    else
-                   {// пересчет текущей скорости, если она меньше текущей
+                   {// определение скорости торможения, чтобы остановиться за 2.0 мСы
                    double v = VCalculate(_coordinate, _targetCoordinate, 2.0);
                        if (fabs(_currentV) < fabs(v))
                        {
@@ -176,7 +176,7 @@ bool skipVCorrection;
                 {
                     bool abruptDiminution = false;
                     double extapolatedCoordinate = _targetCoordinate + _targetV * _extrapolationTime;
-                    if (_movingDirection == Test::DirUpWard)
+                    if (_targetV >= 0)
                     {
                         if (extapolatedCoordinate <=  _coordinate)
                         { // требуется резкое снижение скорости
