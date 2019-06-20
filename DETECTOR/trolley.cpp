@@ -105,7 +105,10 @@ void TROLLEY::setTrolleyTargetRotation(double targetCoordL, double targetCoordR)
 {
     _targetRotationDegree = targetCoordL - targetCoordR;
 
-    if (_targetCoordinate != _coordinate) _rotationCoefficient = (_targetRotationDegree - _rotationDegree) / (_targetCoordinate - _coordinate);
+    if (_targetCoordinate != _coordinate)
+    {
+        _rotationCoefficient = (_targetRotationDegree - _rotationDegree) / (_targetCoordinate - _coordinate);
+    }
         else _rotationCoefficient = 0.0;
     _memCoordinate = _coordinate;
     _memRotationDegree = _rotationDegree;
@@ -256,8 +259,7 @@ bool skipVCorrection;
                 break;
             }
     }
-
-    if ((_movingDirection == Test::DirUpWard) && (_coordinate < _targetCoordinate) || (_movingDirection == Test::DirDownWard) && (_coordinate > _targetCoordinate))
+    if ((_currentV > 0.0) && (_coordinate < _targetCoordinate) || (_currentV < 0.0) && (_coordinate > _targetCoordinate))
     {
         _rotationDegree = _rotationCoefficient * (_coordinate - _memCoordinate) + _memRotationDegree;
     }
