@@ -21,6 +21,7 @@ TROLLEY::TROLLEY(cCriticalSection *cs): _currentV(0.0),
 //    _lastCoordDiscrepancy = 0.0;
     _targetV = 0.0;
     setMovingDirection(Test::DirUpWard);
+    _trolleyTimer1ms.setTimerType(Qt::PreciseTimer);
     _trolleyTimer1ms.setInterval(1);
     _trolleyTimer1ms.start();
     connect(&_trolleyTimer1ms, SIGNAL(timeout()), this, SLOT(proc1ms()));
