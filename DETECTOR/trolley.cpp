@@ -48,7 +48,7 @@ tMovingTarget target;
     target.TargetSpeed = (double)targetSpeed / 1000.0; // мм/с -> мм/мс
     _targets.push_back(target);
 
-//    if (abs(coordL - coordR) > 10) qDebug() << "MovPar:" << "coordL =" << coordL << "coordR =" << coordR << "diff =" << coordL - coordR;
+//    if (abs(coordL - coordR) > 10) qWarninig() << "MovPar:" << "coordL =" << coordL << "coordR =" << coordR << "diff =" << coordL - coordR;
 
     _cs->Release();
 }
@@ -76,7 +76,7 @@ void TROLLEY::stopMoving()
 {
     _currentV = 0;
     ifPathEvent();
-//    qDebug() << "движение остановлено";
+//    qWarninig() << "движение остановлено";
 }
 
 void TROLLEY::ifPathEvent()
@@ -90,7 +90,7 @@ int c = _coordinate / step;
         emit pathStep(c - _stepCoordinate, (int)(_coordinate + shift), (int)(_coordinate - shift));
 
 //        curT = QTime::currentTime();
-//        qDebug() << "msec = " << curT.msec() << "step = " << c - _stepCoordinate << " path = " << _coordinate << "mm";
+//        qWarninig() << "msec = " << curT.msec() << "step = " << c - _stepCoordinate << " path = " << _coordinate << "mm";
 
         _stepCoordinate = c;
     }
@@ -120,7 +120,7 @@ double TROLLEY::VCalculate(double currentCoordinate, double targetCoordinate, do
 {
 double res = (targetCoordinate - currentCoordinate)/timePeriod;
 
-//    qDebug() << "VCalculate: coordinate =" << currentCoordinate << "targetCoordinate =" << targetCoordinate << "res =" << res;
+//    qWarninig() << "VCalculate: coordinate =" << currentCoordinate << "targetCoordinate =" << targetCoordinate << "res =" << res;
     if (fabs(res) > AbsMaxV)
     {
         if (res > 0.0)
@@ -156,11 +156,11 @@ bool skipVCorrection;
                if ((_currentV * coordDiscrepancy) >= 0.0)
                { // если либо уже добежали, либо бежим в переди паровоза
                _currentV = 0.0;
-//                    qDebug() << "Stopped without delay on coordinate" << _coordinate << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
+                    qWarning() << "Stopped without delay on coordinate" << _coordinate << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
                _movingState = Normal;
                }
                    else
-                   {// определение скорости торможения, чтобы остановиться за 2.0 мСы
+                   {// определение скорости торможения, чтобы остановиться за 2.0 мС
                    double v = VCalculate(_coordinate, _targetCoordinate, 2.0);
                        if (fabs(_currentV) < fabs(v))
                        {
@@ -197,12 +197,12 @@ bool skipVCorrection;
                     if (!abruptDiminution)
                     {
                         _currentV = VCalculate(_coordinate, extapolatedCoordinate, _extrapolationTime);
-//                        qDebug() << "V corrected to" << _currentV << "_coordinate =" << _coordinate << "extapolatedCoordinate =" << extapolatedCoordinate << "_targetCoordinate =" << _targetCoordinate;
+                        qWarning() << "V corrected to" << _currentV << "_coordinate =" << _coordinate << "extapolatedCoordinate =" << extapolatedCoordinate << "_targetCoordinate =" << _targetCoordinate;
                     }
                         else
                         {
                             _currentV = _currentV / 4.0;
-//                            qDebug() << "V decreaced to" << _currentV;
+                            qWarning() << "V decreaced to" << _currentV;
                         }
 
                     _correctionCounter = _correctionCounterInit;
@@ -212,7 +212,7 @@ bool skipVCorrection;
                    {
                        _currentV = _targetV;
                        _movingState = Normal;
-//                       qDebug() << "V set to" << _currentV;
+                       qWarning() << "V set to" << _currentV;
                    }
             }
        if (_targetV != 0.0)
@@ -231,14 +231,14 @@ bool skipVCorrection;
                 if (fabs(coordDiscrepancy) > fabs(_currentV))
                 {
                     _coordinate += _currentV;
-//                    qDebug() << "stopping: _coordinate changed to " << _coordinate << "by _currentV = " << _currentV;
+                    qWarning() << "stopping: _coordinate changed to " << _coordinate << "by _currentV = " << _currentV;
                 }
                     else
                     {
                        _coordinate -= coordDiscrepancy;
                        _currentV = 0.0;
                        _movingState = Normal;
-//                       qDebug() << "stopped: _coordinate changed to " << _coordinate << "by coordDiscrepancy = " << coordDiscrepancy << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
+                       qWarning() << "stopped: _coordinate changed to " << _coordinate << "by coordDiscrepancy = " << coordDiscrepancy << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
                     }
                 break;
                 case Correction:
@@ -251,7 +251,7 @@ bool skipVCorrection;
                     {
                         _currentV = _targetV;
                         _movingState = Normal;
-//                        qDebug() << "V restored to" << _currentV;
+//                        qWarning() << "V restored to" << _currentV;
                     }
                 break;
                 default: // Normal
@@ -267,7 +267,7 @@ bool skipVCorrection;
     //
     if (_coordinate != _lastCoordinate)
     {
-//        qDebug() << "Coordinate = " << _coordinate;
+//        qWarnin() << "Coordinate = " << _coordinate;
         _lastCoordinate = _coordinate;
     }
 
