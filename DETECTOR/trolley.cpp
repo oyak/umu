@@ -21,7 +21,8 @@ TROLLEY::TROLLEY(cCriticalSection *cs): _currentV(0.0),
 //    _lastCoordDiscrepancy = 0.0;
     _targetV = 0.0;
     setMovingDirection(Test::DirUpWard);
-    _trolleyTimer1ms.setTimerType(Qt::PreciseTimer);
+
+    _timeSinceMidNight = getCurrentTime();
     _trolleyTimer1ms.setInterval(1);
     _trolleyTimer1ms.start();
     connect(&_trolleyTimer1ms, SIGNAL(timeout()), this, SLOT(proc1ms()));
@@ -140,8 +141,21 @@ void TROLLEY::proc1ms()
 {
 double coordDiscrepancy;
 bool skipVCorrection;
+unsigned int currentTime;
+unsigned int timeSpan;
 
     _cs->Enter();
+    currentTime = getCurrentTime();
+    if (currentTime >= _timeSinceMidNight)
+    {
+        timeSpan = currentTime - _timeSinceMidNight;
+    }
+        else
+        {
+            timeSpan = 86400000 - _timeSinceMidNight + currentTime;
+        }
+    _timeSinceMidNight = currentTime;
+//
     skipVCorrection = false;
     if(!_targets.isEmpty())
     {
@@ -152,7 +166,7 @@ bool skipVCorrection;
        {
            if (_targetV != 0.0)
            {
-               _coordinate += _currentV; // за интервал 1 м—
+               changeCoordinate(timeSpan);
                _targetV = 0.0;
                if ((_currentV * coordDiscrepancy) >= 0.0)
                { // если либо уже добежали, либо бежим в переди паровоза
@@ -174,8 +188,9 @@ bool skipVCorrection;
        }
            else
            {
+                changeCoordinate(timeSpan);
                 _targetV = _targets.back().TargetSpeed;
-                _coordinate += _currentV; // за интервал 1 м—
+
                 if (fabs(coordDiscrepancy) > _absDiscrepancyMaxOfCoord)
                 {
                     bool abruptDiminution = false;
@@ -231,8 +246,8 @@ bool skipVCorrection;
                 coordDiscrepancy = _coordinate - _targetCoordinate;
                 if (fabs(coordDiscrepancy) > fabs(_currentV))
                 {
-                    _coordinate += _currentV;
-//                    qWarning() << "stopping: _coordinate changed to " << _coordinate << "by _currentV = " << _currentV;
+                    changeCoordinate(timeSpan);
+//                       qWarning() << "stopped: _coordinate changed to " << _coordinate << "by currentV = " << _currentv << " * " << timeSpan << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
                 }
                     else
                     {
@@ -243,7 +258,7 @@ bool skipVCorrection;
                     }
                 break;
                 case Correction:
-                    _coordinate += _currentV; // за интервал 1 м—
+                    changeCoordinate(timeSpan);
                     if (_correctionCounter)
                     {
                         _correctionCounter--;
@@ -256,7 +271,7 @@ bool skipVCorrection;
                     }
                 break;
                 default: // Normal
-                    _coordinate += _currentV; // за интервал 1 м—
+                   changeCoordinate(timeSpan);
                 break;
             }
     }
@@ -282,13 +297,11 @@ void TROLLEY::setMovingDirection(Test::eMovingDir movingDirection)
     _movingDirection = movingDirection;
 }
 
-
-// получить текущее врем€ от начала суток с учетом поправки
-unsigned int TROLLEY::getCurrentTime(bool withCorrection)
+// получить текущее врем€ от начала суток
+unsigned int TROLLEY::getCurrentTime()
 {
 unsigned int res;
 QTime currentT = QTime::currentTime();
-//    if (withCorrection) currentT = currentT.addMSecs(_timeCorrection);
     res = currentT.msecsSinceStartOfDay();
     return res;
 }

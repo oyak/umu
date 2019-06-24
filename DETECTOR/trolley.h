@@ -88,15 +88,24 @@ private:
 //
     cCriticalSection *_cs;
     QTimer _trolleyTimer1ms;
+    unsigned int _timeSinceMidNight;
 
     void stopMoving();
     void ifPathEvent();
     float getDisplacement(float v0, float a, unsigned int time);
 
-    unsigned int getCurrentTime(bool withCorrection);
+    unsigned int getCurrentTime();
     void setCoordinate(double coord, double coordL, double coordR);
     void setTrolleyTargetRotation(double targetCoordL, double targetCoordR);
     double VCalculate(double currentCoordinate, double targetCoordinate, double timePeriod);
+    void changeCoordinate(unsigned int timeSpan)
+    {
+        if (timeSpan < 2)
+        {
+            _coordinate += _currentV; // за интервал 1 м—
+        }
+            else _coordinate += _currentV * timeSpan;
+    };
 };
 
 
