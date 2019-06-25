@@ -143,8 +143,6 @@ int   Pathcoord[QDP*2];  // full coordinate of DP (signed!)
 DWORD speedTimer;   // для расчета скорости - числа отсчетов основного ДП за время cSpeedCalcTime
 // для отправки сообщения необходимо включить B-развертку
 int mainShiftSensorPathcoordMemorized;
-#define cSpeedCalcTime 500 // для расчета скорости - числа отсчетов основного ДП
-
 
 unsigned int displayCoord; // дисплейная координата для основного ДП (для основного имитатора дисплейная координата не нужна)
 // сбрасывается при выборе основного ДП или установке его значения
@@ -271,4 +269,6 @@ xSemaphoreHandle s_ACTH;
 unsigned char ACStateSendIntervalCntr; // однако число со знаком
 bool fACStateSendIntervalReached; 
 
-#endif
+#endif // ifndef AC_dis
+
+volatile int lDiff; // модуль разницы между сохраненным и текущим значением основного ДП за период cSpeedCalcTime

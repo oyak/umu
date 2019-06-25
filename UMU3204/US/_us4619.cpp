@@ -278,6 +278,7 @@ register UCHAR ii;
 
    }
    for (ii=0; ii<QDP*2; ii++) Pathcoord[ii] = 0;
+   lDiff = 0;
    DP_SEMAPHORE_LEAVE
 //
    KSwitch(setScanerOff);   
@@ -1052,8 +1053,9 @@ void ustskBody(void)
         tDiff = get_tickdur(speedTimer);
         if (tDiff >= speedCalcPeriod)
         {
-        volatile register int lDiff;
         tSPEEDMESSAGE speedMessage;
+
+#ifndef DEVICE_EMULATION
         if ((mainShiftSensorNumber & IMITATORMASK) == 0)
         { // скорость считается по основному ДП, но не имитатору
             disintpld;
@@ -1080,6 +1082,7 @@ void ustskBody(void)
                 lDiff = 0;
                 DP_SEMAPHORE_LEAVE
             }
+#endif
             speedTimer = xTaskGetTickCount();
             fillMessageHeader((tLANMESSAGEHEADER*)&speedMessage, speedId, idBUM, speedSz);
             speedMessage.Speed = (unsigned short)lDiff;

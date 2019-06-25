@@ -269,5 +269,6 @@ typedef unsigned short tACThLine[NumberOfReceivers][3];    // один элемент для 2
 #define AContactZone 50 // длительность участка после развертки для подсчета суммы АК в мС
 #define MaxAScanDuration (255 - AContactZone)
 
+#define cSpeedCalcTime 500 // для расчета скорости - числа отсчетов основного ДП
 
 #endif

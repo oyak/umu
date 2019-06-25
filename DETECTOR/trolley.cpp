@@ -2,7 +2,9 @@
 #include <QDebug>
 #include <math.h>
 #include "trolley.h"
-
+#include "defsubst.h"
+#include "us465d.h"
+#include "ustyp468.h"
 
 //
 const float TROLLEY::step = 1.83;
@@ -48,6 +50,8 @@ tMovingTarget target;
     target.StartCoordL = coordL;
     target.StartCoordR = coordR;
     target.TargetSpeed = (double)targetSpeed / 1000.0; // לל/ס -> לל/לס
+    lDiff = (int)fabs(target.TargetSpeed * cSpeedCalcTime / step);
+    if (lDiff > 0xFFFF) lDiff > 0xFFFF;
     _targets.push_back(target);
 
 //    if (abs(coordL - coordR) > 10) qWarning() << "MovPar:" << "coordL =" << coordL << "coordR =" << coordR << "diff =" << coordL - coordR;

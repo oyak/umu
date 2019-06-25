@@ -14,9 +14,7 @@
 #include "MTYPES4.H"
 
 #include "MISC46_2.H"
-
-#define __irq
-#define __arm
+#include "defsubst.h"
 
 class UMUDEVICE* UMUDEVICE::deviceObjectPtr;
 
@@ -41,8 +39,7 @@ PLDEMULATOR *UMUDEVICE::pldRPtr;
 // эмул€ци€ параметров настройки Ѕ”ћа, извлекаемых из файла PARAMS.INI
 const unsigned int lengthPathEncoderDividerOffPar = 0;
 
-// в проекте QT определить DEVICE_EMULATION
-#define AC_dis
+// в проекте QT определить DEVICE_EMULATION, AC_dis
 
 void dbgPrintOfMessage(tLAN_CDUMessage* _out_block)
 {
@@ -138,34 +135,10 @@ static void AddToOutBuffNoSync(tLAN_CDUMessage* _out_block)
     UMUDEVICE::_out_bufferPtr->push(*_out_block);
 }
 
-
-#define TimeToTick(time) time
-
 int xTaskGetTickCount(void)
 {
     return GetTickCount_();
 }
-
-#define __no_init
-#define TBD
-#define PARAM_UNDEFINED
-
-
-typedef class cCriticalSection* xSemaphoreHandle;
-#define xTaskHandle int
-
-#define smprintf simplePrintf
-#define simplePrintf(c, ...) // qWarning()<<c
-
-
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-
-/*
-#define COND_IntASD_ENABLE \
-{\
-}
-*/
 
 #define disintpld \
 {\

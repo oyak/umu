@@ -87,7 +87,8 @@ HEADERS  += mainwindow.h \
     DETECTOR/objectsarray.h \
     config.h \
     defcoreM/datacontainer/dc_functions.h \
-    defcoreM/datacontainer/dc_definitions.h
+    defcoreM/datacontainer/dc_definitions.h \
+    DETECTOR/defsubst.h
 
 
 INCLUDEPATH += UMU3204/MAIN \
@@ -105,7 +106,7 @@ INCLUDEPATH += UMU3204/MAIN \
 
 FORMS    += mainwindow.ui
 
-DEFINES += DEVICE_EMULATION
+DEFINES += DEVICE_EMULATION AC_dis
 
 DISTFILES += \
     android/AndroidManifest.xml \

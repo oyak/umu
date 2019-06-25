@@ -2,14 +2,15 @@
 #ifndef _us465dh
 #define _us465dh
 
-//extern const DWORD DPtact[4];
-//extern UCHAR ImitDPOn;
 
 extern xSemaphoreHandle s_ImitDP;   
 
+#ifndef AC_dis
 extern tACThLine *pAcThLine0;
 extern tACThLine *pAcThLine1;
+#endif
 
+extern volatile int lDiff;
 
 #ifdef __cplusplus
 
