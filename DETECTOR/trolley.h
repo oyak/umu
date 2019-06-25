@@ -94,25 +94,30 @@ private:
     void ifPathEvent();
     float getDisplacement(float v0, float a, unsigned int time);
 
-    unsigned int getCurrentTime();
+    unsigned int getCurrentTime() // получить текущее время от начала суток
+    {
+     unsigned int res;
+     QTime currentT = QTime::currentTime();
+         res = currentT.msecsSinceStartOfDay();
+         return res;
+    }
     void setCoordinate(double coord, double coordL, double coordR);
     void setTrolleyTargetRotation(double targetCoordL, double targetCoordR);
     double VCalculate(double currentCoordinate, double targetCoordinate, double timePeriod);
     void changeCoordinate(unsigned int timeSpan)
     {
-        if (timeSpan < 2)
+        for (unsigned int ii=0; ii < timeSpan; ++ii)
         {
-            _coordinate += _currentV; // за интервал 1 мС
+            _coordinate += _currentV;
+           if ((_currentV > 0.0) && (_coordinate < _targetCoordinate) || (_currentV < 0.0) && (_coordinate > _targetCoordinate))
+           {
+               _rotationDegree = _rotationCoefficient * (_coordinate - _memCoordinate) + _memRotationDegree;
+           }
+               else _rotationDegree = _targetRotationDegree;
+          ifPathEvent();
         }
-            else _coordinate += _currentV * timeSpan;
     };
 };
 
-
 #endif // TROLLEY_H
-
-
-
-
-//
 

@@ -275,19 +275,12 @@ unsigned int timeSpan;
                 break;
             }
     }
-    if ((_currentV > 0.0) && (_coordinate < _targetCoordinate) || (_currentV < 0.0) && (_coordinate > _targetCoordinate))
-    {
-        _rotationDegree = _rotationCoefficient * (_coordinate - _memCoordinate) + _memRotationDegree;
-    }
-        else _rotationDegree = _targetRotationDegree;
-    //
+
     if (_coordinate != _lastCoordinate)
     {
 //        qWarnin() << "Coordinate = " << _coordinate;
         _lastCoordinate = _coordinate;
     }
-
-    ifPathEvent();
 
     _cs->Release();
 }
@@ -296,13 +289,3 @@ void TROLLEY::setMovingDirection(Test::eMovingDir movingDirection)
 {
     _movingDirection = movingDirection;
 }
-
-// получить текущее время от начала суток
-unsigned int TROLLEY::getCurrentTime()
-{
-unsigned int res;
-QTime currentT = QTime::currentTime();
-    res = currentT.msecsSinceStartOfDay();
-    return res;
-}
-
