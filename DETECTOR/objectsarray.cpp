@@ -141,11 +141,11 @@ int seekDir = 0; // 0- не определено, -1 - к началу массива, 1 - к концу массива
     {
         if (_currentObject == nullptr)
         {
-            qDebug() << "coord = " << coord  << "currentObject == null";
+            qWarning() << "coord = " << coord  << "currentObject == null";
         }
             else
             {
-                qDebug() << "coord = " << coord  << "currentObject Id == " << _currentObject->Id;
+                qWarning() << "coord = " << coord  << "currentObject Id == " << _currentObject->Id;
             }
         _lastObject = _currentObject;
     }
