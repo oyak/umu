@@ -155,7 +155,7 @@ typedef class cCriticalSection* xSemaphoreHandle;
 #define xTaskHandle int
 
 #define smprintf simplePrintf
-#define simplePrintf(c, ...) // qDebug()<<c
+#define simplePrintf(c, ...) // qWarning()<<c
 
 
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
@@ -839,8 +839,8 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                 IdCount = ReadLE16U (bytePtr);
                 if (byteCount < IdCount * (sizeof(coord) + sizeof(id) )) break;
 
-                if (jj == 0) qDebug() << "left side flaw count = " << IdCount;
-                    else qDebug() << "right side flaw count = " << IdCount;
+                if (jj == 0) qWarning() << "left side flaw count = " << IdCount;
+                    else qWarning() << "right side flaw count = " << IdCount;
 
                 bytePtr += sizeof(unsigned short);
                 for (unsigned short ii=0; ((ii < IdCount) && (byteCount > 0)); ++ii)
@@ -854,21 +854,21 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                       bool res;
 
                         res = _pEmulator->onMessageId(id, coord, usLeft);
-                        if (res) qDebug() << "left side flaw: id = " << id << ", coord = " << coord;
-                            else qDebug() << "left side flaw: id = " << id << ", coord = " << coord << " - ignored";
+                        if (res) qWarning() << "left side flaw: id = " << id << ", coord = " << coord;
+                            else qWarning() << "left side flaw: id = " << id << ", coord = " << coord << " - ignored";
                     }
                        else
                        {
                            bool res;
                            res = _pEmulator->onMessageId(id, coord, usRight);
-                           if (res) qDebug() << "right side flaw: id = " << id << ", coord = " << coord;
-                               else qDebug() << "right side flaw: id = " << id << ", coord = " << coord << " - ignored";
+                           if (res) qWarning() << "right side flaw: id = " << id << ", coord = " << coord;
+                               else qWarning() << "right side flaw: id = " << id << ", coord = " << coord << " - ignored";
                        }
 
                 }
                 byteCount -= IdCount * (sizeof(coord) + sizeof(id));
             }
-            qDebug() << "TrackMapId";
+            qWarning() << "TrackMapId";
             break;
         }
 //
@@ -890,7 +890,7 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
             {
                pMessage = reinterpret_cast<tJUMPTRACKCOORD*>(buff.Data);
               _pTrolley->setCoordinate(pMessage->Coord, pMessage->LeftDebugCoord, pMessage->RightDebugCoord);
-              qDebug() << "JumpTrackCoordinateId";
+              qWarning() << "JumpTrackCoordinateId";
             }
             break;
         }
@@ -1086,12 +1086,12 @@ void UMUDEVICE::printConnectionStatus()
 {
     if (_PCConnected)
     {
-        qDebug() << "PC connection is present";
+        qWarning() << "PC connection is present";
     }
 
     if (_CDUConnected)
     {
-        qDebug() << "CDU connection is present";
+        qWarning() << "CDU connection is present";
     }
 }
 //
