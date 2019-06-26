@@ -1046,6 +1046,10 @@ void ustskBody(void)
          if (pShiftSensorProc[ii]  != NULL)  pShiftSensorProc[ii]();
      }
 //
+#ifdef DEVICE_EMULATION
+     DP_SEMAPHORE_LEAVE
+#endif
+//
     if (EnableBScan)
     {
         volatile register int tDiff;
