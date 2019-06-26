@@ -637,10 +637,16 @@ unsigned int res = 0;
         switch (_read_state) {
         case rsHead: {
             readPCMessageHead(res, fRepeat);
+            if (fRepeat) _wait_PCmesageBody_count = 1000;
             break;
         }
         case rsBody: {
             readPCMessageBody(res, fRepeat);
+            if (!fRepeat)
+            {
+                if (_wait_PCmesageBody_count) _wait_PCmesageBody_count--;
+                assert(_wait_PCmesageBody_count);
+            }
             break;
         }
         case rsOff:

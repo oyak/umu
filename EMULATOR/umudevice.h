@@ -372,6 +372,7 @@ protected:
     eReadState _read_state;
     unsigned int _read_bytes_count;
     unsigned int _error_message_count;
+    unsigned int _wait_PCmesageBody_count;
 
     void readPCMessageHead(unsigned int& res, bool& fRepeat);
     void readPCMessageBody(unsigned int& res, bool& fRepeat);

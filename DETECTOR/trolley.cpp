@@ -170,6 +170,7 @@ unsigned int timeSpan;
        {
            if (_targetV != 0.0)
            {
+               setTrolleyTargetRotation((double)_targets.back().StartCoordL, (double)_targets.back().StartCoordR);
                changeCoordinate(timeSpan);
                _targetV = 0.0;
                if ((_currentV * coordDiscrepancy) >= 0.0)
@@ -192,6 +193,7 @@ unsigned int timeSpan;
        }
            else
            {
+                setTrolleyTargetRotation((double)_targets.back().StartCoordL, (double)_targets.back().StartCoordR);
                 changeCoordinate(timeSpan);
                 _targetV = _targets.back().TargetSpeed;
 
@@ -235,10 +237,6 @@ unsigned int timeSpan;
 //                       qWarning() << "V set to" << _currentV;
                    }
             }
-       if (_targetV != 0.0)
-       {
-           setTrolleyTargetRotation((double)_targets.back().StartCoordL, (double)_targets.back().StartCoordR);
-       }
        _targets.clear();
     }
 //
