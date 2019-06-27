@@ -1,11 +1,13 @@
 
 #include "unitlin.h"
+#include "QDebug"
 
 
 UNITLIN::UNITLIN(CONFIG *pConfig)
 {
     _pDevice = new UMUDEVICE(&_thList, (void*)this, pConfig);
      connect(_pDevice, SIGNAL(CDUconnected()), this, SLOT(on_CDU_connected()));
+    connect(_pDevice, SIGNAL(message(QString)), this, SLOT(onMessage(QString)));
 }
 
 UNITLIN::~UNITLIN()
@@ -195,4 +197,9 @@ void UNITLIN::_onPathStep(int shift, unsigned int coordInMM)
 void UNITLIN::printConnectionStatus()
 {
     _pDevice->printConnectionStatus();
+}
+
+void UNITLIN::onMessage(QString s)
+{
+    qWarning() << s;
 }

@@ -43,6 +43,14 @@ public:
     void deletePathObjects();
     void setMovingDirection(Test::eMovingDir movingDirection);
 
+signals:
+    void message(QString s);
+//
+public slots:
+    void onLeftSideMessage(QString s);
+    void onRightSideMessage(QString s);
+//
+
 private:
     PATHMODEL *_pPathModel[2]; // на две нити usLeft, usRight
 
