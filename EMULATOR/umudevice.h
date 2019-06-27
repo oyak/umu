@@ -294,6 +294,7 @@ public:
 signals:
     void CDUconnected();
     void restartPCLinkFaultTimer();
+    void message(QString s);
 
 public slots:
     void _onPLDInt();                                             // срабатывание таймера _PLDIntTimer
@@ -301,6 +302,7 @@ public slots:
     void _onPingTimer();
     void _onPCLinkFaultTimer();         // слот на срабатывание _PCLinkFaultTimer
     void _onRestartPCLinkFaultTimer();  // перезапускаем _PCLinkFaultTimer, чтобы не сработал
+    void onMessage(QString s); // слот на сигналы с текстовыми сообщениями от используемых классов
 
 private:
     eState _state;

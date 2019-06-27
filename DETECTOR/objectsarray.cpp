@@ -139,18 +139,18 @@ int seekDir = 0; // 0- не определено, -1 - к началу массива, 1 - к концу массива
 
     if (_currentObject != _lastObject)
     {
+     QString s = QString::asprintf("coord = %d ", coord);
         if (_currentObject == nullptr)
         {
-            qWarning() << "coord = " << coord  << "currentObject == null";
+            s += "currentObject = null";
         }
             else
             {
-                qWarning() << "coord = " << coord  << "currentObject Id == " << _currentObject->Id;
+                s += QString::asprintf("currentObject Id = %d", _currentObject->Id);
             }
+        emit message(s);
         _lastObject = _currentObject;
     }
-
-
     _cs->Release();
     return res;
 }

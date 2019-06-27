@@ -21,11 +21,11 @@ SignalsData* PATHMODEL::getObject(unsigned int coord, bool& isDataObject)
 SignalsData* res;
 
     res = (_pObjectsArray[OverPlacing])->getObject(coord, isDataObject);
-    if (res == nullptr)
+    if (isDataObject == false)
     {
         res = (_pObjectsArray[ExpandedOverPlacing])->getObject(coord, isDataObject);
     }
-    if (res == nullptr)
+    if (isDataObject == false)
     {
         res = (_pObjectsArray[OverPlaced])->getObject(coord, isDataObject);
     }
@@ -38,4 +38,19 @@ void PATHMODEL::setMovingDireciton(Test::eMovingDir movingDirection)
     {
         (_pObjectsArray[ii])->setMovingDirection(movingDirection);
     }
+}
+
+void PATHMODEL::onMessageOverPlacing(QString s)
+{
+    emit message(s + " in OverPalacing list");
+}
+
+void PATHMODEL::onMessageExpandedOverPlacing(QString s)
+{
+    emit message(s + " in ExpandedOverPalacing list");
+}
+
+void PATHMODEL::onMessageOverPlaced(QString s)
+{
+    emit message(s + " in OverPalaced list");
 }

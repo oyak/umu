@@ -53,6 +53,9 @@ EMULATOR::EMULATOR(cCriticalSection* cs1, cCriticalSection* cs2, float pathStep,
     _pPathModel[1] = new PATHMODEL(cs2, pathStep);
 
     _pStorage = new OBJECTSTOR(pathToObjectsFiles);
+
+    connect(_pPathModel[0], SIGNAL(message(QString)), this, SLOT(onLeftSideMessage(QString)));
+    connect(_pPathModel[1], SIGNAL(message(QString)), this, SLOT(onRightSideMessage(QString)));
     // для отладки
     bool res;
     //    res = onMessageId(81, 950001, usLeft, Test::DirUpWard);
@@ -65,6 +68,8 @@ EMULATOR::EMULATOR(cCriticalSection* cs1, cCriticalSection* cs2, float pathStep,
 
 EMULATOR::~EMULATOR()
 {
+    disconnect(_pPathModel[0], SIGNAL(messge(QString)), this, SLOT(_onMessage(QString)));
+    disconnect(_pPathModel[1], SIGNAL(messge(QString)), this, SLOT(_onMessage(QString)));
     _channelList.clear();
     _config.clear();
     deletePathObjects();
@@ -95,12 +100,12 @@ bool EMULATOR::onMessageId(unsigned short objectId, int startCoordInMM, eUMUSide
     }
     return res;
 }
+
 void EMULATOR::deletePathObjects()
 {
     _pPathModel[0]->deleteObjects();
     _pPathModel[1]->deleteObjects();
 }
-
 
 SignalsData* EMULATOR::getScanObject(eUMUSide side, int coordInMM, bool& isDataObject)
 {
@@ -112,4 +117,14 @@ void EMULATOR::setMovingDirection(Test::eMovingDir movingDirection)
 {
     _pPathModel[0]->setMovingDireciton(movingDirection);
     _pPathModel[1]->setMovingDireciton(movingDirection);
+}
+
+void EMULATOR::onLeftSideMessage(QString s)
+{
+    emit message("left side: " + s);
+}
+
+void EMULATOR::onRightSideMessage(QString s)
+{
+    emit message("right side: " + s);
 }
