@@ -328,6 +328,7 @@ cCriticalSection *pCS2;
 #endif
     _pEmulator = new EMULATOR(pCS1, pCS2, TROLLEY::step, _pConfig->getPathToObjectsFiles());
     _pEmulator->getChannelList(_channelList);
+    connect(_pEmulator, SIGNAL(message(QString)), this, SLOT(onMessage(QString)));
 //
       moveLargeBScanInit
 //
@@ -1182,4 +1183,9 @@ bool UMUDEVICE::testPassword(QString& password)
 void UMUDEVICE::save()
 {
     _pConfig->save();
+}
+
+void UMUDEVICE::onMessage(QString s) // слот на сигналы с текстовыми сообщениями от используемых классов
+{
+    emit message(s);
 }

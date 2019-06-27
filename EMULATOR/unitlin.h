@@ -61,9 +61,11 @@ public:
 
 signals:
     void CDUconnected();
+    void message(QString s);
 
 private slots:
     void on_CDU_connected();
+    void onMessage(QString s); // слот на сигналы с текстовыми сообщениями от используемых классов
 
 private:
     class UMUDEVICE *_pDevice;

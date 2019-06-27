@@ -33,8 +33,9 @@ typedef struct _COMPLEX_OBJECT
 }tCOMPLEXOBJECT;
 */
 
-class OBJECTSARRAY{
-//
+class OBJECTSARRAY:public QObject
+{
+    Q_OBJECT
 public:
 //
     OBJECTSARRAY(cCriticalSection* cs, float pathStep): _cs(cs),
@@ -69,6 +70,9 @@ private:
 
     bool insertSCANOBJECT_EXBefore(QVector<tSCANOBJECT_EX>::iterator whereToIt, unsigned int id, int firstCoord, int lastCoord, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject);
     unsigned int convertMMtoPathStep(unsigned int pathInMM);
+
+signals:
+    void message(QString);
 };
 
 
