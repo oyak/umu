@@ -295,7 +295,6 @@ signals:
     void CDUconnected();
     void restartPCLinkFaultTimer();
     void message(QString s);
-   
 
 public slots:
     void _onPLDInt();                                             // срабатывание таймера _PLDIntTimer
