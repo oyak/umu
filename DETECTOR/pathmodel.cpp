@@ -27,7 +27,9 @@ bool PATHMODEL::addObject(unsigned int id, int startCoord, unsigned int lenInSte
                 _pathEndCoordinate = startCoord + pObject->len();
             }
         }
+        return true;
     }
+    return false;
 }
 //
 // coord - коодината в мм
