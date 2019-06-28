@@ -60,7 +60,7 @@ void OBJECTSARRAY::deleteObjects()
 //
 // coord - коодината в мм
 // если найдены сигналы, соответствующие координате - SignalsData, возвращается указатель на них и
-SignalsData* OBJECTSARRAY::getObject(int coord, bool& isDataObject)
+SignalsData* OBJECTSARRAY::getObject(int coord, bool& isDataObject, bool dbgOut)
 {
 SignalsData* res = 0;
 int seekDir = 0; // 0- не определено, -1 - к началу массива, 1 - к концу массива
@@ -139,16 +139,19 @@ int seekDir = 0; // 0- не определено, -1 - к началу массива, 1 - к концу массива
 
     if (_currentObject != _lastObject)
     {
-     QString s = QString::asprintf("coord = %d ", coord);
-        if (_currentObject == nullptr)
+        if (dbgOut)
         {
-            s += "currentObject = null";
-        }
-            else
+        QString s = QString::asprintf("coord = %d ", coord);
+            if (_currentObject == nullptr)
             {
-                s += QString::asprintf("currentObject Id = %d", _currentObject->Id);
+                s += "currentObject = null";
             }
-        emit message(s);
+                else
+                {
+                    s += QString::asprintf("currentObject Id = %d", _currentObject->Id);
+                }
+            emit message(s);
+        }
         _lastObject = _currentObject;
     }
     _cs->Release();

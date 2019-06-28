@@ -128,3 +128,13 @@ void EMULATOR::onRightSideMessage(QString s)
 {
     emit message("right side: " + s);
 }
+
+bool EMULATOR::testPathMap()
+{
+    return _pPathModel[0]->testPathMap(true) & _pPathModel[1]->testPathMap(true);
+}
+
+bool EMULATOR::testCoordinate(int coordinate)
+{
+    return _pPathModel[0]->testCoordinate(coordinate) & _pPathModel[1]->testCoordinate(coordinate);
+}

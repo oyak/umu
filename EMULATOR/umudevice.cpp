@@ -848,7 +848,7 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                 }
                 byteCount -= IdCount * (sizeof(coord) + sizeof(id));
             }
-            qWarning() << "TrackMapId";
+            _pEmulator->testPathMap();
             break;
         }
 //
@@ -870,8 +870,8 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
             {
                pMessage = reinterpret_cast<tJUMPTRACKCOORD*>(buff.Data);
               _pTrolley->setCoordinate(pMessage->Coord, pMessage->LeftDebugCoord, pMessage->RightDebugCoord);
-              qWarning() << "JumpTrackCoordinateId";
             }
+            _pEmulator->testCoordinate(pMessage->Coord);
             break;
         }
     }
