@@ -496,6 +496,7 @@ bool UMUDEVICE::engine(void)
 //
        case PCConnecting:
         _PCConnected = false;
+        _read_state = rsHead;
 #ifndef SKIP_PC_CONNECTING
         if (_dtLan->openConnection(_PCConnection_id) == 0)
         {
@@ -521,7 +522,7 @@ bool UMUDEVICE::engine(void)
 #ifndef SKIP_PC_CONNECTING
         if ((_pConfig->getRestorePCConnectionFlagState()) && (_PCLinkFault))
         {
-            _pTrolley->stopTrolley();
+            emit message("UMUDEVICE::engine(): PC LAN reconnection !");
             _dtLan->closeConnection(_PCConnection_id);
             setState(PCConnecting);
         }
@@ -848,7 +849,7 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                 }
                 byteCount -= IdCount * (sizeof(coord) + sizeof(id));
             }
-            qWarning() << "TrackMapId";
+            _pEmulator->testPathMap();
             break;
         }
 //
@@ -870,8 +871,8 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
             {
                pMessage = reinterpret_cast<tJUMPTRACKCOORD*>(buff.Data);
               _pTrolley->setCoordinate(pMessage->Coord, pMessage->LeftDebugCoord, pMessage->RightDebugCoord);
-              qWarning() << "JumpTrackCoordinateId";
             }
+            _pEmulator->testCoordinate(pMessage->Coord);
             break;
         }
     }

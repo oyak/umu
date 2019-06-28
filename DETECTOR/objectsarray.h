@@ -51,7 +51,7 @@ public:
     bool addObject(unsigned int id, int startCoord, unsigned int lenInSteps, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject);
 //
 
-    SignalsData *getObject(int coord, bool &isDataObject);
+    SignalsData *getObject(int coord, bool& isDataObject, bool dbgOut=true);
     void setMovingDirection(Test::eMovingDir movingDirection);
 private:
     float _step; // ראד ִֿ

@@ -42,6 +42,8 @@ public:
     bool onMessageId(unsigned short objectId, int startCoord, eUMUSide side);
     void deletePathObjects();
     void setMovingDirection(Test::eMovingDir movingDirection);
+    bool testCoordinate(int coordinate);
+    bool testPathMap();
 
 signals:
     void message(QString s);
@@ -54,7 +56,6 @@ public slots:
 private:
     PATHMODEL *_pPathModel[2]; // на две нити usLeft, usRight
 
-//    OBJECTLIB _lib;
     OBJECTSTOR *_pStorage;
     Test *_pFileParser;
     QMap<CID, tStrokeConfig> _config;
