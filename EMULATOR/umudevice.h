@@ -32,12 +32,10 @@
 #endif
 
 
-
-#define N0EMS_SENSOR_SHIFT_mm 90 // смещение ПЭП 0гр в искательной системе относительно ее
+#define N0EMS_SENSOR_SHIFT_mm 90  // смещение ПЭП 0гр в искательной системе относительно ее
 // центра (между БР1 и БР2), мм
 
-#define  cReceiveStartOffsetMax 0x35 // самое длинное сообщение протокола для БУМ минус 1
-
+#define cReceiveStartOffsetMax 0x35  // самое длинное сообщение протокола для БУМ минус 1
 
 
 #define LAN_MESSAGE_SHORT_HEADER_SIZE 4
@@ -49,8 +47,8 @@ struct tLAN_PCMessage
 {
     enum eCONSTANTS
     {
-// PC
-        LanDataMaxSize = 4090,
+        // PC
+        LanDataMaxSize = 65536,
         LANBufferSize = 4096
     };
 
@@ -67,15 +65,15 @@ struct tLAN_PCMessage
         memset(Data, 0, LanDataMaxSize);
     }
 
-/*
-    tLAN_PCMessage(unsigned char id, unsigned short size)
-        : Id(id)
-        , Source(CDU)
-        , Size(size)
-    {
-        memset(Data, 0, LanDataMaxSize);
-    }
-*/
+    /*
+        tLAN_PCMessage(unsigned char id, unsigned short size)
+            : Id(id)
+            , Source(CDU)
+            , Size(size)
+        {
+            memset(Data, 0, LanDataMaxSize);
+        }
+    */
     void resetMessage()
     {
         Id = 0;
@@ -89,7 +87,7 @@ struct tLAN_CDUMessage
 {
     enum eCONSTANTS
     {
-// CDU
+        // CDU
         LanDataMaxSize = 1019,
         LANBufferSize = 1024
     };
@@ -111,17 +109,17 @@ struct tLAN_CDUMessage
         memset(Data, 0, LanDataMaxSize);
     }
 
-/*
-    tLAN_Message(unsigned char id, unsigned short size)
-        : Id(id)
-        , Source(CDU)
-        , Size(size)
-        , MessageCount(0)
-        , NotUse(0)
-    {
-        memset(Data, 0, LanDataMaxSize);
-    }
-*/
+    /*
+        tLAN_Message(unsigned char id, unsigned short size)
+            : Id(id)
+            , Source(CDU)
+            , Size(size)
+            , MessageCount(0)
+            , NotUse(0)
+        {
+            memset(Data, 0, LanDataMaxSize);
+        }
+    */
     void resetMessage()
     {
         Id = 0;
@@ -143,60 +141,60 @@ typedef struct _MESSAGEHEADER
 } tMESSAGEHEADER;
 */
 //
-typedef struct _NEXT_TRACK_COORD //
+typedef struct _NEXT_TRACK_COORD  //
 {
     int32_t Coord;
     int32_t LeftDebugCoord;
     int32_t RightDebugCoord;
-    float  Speed;
+    float Speed;
     uint32_t Time;
 } tNEXTTRACKCOORD;
 
-typedef struct _JUMP_TRACK_COORD //
+typedef struct _JUMP_TRACK_COORD  //
 {
     int32_t Coord;
     int32_t LeftDebugCoord;
     int32_t RightDebugCoord;
     uint32_t Time;
-}tJUMPTRACKCOORD;
+} tJUMPTRACKCOORD;
 
 
 typedef struct _OBJECT_DATA
 {
     int32_t StartCoordinate;
     unsigned short Id;
-}tOBJECTDATA;
+} tOBJECTDATA;
 
 #pragma pack(pop)
 
 // идентификаторы сообщений обмена БУМ-тренажер
 enum MessageId  //: unsigned char
 {
-ChangeCduModeId = 1,  //смена режима CDU - планшет
-ChangeRcModeId = 2, //смена режима RC – пульт (смартфон)
-RegistrationOnId = 3, //включена регистрация
-RegistrationOffId = 4, //выключена регистрация
-AnswerToQuestionId = 5, //ответ на вопрос
-BoltJointOnId = 6, //кнопка болтовой стык нажата
-BoltJointOffId = 7, //кнопка болтовой стык отпущена
-OperatorTrackCoordinateId = 8, //координата отмечена оператором (км пк)
-OperatorActionId = 9, //действие оператора
-DefectMarkId = 10, //отметка о дефекте
-RailroadSwitchMarkId = 11, //отметка о стрелке
-TrackMapId = 12, //маршрут пути
-NextTrackCoordinateId = 13, //следующая координата
-JumpTrackCoordinateId = 14, //прыжок на координату (разбор)
-ManipulatorStateId = 15, //состояние манипулятора (скорость)
-PingId = 16  //контроль соединения
+    ChangeCduModeId = 1,            //смена режима CDU - планшет
+    ChangeRcModeId = 2,             //смена режима RC – пульт (смартфон)
+    RegistrationOnId = 3,           //включена регистрация
+    RegistrationOffId = 4,          //выключена регистрация
+    AnswerToQuestionId = 5,         //ответ на вопрос
+    BoltJointOnId = 6,              //кнопка болтовой стык нажата
+    BoltJointOffId = 7,             //кнопка болтовой стык отпущена
+    OperatorTrackCoordinateId = 8,  //координата отмечена оператором (км пк)
+    OperatorActionId = 9,           //действие оператора
+    DefectMarkId = 10,              //отметка о дефекте
+    RailroadSwitchMarkId = 11,      //отметка о стрелке
+    TrackMapId = 12,                //маршрут пути
+    NextTrackCoordinateId = 13,     //следующая координата
+    JumpTrackCoordinateId = 14,     //прыжок на координату (разбор)
+    ManipulatorStateId = 15,        //состояние манипулятора (скорость)
+    PingId = 16                     //контроль соединения
 };
 
 
-#define PING_PERIOD 500 // мс
-#define PC_LINK_FAULT_TIMEOUT 3000 // мс
+#define PING_PERIOD 500             // мс
+#define PC_LINK_FAULT_TIMEOUT 3000  // мс
 
 
 //
-class UMUDEVICE: public QObject
+class UMUDEVICE : public QObject
 {
     Q_OBJECT
     enum eState
@@ -204,47 +202,47 @@ class UMUDEVICE: public QObject
         Stopped = 0,
         CDUConnected,
         PCConnecting,
-        WhenConnected,     // все требуемые подключения установлены
+        WhenConnected,  // все требуемые подключения установлены
         Working,
-        Finishing      // разъединение, закрытие тредов
+        Finishing  // разъединение, закрытие тредов
     };
 
     enum eOutBufferIndex
     {
         CDUoutBufferIndex = 0,
         PCoutBufferIndex = 1,
-        NumOfOutBuffers = 2 // общее число буферов
+        NumOfOutBuffers = 2  // общее число буферов
     };
 
 
 public:
-    static UMUDEVICE *deviceObjectPtr;
+    static UMUDEVICE* deviceObjectPtr;
 
 #ifdef DEFCORE_OS_WIN
-     static class UNITWIN *_parentClass;
-     static class cCriticalSection_Win* _critical_sectionPtr;
+    static class UNITWIN* _parentClass;
+    static class cCriticalSection_Win* _critical_sectionPtr;
 #else
-     static class UNITLIN *_parentClass;
-     static class cCriticalSection_Lin* _critical_sectionPtr;
+    static class UNITLIN* _parentClass;
+    static class cCriticalSection_Lin* _critical_sectionPtr;
 #endif
-    static std::queue<tLAN_CDUMessage> *_out_bufferPtr;  // указатель на буфер выгрузки данных для БУИ
+    static std::queue<tLAN_CDUMessage>* _out_bufferPtr;  // указатель на буфер выгрузки данных для БУИ
     static tLAN_CDUMessage _BScanMessage;
     static unsigned int _BScanMessageCounter;
-    static bool *enablePLDIntPtr;   // указатель на флаг "прерывания" от ПЛИС разрешены
+    static bool* enablePLDIntPtr;  // указатель на флаг "прерывания" от ПЛИС разрешены
 
 
-    static PLDEMULATOR *pldLPtr;
-    static PLDEMULATOR *pldRPtr;
+    static PLDEMULATOR* pldLPtr;
+    static PLDEMULATOR* pldRPtr;
 
 
     static char localIpAddress[];
     static char remoteIpAddress[];
 
 
-    UMUDEVICE(cThreadClassList* ThreadClassList, void *parentClass, CONFIG *pConfig);
+    UMUDEVICE(cThreadClassList* ThreadClassList, void* parentClass, CONFIG* pConfig);
     ~UMUDEVICE();
 
-    bool _enablePLDInt;   // флаг "прерывания" от ПЛИС разрешены
+    bool _enablePLDInt;  // флаг "прерывания" от ПЛИС разрешены
 
     eState getState(void);
     void start();
@@ -263,7 +261,7 @@ public:
 
     void printConnectionStatus();
 
-// работа с настройками
+    // работа с настройками
     QString& getCDULocalIPAddress();
     QString& getCDURemoteIPAddress();
     bool setCDULocalIPAddress(QString& IPAddressPart3, QString& IPAddressPart2, QString& IPAddressPart1, QString& IPAddressPart0);
@@ -291,7 +289,7 @@ public:
 
     bool testPassword(QString& password);
     void save();
-//
+    //
 
 signals:
     void CDUconnected();
@@ -299,23 +297,23 @@ signals:
     void message(QString s);
 
 public slots:
-    void _onPLDInt(); // срабатывание таймера _PLDIntTimer
-    void _onPathStep(int shift, int coordLInMM, int coordRInMM); // слот на сигнал о срабатывании ДП от trolley
+    void _onPLDInt();                                             // срабатывание таймера _PLDIntTimer
+    void _onPathStep(int shift, int coordLInMM, int coordRInMM);  // слот на сигнал о срабатывании ДП от trolley
     void _onPingTimer();
-    void _onPCLinkFaultTimer(); // слот на срабатывание _PCLinkFaultTimer
-    void _onRestartPCLinkFaultTimer(); // перезапускаем _PCLinkFaultTimer, чтобы не сработал
+    void _onPCLinkFaultTimer();         // слот на срабатывание _PCLinkFaultTimer
+    void _onRestartPCLinkFaultTimer();  // перезапускаем _PCLinkFaultTimer, чтобы не сработал
     void onMessage(QString s); // слот на сигналы с текстовыми сообщениями от используемых классов
-//
+
 private:
     eState _state;
     bool _endWorkFlag;
-    int _PCConnection_id;           // Идентификатор соединения в cDatatr c ПК тренажера
-    int _CDUConnection_id;          // идентияикатор соединения с БУИ
+    int _PCConnection_id;   // Идентификатор соединения в cDatatr c ПК тренажера
+    int _CDUConnection_id;  // идентияикатор соединения с БУИ
 
-    bool _CDUConnected;             // соединение с БУИ установлено
-    bool _PCConnected;             // соединение с ПК установлено
+    bool _CDUConnected;  // соединение с БУИ установлено
+    bool _PCConnected;   // соединение с ПК установлено
 
-    bool _PCLinkFault;             // устанавливаем, если нет PingId от ПК в течение PC_LINK_FAULT_TIMEOUT
+    bool _PCLinkFault;  // устанавливаем, если нет PingId от ПК в течение PC_LINK_FAULT_TIMEOUT
     QTimer _PCLinkFaultTimer;
 
     unsigned int _write_error_count[NumOfOutBuffers];
@@ -324,7 +322,7 @@ private:
     std::queue<tLAN_PCMessage> _PC_out_buffer;
 
     unsigned char _receiveStartOffset;
-    unsigned char _incmdbuf[UIP_BUFSIZE+4+cReceiveStartOffsetMax];
+    unsigned char _incmdbuf[UIP_BUFSIZE + 4 + cReceiveStartOffsetMax];
 
     cDataTransferLan* _dtLan;
 
@@ -334,19 +332,19 @@ private:
 
     QTimer _PLDIntTimer;
 
-    PLDEMULATOR *_pldl;
-    PLDEMULATOR *_pldr;
+    PLDEMULATOR* _pldl;
+    PLDEMULATOR* _pldr;
 
-    TROLLEY *_pTrolley;
-    EMULATOR *_pEmulator;
+    TROLLEY* _pTrolley;
+    EMULATOR* _pEmulator;
     QList<CID> _channelList;
 
-    Test::eMovingDir _movingDirection; // направление движения:
+    Test::eMovingDir _movingDirection;  // направление движения:
 
     QTimer _pingTimer;
     cCriticalSection* _pPingTimerCS;
     bool _needToPing;
-    CONFIG *_pConfig;
+    CONFIG* _pConfig;
 
     bool isEndWork();
 
@@ -360,10 +358,8 @@ private:
     void setState(eState newState);
 
 
-
 protected:
-
-    enum eReadState                       // Состояние процесса чтения сообщения
+    enum eReadState  // Состояние процесса чтения сообщения
     {
         rsOff = 0,   // Выключенно
         rsHead = 1,  // Ожидаем заголовок сообщения
@@ -378,15 +374,13 @@ protected:
 
     void readPCMessageHead(unsigned int& res, bool& fRepeat);
     void readPCMessageBody(unsigned int& res, bool& fRepeat);
-    void unPack(tLAN_PCMessage &buf);
-//
+    void unPack(tLAN_PCMessage& buf);
+    //
     void AddToOutBuffSync(tLAN_PCMessage* _out_block);
     void AddToOutBuffNoSync(tLAN_PCMessage* _out_block);
     void sendPingToPC();
 
     void whenTrolleyCoordChanged(int coordLInMM, int coordRInMM);
-
 };
 
 #endif
-
