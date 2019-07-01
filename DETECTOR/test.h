@@ -38,9 +38,8 @@ public:
     bool readNextCoord(unsigned int &coord, bool& fShort);
     bool readNextStolb(sCoordPostMRF *postCoordPtr, int *systemCoordPtr);
     bool extractScanObject(unsigned int startCoord, eUMUSide side, unsigned int len, tSCANOBJECT_EX& object);
-
-    unsigned int convertToSystemCoord(tMRFCrd &coord);
     unsigned int convertMMToSystemCoord(unsigned int mm);
+    unsigned int convertSystemCoordToMM(unsigned int steps);
     unsigned int countCoordUntilFileOffet(unsigned int objectId, qint64 fileOffset);
 
 private:
@@ -58,10 +57,11 @@ private:
 
       bool footerExist();
       bool readAndParseEventID(unsigned char& Id, void *pParsedData, bool readIDOnly);
-      long long convertToMM(tMRFCrd coord);
+//      long long convertToMM(tMRFCrd coord);
       unsigned char getSideByte(eUMUSide Side);
       eUMUSide convertToUMUSide(unsigned char sideByte);
       CID convertToCID(CID chIdx, eMovingDir movingDirection);
+      bool getPKLen(sCoordPostMRF *postCoordPtr, int& len, bool inverseDirection);
 };
 
 
