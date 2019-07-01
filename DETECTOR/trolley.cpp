@@ -248,7 +248,7 @@ unsigned int timeSpan;
                 coordDiscrepancy = _coordinate - _targetCoordinate;
                 if (fabs(coordDiscrepancy) > fabs(_currentV))
                 {
-                    changeCoordinate(timeSpan);
+                    changeCoordinate(1); // изменяем координату только на _currentV, не бошльше - см условие if
 //                       qWarning() << "stopped: _coordinate changed to " << _coordinate << "by currentV = " << _currentv << " * " << timeSpan << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
                 }
                     else
