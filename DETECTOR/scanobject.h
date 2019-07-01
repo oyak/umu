@@ -2,14 +2,13 @@
 #define SCANOBJECT_H
 
 #include <QVector>
+#include <QObject>
 #include "signalsdata.h"
 
 
-class SCANOBJECT
+class SCANOBJECT:public QObject
 {
-private:
-
-QVector<SignalsData> _data;
+   Q_OBJECT
 public:
     SCANOBJECT();
     ~SCANOBJECT();
@@ -29,7 +28,14 @@ public:
     bool isEmpty();
     unsigned int len(); // возвращает длину объекта в миллиметрах
     unsigned int size();// возвращает длину объекта в шагах ДП - размер массива данных
+    void getAllChannels(QVector<CID>& channels);
+    void view();
+
+signals:
+    void message(QString);
+
 private:
+    QVector<SignalsData> _data;
     unsigned int _step; // шаг ДП для этого объекта в сотых долях мм
 };
 
