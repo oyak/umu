@@ -47,7 +47,7 @@ typedef struct _OBJECT_SOURCE_DESCRIPTOR
 // отрицательное (т.е центр записи в канале 0 находится слева от центра объекта), то файл
 // при создании удлиняется слева, иначе - справа. Если N0EMSShift отлично от нуля,
 // поле Order может иметь значение только ExpandedOverPlaced
-
+// модуль значения должнен быть меньше 1000
     unsigned int LngCutting; // укорочение длины
     eOBJECT_ORDER Order; //
     QString ObjectName;

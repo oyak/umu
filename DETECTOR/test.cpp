@@ -36,7 +36,7 @@ bool Test::extractObject(OBJECTLIB& lib, unsigned int objectId, tSCANOBJECT_EX& 
 {
 tObjectSourceDescr descriptor;
 bool res;
-sCoordPostMRF post;
+sCoordPostMRF startPost;
 int startKM;
 int startPk;
 int startM;
@@ -56,39 +56,70 @@ int startmM;
 //
     if (res)
     {
-        startKM = descriptor.StartKm;
-        startPk = descriptor.StartPk;
+        startPost.Km[1] = startKM = descriptor.StartKm;
+        startPost.Pk[1] = startPk = descriptor.StartPk;
         startM = descriptor.StartM;
         startmM = descriptor.StartmM;
         if (descriptor.Order == ExpandedOverPlacing)
         {
+            assert(abs(descriptor.N0EMSShift) < 1000);
             if (descriptor.N0EMSShift < 0)
             { // начальную точку объекта сдвигаем влево
                 startmM += descriptor.N0EMSShift;
                 if (startmM < 0)
                 {
-                    startmM += 1000;
-                    startM--;
-                    if (startM < 0)
+                    if (startM == 0)
                     {
-                        tMRFCrd post;
-                        post.Km = startKM;
-                        post.Pk = startPk;
-                        startM += 100;
-                        post = GetPrevMRFPostCrd(post, _Header.MoveDir);
-                        startKM = post.Km;
-                        startPk = post.Pk;
+                    tMRFCrd post;
+                    int pkLen; // длина прерыдущего участка в мм
+                    int mm;
+                    int m;
+                        res = getPKLen(&startPost, pkLen, true);
+                        if (res)
+                        {
+                            assert(pkLen);
+                            m = pkLen / 1000;
+                            mm = pkLen % 1000;
+                            if (m == 0)
+                            { // и такое безобразие, наыерное, может быть
+                                assert(mm >= abs(startmM));
+                                startmM += mm;
+                                startM = m;
+                            }
+                                else
+                                {
+                                    if (mm >= abs(startmM))
+                                    {
+                                        startmM += mm;
+                                        startM = m;
+                                    }
+                                        else
+                                        {
+                                            startmM += 1000 + mm;
+                                            startM = m - 1;
+                                        }
+                                }
+                            post.Km = startKM;
+                            post.Pk = startPk;
+                            post = GetPrevMRFPostCrd(post, _Header.MoveDir);
+                            startKM = post.Km;
+                            startPk = post.Pk;
+                        }
                     }
+                        else
+                        {//если не отошли за предыдущий пикетный столб
+                            startmM += 1000;
+                            startM --;
+                        }
                 }
             }
-
         }
     }
 //
     if (res)
     {
         bool condition1;
-        bool condition2;
+        bool condition2; //
         if (_Header.MoveDir == -1)
         {
             condition1 = (_Header.StartKM >= startKM);
@@ -101,13 +132,13 @@ int startmM;
             }
         if (condition1)
         {
-            post.Km[1] = startKM;
-            post.Pk[1] = startPk;
+            startPost.Km[1] = startKM;
+            startPost.Pk[1] = startPk;
             unsigned int systemCoord;
             if (condition2)
             {
               int currentCoord = _fullCoordinate;
-                res = findAndParseStolbID(post, &currentCoord, _Header.MoveDir);
+                res = findAndParseStolbID(startPost, &currentCoord, _Header.MoveDir);
                 if (res)
                 {
                     _fullCoordinate = currentCoord;
@@ -297,7 +328,59 @@ CID Test::convertToCID(CID chIdx, eMovingDir movingDirection)
                     return F42E;
                 default: assert(0);
             }
-        }
+    }
+}
+// определяет длину участка в мм от пикетного столба *postCoordPtr
+// до следующего/предыдущего столба(начала файла) в зависимости inverseDirection = false/true
+// возвращает true, если пикетный столб найден
+// возвращает указатель в файле на позицию, соответствующую после чтения заголовка
+bool Test::getPKLen(sCoordPostMRF *postCoordPtr, int& len, bool inverseDirection)
+{
+bool res;
+sCoordPostMRF firstPostCoord;
+sCoordPostMRF postCoord2;
+int startCoord;
+int nextCoord;
+    readHeader();
+    res = readNextStolb(&firstPostCoord, &startCoord);
+    readHeader();
+    res = findAndParseStolbID(*postCoordPtr, &startCoord, _Header.MoveDir);
+    if (res)
+    {
+       len = 0;
+       if (inverseDirection == false)
+       { // направление поиска совпадает с направлением в файле
+           res = readNextStolb(&postCoord2, &nextCoord);
+           if (res)
+           {
+               len = convertSystemCoordToMM(nextCoord - startCoord);
+           }
+       }
+           else
+           {
+               if ((firstPostCoord.Km[1] == postCoordPtr->Km[1]) && (firstPostCoord.Pk[1] == postCoordPtr->Pk[1]))
+               { // заданный столб - первый в файле
+                   len = convertSystemCoordToMM(startCoord);
+               }
+                   else
+                   {
+                   tMRFCrd post;
+                       post.Km = postCoordPtr->Km[1];
+                       post.Pk = postCoordPtr->Pk[1];
+                       post = GetPrevMRFPostCrd(post, _Header.MoveDir);
+                       postCoord2.Km[1] = post.Km;
+                       postCoord2.Pk[1] = post.Pk;
+                       readHeader();
+                       res = findAndParseStolbID(postCoord2, &nextCoord, _Header.MoveDir);
+                       if (res)
+                       {
+                           len = convertSystemCoordToMM(startCoord - nextCoord);
+                       }
+                   }
+           }
+    }
+    readHeader();
+    return res;
 }
 
 // извлекает сигналы, относящиеся к заданной системной координате,
@@ -416,7 +499,6 @@ unsigned int tempCoord;
 // находит идентификатор заданного столба, устанавливает
 // текущую позицию в файле на следующий идентификатор и
 // возвращает true
-// предполагается, что идет увеличение путейской координаты
 bool Test::findAndParseStolbID(sCoordPostMRF coord, int *systemCoordPtr, int movingDir)
 {
 bool res;
@@ -890,26 +972,11 @@ unsigned char ID[4];
     _fileOffset = _pFile->pos();
     return res;
 }
-//
-long long Test::convertToMM(tMRFCrd coord)
+// перевод длины в шагах ДП в длину в мм
+unsigned int Test::convertSystemCoordToMM(unsigned int steps)
 {
-    return coord.mm + (coord.Pk + coord.Km * 10) * 100000;
+    return static_cast<unsigned int>(steps * _Header.ScanStep / 100.0);
 }
-
-unsigned int Test::convertToSystemCoord(tMRFCrd& coord)
-{
-unsigned long long res = 0;
-unsigned long long startCoordMM;
-unsigned long long coordMM;
-
-    coordMM = convertToMM(coord);
-    startCoordMM = ((((_Header.StartKM * 10) + _Header.StartPk) * 100) + _Header.StartMetre) * 1000;
-    if (coordMM < startCoordMM) return res;
-
-    res = static_cast<unsigned int>((coordMM - startCoordMM) * 100 / _Header.ScanStep);
-    return static_cast<unsigned int>(res);
-}
-//
 // перевод длины в мм в длину в шагах ДП
 unsigned int Test::convertMMToSystemCoord(unsigned int mm)
 {
@@ -917,7 +984,6 @@ unsigned long long res;
     res = mm * 100 / _Header.ScanStep;
     return static_cast<unsigned int>(res);
 }
-
 //файл должен быть открыт
 unsigned int Test::countCoordUntilFileOffet(unsigned int objectId, qint64 fileOffset)
 {
