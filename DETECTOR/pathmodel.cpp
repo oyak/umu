@@ -97,7 +97,7 @@ int clearenceStart;
             else
             {
                 res = false;
-                emit message(QString::asprintf("testPathMap: clearence = %d on coordinate %d", clearenceLen, clearenceStart));
+                emit message(QString::asprintf("testPathMap: gap = %d on coordinate %d", clearenceLen, clearenceStart));
             }
     } while (coord <= _pathEndCoordinate);
 
