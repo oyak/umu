@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <QDebug>
 #include "pldemu.h"
+#include "math.h"
 #include "MISC46_2.H"
 
 PLDEMULATOR::PLDEMULATOR(cCriticalSection *cs): _cycledAScan(false),
@@ -132,7 +133,8 @@ bool res = true;
     if (numOfSignals < MaxNumOfSignals)
     {
         int amplitudeInDB = codeToDB(amplitudeCode);
-        int correctedAmplitudeInDB = amplitudeInDB + getATTValueChange(tact, line, delayMS);
+        int correctedAmplitudeInDB = amplitudeInDB;
+//        int correctedAmplitudeInDB = amplitudeInDB + getATTValueChange(tact, line, delayMS);
 
         _BScanBuffer[line][tact][numOfSignals].MaximumAmpl = DBToAmplitude(correctedAmplitudeInDB);
         _BScanBuffer[line][tact][numOfSignals].Reserved2 = amplitudeInDB;
@@ -374,7 +376,7 @@ void PLDEMULATOR::writeIntoRAM(unsigned int address, unsigned char value)
 //            qDebug() << "writeIntoRAM: address =" << hex << address + ExtRamStartAdr << "value =" << value << "into _tactWorkArea, offset = " << ((address - _tactParameterAreaSize) >> 1);
 
             defineStrobsLimits();
-            redefineSignalAmplitudes();
+//            redefineSignalAmplitudes();
         }
     _cs->Release();
 }
