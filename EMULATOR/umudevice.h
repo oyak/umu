@@ -238,7 +238,6 @@ public:
     static char localIpAddress[];
     static char remoteIpAddress[];
 
-
     UMUDEVICE(cThreadClassList* ThreadClassList, void* parentClass, CONFIG* pConfig);
     ~UMUDEVICE();
 
@@ -289,8 +288,10 @@ public:
 
     bool testPassword(QString& password);
     void save();
+#ifdef _test_message_numeration_integrity
+    void testMessageNumerationIntegrity(tLAN_CDUMessage* _out_block);
+#endif
     //
-
 signals:
     void CDUconnected();
     void restartPCLinkFaultTimer();
@@ -371,6 +372,11 @@ protected:
     unsigned int _read_bytes_count;
     unsigned int _error_message_count;
     unsigned int _wait_PCmesageBody_count;
+//
+#ifdef _test_message_numeration_integrity
+    unsigned char _messageNumber;
+    unsigned char _lastMessageID;
+#endif
 
     void readPCMessageHead(unsigned int& res, bool& fRepeat);
     void readPCMessageBody(unsigned int& res, bool& fRepeat);

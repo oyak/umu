@@ -116,13 +116,22 @@ void dbgPrintOfMessage(tLAN_CDUMessage* _out_block)
     }
 }
 
+#ifdef _test_message_numeration_integrity
+static void test_Message_Numeration_Integrity(tLAN_CDUMessage* _out_block)
+{
+    UMUDEVICE::deviceObjectPtr->testMessageNumerationIntegrity(_out_block);
+}
+#endif
+
 static void AddToOutBuffSync(tLAN_CDUMessage* _out_block)
 {
     UMUDEVICE::_critical_sectionPtr->Enter();
 
 //    if (_out_block->Id == 0x83)
 //        dbgPrintOfMessage(_out_block);
-
+#ifdef _test_message_numeration_integrity
+    test_Message_Numeration_Integrity(_out_block);
+#endif
     UMUDEVICE::_out_bufferPtr->push(*_out_block);
     UMUDEVICE::_critical_sectionPtr->Release();
 }
@@ -132,6 +141,9 @@ static void AddToOutBuffNoSync(tLAN_CDUMessage* _out_block)
 //    if (_out_block->Id == 0x83)
 //        dbgPrintOfMessage(_out_block);
 
+#ifdef _test_message_numeration_integrity
+    test_Message_Numeration_Integrity(_out_block);
+#endif
     UMUDEVICE::_out_bufferPtr->push(*_out_block);
 }
 
@@ -391,6 +403,11 @@ cCriticalSection *pCS2;
     connectionParams._socket_2_tcp = false;
     connectionParams._socket_1_server = true;
     connectionParams._socket_1_transfer_direction = cSocketLan::DirectionToLocal;
+
+#ifdef _test_message_numeration_integrity
+    _messageNumber = 0;
+    _lastMessageID = 0;
+#endif
 
     _CDUConnection_id = _dtLan->addConnection(reinterpret_cast<cDataTransferLan::cLanConnectionParams* const>(&connectionParams));
 //
@@ -663,6 +680,18 @@ bool UMUDEVICE::umuTick()
     SLEEP(1);
     return !isEndWork();
 }
+
+#ifdef _test_message_numeration_integrity
+void UMUDEVICE::testMessageNumerationIntegrity(tLAN_CDUMessage* _out_block)
+{
+    if (_out_block->MessageCount != _messageNumber)
+    {
+        emit message(QString::asprintf("ERROR: real LAN-messsage to CDU number = %d, expected number = %d, this message ID = %d, last message ID = 0x%x", _out_block->MessageCount, _messageNumber, _out_block->Id, _lastMessageID));
+    }
+    _messageNumber = _out_block->MessageCount + 1;
+    _lastMessageID = _out_block->Id;
+}
+#endif
 
 void UMUDEVICE::writePLDRegister(eUMUSide side, unsigned int regAddress, unsigned char value)
 {
