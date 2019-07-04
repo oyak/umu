@@ -123,19 +123,6 @@ static void test_Message_Numeration_Integrity(tLAN_CDUMessage* _out_block)
 }
 #endif
 
-static void AddToOutBuffSync(tLAN_CDUMessage* _out_block)
-{
-    UMUDEVICE::_critical_sectionPtr->Enter();
-
-//    if (_out_block->Id == 0x83)
-//        dbgPrintOfMessage(_out_block);
-#ifdef _test_message_numeration_integrity
-    test_Message_Numeration_Integrity(_out_block);
-#endif
-    UMUDEVICE::_out_bufferPtr->push(*_out_block);
-    UMUDEVICE::_critical_sectionPtr->Release();
-}
-//
 static void AddToOutBuffNoSync(tLAN_CDUMessage* _out_block)
 {
 //    if (_out_block->Id == 0x83)
@@ -202,8 +189,10 @@ DWORD get_msrd(void)
 
 void putmsg(UCHAR *srcbuf, USHORT size, vfuncpv userproc)
 {
+    UMUDEVICE::_critical_sectionPtr->Enter();
     if (userproc) userproc((void*)srcbuf);
-    AddToOutBuffSync(reinterpret_cast<tLAN_CDUMessage*>(srcbuf));
+    AddToOutBuffNoSync(reinterpret_cast<tLAN_CDUMessage*>(srcbuf));
+    UMUDEVICE::_critical_sectionPtr->Release();
 }
 
 void put_DataByWord(unsigned int address, USHORT size)
@@ -301,9 +290,6 @@ void get_Access(USHORT size)
     UMUDEVICE::_critical_sectionPtr->Enter();
     UMUDEVICE::_BScanMessage.Size = size - LAN_MESSAGE_BIG_HEADER_SIZE;
     UMUDEVICE::_BScanMessageCounter = 0;
-#ifndef SHORT_HEADER
-    ATTACH_MESSAGE_NUMBER(UMUDEVICE::_BScanMessage.MessageCount);
-#endif
 }
 
 //char CDULocalIpAddress[] = "127.0.0.1";
@@ -686,7 +672,7 @@ void UMUDEVICE::testMessageNumerationIntegrity(tLAN_CDUMessage* _out_block)
 {
     if (_out_block->MessageCount != _messageNumber)
     {
-        emit message(QString::asprintf("ERROR: real LAN-messsage to CDU number = %d, expected number = %d, this message ID = %d, last message ID = 0x%x", _out_block->MessageCount, _messageNumber, _out_block->Id, _lastMessageID));
+        emit message(QString::asprintf("ERROR: real LAN-messsage to CDU number = %d, expected number = %d, this message ID = 0x%x, last message ID = 0x%x", _out_block->MessageCount, _messageNumber, _out_block->Id, _lastMessageID));
     }
     _messageNumber = _out_block->MessageCount + 1;
     _lastMessageID = _out_block->Id;
