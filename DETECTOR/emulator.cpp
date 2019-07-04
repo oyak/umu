@@ -54,8 +54,8 @@ EMULATOR::EMULATOR(cCriticalSection* cs1, cCriticalSection* cs2, float pathStep,
 
     _pStorage = new OBJECTSTOR(pathToObjectsFiles);
 
-    connect(_pPathModel[0], SIGNAL(message(QString)), this, SLOT(onLeftSideMessage(QString)));
-    connect(_pPathModel[1], SIGNAL(message(QString)), this, SLOT(onRightSideMessage(QString)));
+    connect(_pPathModel[usLeft], SIGNAL(message(QString)), this, SLOT(onLeftSideMessage(QString)));
+    connect(_pPathModel[usRight], SIGNAL(message(QString)), this, SLOT(onRightSideMessage(QString)));
     // для отладки
     bool res;
     //    res = onMessageId(81, 950001, usLeft, Test::DirUpWard);
@@ -68,13 +68,13 @@ EMULATOR::EMULATOR(cCriticalSection* cs1, cCriticalSection* cs2, float pathStep,
 
 EMULATOR::~EMULATOR()
 {
-    disconnect(_pPathModel[0], SIGNAL(messge(QString)), this, SLOT(_onMessage(QString)));
-    disconnect(_pPathModel[1], SIGNAL(messge(QString)), this, SLOT(_onMessage(QString)));
+    disconnect(_pPathModel[usLeft], SIGNAL(messge(QString)), this, SLOT(onLeftSideMessage(QString)));
+    disconnect(_pPathModel[usRight], SIGNAL(messge(QString)), this, SLOT(onRightSideMessage(QString)));
     _channelList.clear();
     _config.clear();
     deletePathObjects();
-    delete _pPathModel[0];
-    delete _pPathModel[1];
+    delete _pPathModel[usLeft];
+    delete _pPathModel[usRight];
 }
 
 void EMULATOR::getChannelList(QList<CID>& channelList)

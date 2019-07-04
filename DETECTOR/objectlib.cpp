@@ -5608,16 +5608,6 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 500;
     table.insert(209, descriptor);
 //
-    descriptor.ObjectName = "20, 21, 26.3";
-    descriptor.SourceFileName = "190226-111935.a31";
-    descriptor.Side = usRight;
-    descriptor.StartKm = 53;
-    descriptor.StartPk = 3;
-    descriptor.StartM = 65;
-    descriptor.StartmM = 465;
-    descriptor.LengthMM = 500;
-    table.insert(210, descriptor);
-//
     descriptor.ObjectName = "30.2";
     descriptor.SourceFileName = "170925-142835.a31";
     descriptor.Side = usRight;
@@ -5827,10 +5817,6 @@ tObjectSourceDescr descriptor;
     descriptor.StartmM = 535;
     descriptor.LengthMM = 500;
     table.insert(665, descriptor);
-//
-
-
-
 }
 
 OBJECTLIB::~OBJECTLIB()

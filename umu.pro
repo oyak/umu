@@ -106,7 +106,7 @@ INCLUDEPATH += UMU3204/MAIN \
 
 FORMS    += mainwindow.ui
 
-DEFINES += DEVICE_EMULATION AC_dis
+DEFINES += DEVICE_EMULATION AC_dis _test_message_numeration_integrity
 
 DISTFILES += \
     android/AndroidManifest.xml \
