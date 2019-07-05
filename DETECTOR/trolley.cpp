@@ -50,8 +50,10 @@ tMovingTarget target;
     target.StartCoordL = coordL;
     target.StartCoordR = coordR;
     target.TargetSpeed = (double)targetSpeed / 1000.0; // לל/ס -> לל/לס
+#ifdef FAKE_V_CALCULATION
     lDiff = (int)fabs(target.TargetSpeed * cSpeedCalcTime / step);
     if (lDiff > 0xFFFF) lDiff > 0xFFFF;
+#endif
     _targets.push_back(target);
 
 //    if (abs(coordL - coordR) > 10) qWarning() << "MovPar:" << "coordL =" << coordL << "coordR =" << coordR << "diff =" << coordL - coordR;

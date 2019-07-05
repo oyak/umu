@@ -1059,7 +1059,7 @@ void ustskBody(void)
         {
         tSPEEDMESSAGE speedMessage;
 
-#ifndef DEVICE_EMULATION
+#ifndef FAKE_V_CALCULATION
         if ((mainShiftSensorNumber & IMITATORMASK) == 0)
         { // скорость считается по основному ДП, но не имитатору
             disintpld;
