@@ -328,9 +328,6 @@ void MainWindow::on_lineEdit_10_textChanged(const QString& arg1)
     if (!testCDURemoteIPAddress()) drawCDURemoteIPAddress();
 }
 
-
-void MainWindow::on_pushButton_released() {}
-
 void MainWindow::on_lineEdit_11_textChanged(const QString& arg1)
 {
     (void) arg1;

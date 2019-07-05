@@ -61,8 +61,6 @@ private slots:
 
     void on_checkBox_stateChanged(int arg1);
 
-    void on_pushButton_released();
-
     void on_lineEdit_10_textChanged(const QString& arg1);
 
     void on_lineEdit_11_textChanged(const QString& arg1);
