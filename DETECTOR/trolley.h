@@ -28,7 +28,7 @@ public:
     TROLLEY(cCriticalSection *cs);
     ~TROLLEY();
 
-    static const float step;
+    static const double step;
     static const unsigned int _timerPeriod;
     static const double _absDiscrepancyMaxOfCoord; // максимальное значение невязки по координате в мм
 

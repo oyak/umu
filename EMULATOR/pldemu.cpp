@@ -342,7 +342,7 @@ void PLDEMULATOR::_onAscanTimer()
 void PLDEMULATOR::setPathShft(int shift)
 {
     _cs->Enter();
-    _DPShift = shift;
+    _DPShift += shift;
     _cs->Release();
 }
 

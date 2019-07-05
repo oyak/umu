@@ -7,7 +7,7 @@
 #include "ustyp468.h"
 
 //
-const float TROLLEY::step = 1.83;
+const double TROLLEY::step = 1.83;
 const unsigned int TROLLEY::_timerPeriod = 1;
 const double TROLLEY::_absDiscrepancyMaxOfCoord = 3.0; // максимальная невязка координаты
 
