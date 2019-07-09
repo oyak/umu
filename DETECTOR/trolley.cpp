@@ -159,13 +159,13 @@ unsigned int timeSpan;
     {
        skipVCorrection = true;
        _targetCoordinate = _targets.back().StartCoord * 1.0;
-       coordDiscrepancy = _coordinate - _targetCoordinate;
        if (_targets.back().TargetSpeed == 0.0)
        {
            if (_targetV != 0.0)
            {
-               setTrolleyTargetRotation((double)_targets.back().StartCoordL, (double)_targets.back().StartCoordR);
                changeCoordinate(timeSpan);
+               setTrolleyTargetRotation((double)_targets.back().StartCoordL, (double)_targets.back().StartCoordR);
+               coordDiscrepancy = _coordinate - _targetCoordinate;
                _targetV = 0.0;
                if (((_currentV * coordDiscrepancy) > 0.0) || (coordDiscrepancy == 0.0) )
                { // если либо уже добежали, либо бежим в переди паровоза
@@ -188,10 +188,10 @@ unsigned int timeSpan;
        }
            else
            {
-                setTrolleyTargetRotation((double)_targets.back().StartCoordL, (double)_targets.back().StartCoordR);
                 changeCoordinate(timeSpan);
+                setTrolleyTargetRotation((double)_targets.back().StartCoordL, (double)_targets.back().StartCoordR);
+                coordDiscrepancy = _coordinate - _targetCoordinate;
                 _targetV = _targets.back().TargetSpeed;
-
                 if (fabs(coordDiscrepancy) > _absDiscrepancyMaxOfCoord)
                 {
                     bool abruptDiminution = false;
