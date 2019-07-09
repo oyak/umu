@@ -163,8 +163,8 @@ unsigned int timeSpan;
        {
            if (_targetV != 0.0)
            {
-               changeCoordinate(timeSpan);
                setTrolleyTargetRotation((double)_targets.back().StartCoordL, (double)_targets.back().StartCoordR);
+               changeCoordinate(timeSpan);
                coordDiscrepancy = _coordinate - _targetCoordinate;
                _targetV = 0.0;
                if (((_currentV * coordDiscrepancy) > 0.0) || (coordDiscrepancy == 0.0) )
@@ -188,8 +188,8 @@ unsigned int timeSpan;
        }
            else
            {
-                changeCoordinate(timeSpan);
                 setTrolleyTargetRotation((double)_targets.back().StartCoordL, (double)_targets.back().StartCoordR);
+                changeCoordinate(timeSpan);
                 coordDiscrepancy = _coordinate - _targetCoordinate;
                 _targetV = _targets.back().TargetSpeed;
                 if (fabs(coordDiscrepancy) > _absDiscrepancyMaxOfCoord)
