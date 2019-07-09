@@ -151,15 +151,7 @@ unsigned int currentTime;
 unsigned int timeSpan;
 
     _cs->Enter();
-    currentTime = getCurrentTime();
-    if (currentTime >= _timeSinceMidNight)
-    {
-        timeSpan = currentTime - _timeSinceMidNight;
-    }
-        else
-        {
-            timeSpan = 86400000 - _timeSinceMidNight + currentTime;
-        }
+    timeSpan = getTimeInterval(_timeSinceMidNight, &currentTime);
     _timeSinceMidNight = currentTime;
 //
     skipVCorrection = false;
@@ -175,11 +167,11 @@ unsigned int timeSpan;
                setTrolleyTargetRotation((double)_targets.back().StartCoordL, (double)_targets.back().StartCoordR);
                changeCoordinate(timeSpan);
                _targetV = 0.0;
-               if ((_currentV * coordDiscrepancy) >= 0.0)
+               if (((_currentV * coordDiscrepancy) > 0.0) || (coordDiscrepancy == 0.0) )
                { // если либо уже добежали, либо бежим в переди паровоза
-               _currentV = 0.0;
+                   _currentV = 0.0;
 //                    qWarning() << "Stopped without delay on coordinate" << _coordinate << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
-               _movingState = Normal;
+                   _movingState = Normal;
                }
                    else
                    {// определение скорости торможения, чтобы остановиться за 2.0 мС
@@ -188,6 +180,7 @@ unsigned int timeSpan;
                        {
                            _currentV = v;
                        }
+                       _stoppingStartTime = getCurrentTime();
                        _movingState = Stopping;
                    }
           }
@@ -247,20 +240,29 @@ unsigned int timeSpan;
             switch(_movingState)
             {
                 case Stopping:
-                coordDiscrepancy = _coordinate - _targetCoordinate;
-                if (fabs(coordDiscrepancy) > fabs(_currentV))
                 {
-                    changeCoordinate(1); // изменяем координату только на _currentV, не бошльше - см условие if
-//                       qWarning() << "stopped: _coordinate changed to " << _coordinate << "by currentV = " << _currentv << " * " << timeSpan << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
-                }
-                    else
+                unsigned int stoppingDuration = getTimeInterval(_stoppingStartTime, nullptr);
+                    coordDiscrepancy = _coordinate - _targetCoordinate;
+                    if (fabs(coordDiscrepancy) > fabs(_currentV))
                     {
-                       _coordinate -= coordDiscrepancy;
-                       _currentV = 0.0;
-                       _movingState = Normal;
-//                       qWarning() << "stopped: _coordinate changed to " << _coordinate << "by coordDiscrepancy = " << coordDiscrepancy << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
+                        changeCoordinate(1); // изменяем координату только на _currentV, не бошльше - см условие if
+                        if (stoppingDuration >= queerStoppingTime)
+                        {
+                            qWarning() << "stopped: _coordinate changed to " << _coordinate << "by currentV = " << _currentV << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5 << "targetCoord =" << _targetCoordinate;
+                        }
                     }
+                        else
+                        {
+                            _coordinate -= coordDiscrepancy;
+                            _currentV = 0.0;
+                            _movingState = Normal;
+                            if (stoppingDuration >= queerStoppingTime)
+                            {
+                                qWarning() << "stopped: _coordinate changed to " << _coordinate << "by coordDiscrepancy = " << coordDiscrepancy << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
+                            }
+                        }
                 break;
+                }
                 case Correction:
                     changeCoordinate(timeSpan);
                     if (_correctionCounter)
@@ -292,4 +294,21 @@ unsigned int timeSpan;
 void TROLLEY::setMovingDirection(Test::eMovingDir movingDirection)
 {
     _movingDirection = movingDirection;
+}
+
+unsigned int TROLLEY::getTimeInterval(unsigned int startOfInterval, unsigned int *pCurrentTime)
+{
+unsigned int currentTime = getCurrentTime();
+unsigned int res;
+
+    if (currentTime >= startOfInterval)
+    {
+        res = currentTime - startOfInterval;
+    }
+        else
+        {
+            res = 86400000 - startOfInterval + currentTime;
+        }
+    if (pCurrentTime) *pCurrentTime = currentTime;
+    return res;
 }

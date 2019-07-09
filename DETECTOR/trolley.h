@@ -10,6 +10,8 @@
 
 
 #define AbsMaxV 1.389 // модуль максимальной разрешенной скорости контроля, мм/мс
+#define queerStoppingTime 3 // при превышении времени останова более данной величины начинают выводиться лог сообщения об изменении текущей координаты
+
 
 typedef struct
 {
@@ -89,6 +91,7 @@ private:
     cCriticalSection *_cs;
     QTimer _trolleyTimer1ms;
     unsigned int _timeSinceMidNight;
+    unsigned int _stoppingStartTime; // момент времени, в который начинается останов тележки, т.е. когда _targetV становится нулем
 
     void stopMoving();
     void ifPathEvent();
@@ -117,6 +120,7 @@ private:
           ifPathEvent();
         }
     };
+    unsigned int getTimeInterval(unsigned int startOfInterval, unsigned int *pCurrentTime);
 };
 
 #endif // TROLLEY_H
