@@ -650,6 +650,10 @@ unsigned int res = 0;
             if (!fRepeat)
             {
                 if (_wait_PCmesageBody_count) _wait_PCmesageBody_count--;
+                if (_wait_PCmesageBody_count == 0)
+                {// не получено сообщение в течение длительного периода
+                    emit message(QString::asprintf("Message header id = 0x%x, size = 0x%x without body", _currentMessage.Id, _currentMessage.Size));
+                }
                 assert(_wait_PCmesageBody_count);
             }
             break;
@@ -766,8 +770,10 @@ void UMUDEVICE::readPCMessageHead(unsigned int& res, bool& fRepeat)
 void UMUDEVICE::readPCMessageBody(unsigned int& res, bool& fRepeat)
 {
     DEFCORE_ASSERT(_read_bytes_count <= tLAN_PCMessage::LanDataMaxSize);
-    res = _dtLan->read(_PCConnection_id, reinterpret_cast<unsigned char*>(&_currentMessage.Data), _read_bytes_count);
-
+    if (_read_bytes_count != 0)
+    {// если сообщение содержит только заголовок
+        res = _dtLan->read(_PCConnection_id, reinterpret_cast<unsigned char*>(&_currentMessage.Data), _read_bytes_count);
+    }
     if (res == _read_bytes_count) {
         fRepeat = true;
         _read_state = rsHead;
