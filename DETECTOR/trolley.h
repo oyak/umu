@@ -97,13 +97,6 @@ private:
     void ifPathEvent();
     float getDisplacement(float v0, float a, unsigned int time);
 
-    unsigned int getCurrentTime() // получить текущее время от начала суток
-    {
-     unsigned int res;
-     QTime currentT = QTime::currentTime();
-         res = currentT.msecsSinceStartOfDay();
-         return res;
-    }
     void setCoordinate(double coord, double coordL, double coordR);
     void setTrolleyTargetRotation(double targetCoordL, double targetCoordR);
     double VCalculate(double currentCoordinate, double targetCoordinate, double timePeriod);
@@ -120,7 +113,6 @@ private:
           ifPathEvent();
         }
     };
-    unsigned int getTimeInterval(unsigned int startOfInterval, unsigned int *pCurrentTime);
 };
 
 #endif // TROLLEY_H

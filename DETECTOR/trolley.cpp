@@ -5,6 +5,7 @@
 #include "defsubst.h"
 #include "us465d.h"
 #include "ustyp468.h"
+#include "variety.h"
 
 //
 const double TROLLEY::step = 1.83;
@@ -294,21 +295,4 @@ unsigned int timeSpan;
 void TROLLEY::setMovingDirection(Test::eMovingDir movingDirection)
 {
     _movingDirection = movingDirection;
-}
-
-unsigned int TROLLEY::getTimeInterval(unsigned int startOfInterval, unsigned int *pCurrentTime)
-{
-unsigned int currentTime = getCurrentTime();
-unsigned int res;
-
-    if (currentTime >= startOfInterval)
-    {
-        res = currentTime - startOfInterval;
-    }
-        else
-        {
-            res = 86400000 - startOfInterval + currentTime;
-        }
-    if (pCurrentTime) *pCurrentTime = currentTime;
-    return res;
 }

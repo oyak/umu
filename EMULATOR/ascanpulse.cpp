@@ -2,16 +2,15 @@
 #include <math.h>
 
 #include "ascanpulse.h"
+#include "variety.h"
 
 
 ASCANPULSE::ASCANPULSE(unsigned int maxOffsetInAScanBuffer)
 {
     _maxOffsetInASCanBuffer = maxOffsetInAScanBuffer;
     defineSamples();
-    qsrand(0xDEFE);
     for(int ii=0; ii < 256; ++ii)
         for(int jj=0; jj < 256; ++jj) _randBuffer[ii][jj] = getRandomNumber(0, 5);
-
 }
 
 ASCANPULSE::~ASCANPULSE()
@@ -143,13 +142,3 @@ void ASCANPULSE::clearSamples()
         }
     }
 }
-
-// Генерируем рандомное число между значениями min и max
-// Предполагается, что функцию srand() уже вызывали
-unsigned char ASCANPULSE::getRandomNumber(int min, int max)
-{
-const double fraction = 1.0 / (static_cast<double>(RAND_MAX) + 1.0);
-    // равномерно распределяем рандомное число в нашем диапазоне
-    return static_cast<unsigned char>(qrand() * fraction * (max - min + 1) + min);
-}
-

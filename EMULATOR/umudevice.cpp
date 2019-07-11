@@ -15,6 +15,8 @@
 
 #include "MISC46_2.H"
 #include "defsubst.h"
+#include "variety.h"
+
 
 class UMUDEVICE* UMUDEVICE::deviceObjectPtr;
 
@@ -309,6 +311,7 @@ cCriticalSection *pCS1;
 cCriticalSection *pCS2;
 
     _movingDirection = Test::DirNotDefined;
+    qsrand(getCurrentTime());
 #ifdef DEFCORE_OS_WIN
      _pTrolley = new TROLLEY(reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection());
 

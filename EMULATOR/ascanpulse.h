@@ -72,7 +72,6 @@ private:
     unsigned char _randBuffer[256][256];
     void defineSamples();
     void clearSamples();
-    unsigned char getRandomNumber(int min, int max);
     unsigned int scaleToDotsIdx(unsigned char scale);
     unsigned int dotsToDotsIdx(int numOfDots);
     int idxToDots(unsigned int index);
