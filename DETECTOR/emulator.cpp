@@ -3,6 +3,7 @@
 #include <QDebug>
 #include "emulator.h"
 #include "ChannelsIds.h"
+#include "variety.h"
 
 
 EMULATOR::EMULATOR(cCriticalSection* cs1, cCriticalSection* cs2, float pathStep, QString pathToObjectsFiles)
@@ -56,14 +57,6 @@ EMULATOR::EMULATOR(cCriticalSection* cs1, cCriticalSection* cs2, float pathStep,
 
     connect(_pPathModel[usLeft], SIGNAL(message(QString)), this, SLOT(onLeftSideMessage(QString)));
     connect(_pPathModel[usRight], SIGNAL(message(QString)), this, SLOT(onRightSideMessage(QString)));
-    // для отладки
-    bool res;
-    //    res = onMessageId(81, 950001, usLeft, Test::DirUpWard);
-    //    res = onMessageId(21, 950000, usLeft, Test::DirUpWard);
-    //    res = onMessageId(21, 961000, usLeft, Test::DirUpWard);
-
-
-    //    res = onMessageId(16, 950001, usRight, Test::DirDownWard);
 }
 
 EMULATOR::~EMULATOR()
@@ -91,6 +84,30 @@ bool EMULATOR::onMessageId(unsigned short objectId, int startCoordInMM, eUMUSide
     eOBJECT_ORDER order;
     unsigned int len;
     int N0EMSShift;
+    switch(objectId)
+    {
+// превращаем код объекта (внутренний дефект) 201 в число 201..209, код 301 - в 301..306, код 551 - в 551...555, код 661 - в 661...665
+        case 201:
+        {
+            objectId += getRandomNumber(0, 8);
+            emit message(QString::asprintf("onMessageId: ObjectId 201 renumberred to %d", objectId));
+            break;
+        }
+        case 301:
+        {
+            objectId += getRandomNumber(0, 5);
+            emit message(QString::asprintf("onMessageId: ObjectId 301 renumberred to %d", objectId));
+            break;
+        }
+        case 551:
+        case 661:
+        {
+            objectId += getRandomNumber(0, 4);
+            emit message(QString::asprintf("onMessageId: ObjectId (551 or 661) renumberred to %d", objectId));
+            break;
+        }
+    default: break;
+    }
     SCANOBJECT* pObject = _pStorage->extractObject(order, len, N0EMSShift, objectId);
     if (pObject) {
         if ((order == ExpandedOverPlacing) && (N0EMSShift > 0)) {
