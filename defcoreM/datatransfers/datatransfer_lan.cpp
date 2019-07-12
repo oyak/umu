@@ -186,32 +186,32 @@ int cDataTransferLan::read(const int connection_id, unsigned char* data_ptr, con
     int count = data_count;
 
     cBufferData* pdata = _connections_pull[connection_id]._recv_buffer;
-
-    if (count > (pdata->_max_id - pdata->_current_position))
-    {
+    int presentDataCount = pdata->_max_id - pdata->_current_position;
+    if (count > presentDataCount) {
         const cLanConnectionParams* params = static_cast<const cLanConnectionParams*>(_connections_pull[connection_id]._parameters);
-
-        if (params->_socket_1_transfer_direction == cSocketLan::DirectionToRemoute)
-        {
-            ret_val = _connections_pull[connection_id]._socket_2->reciveData(pdata->_buffer, pdata->_buffer_size);
+        if (pdata->_current_position) {
+            if (presentDataCount) { // смещаем еще несчитанные данные в начало буфера
+                memcpy(pdata->_buffer, &(pdata->_buffer[pdata->_current_position]), presentDataCount);
+            }
+            pdata->_current_position = 0;
+            pdata->_max_id = presentDataCount;
         }
-            else
-            {
-                ret_val = _connections_pull[connection_id]._socket_1->reciveData(pdata->_buffer, pdata->_buffer_size);
+        if (params->_socket_1_transfer_direction == cSocketLan::DirectionToRemoute) {
+            ret_val = _connections_pull[connection_id]._socket_2->reciveData(&pdata->_buffer[presentDataCount], pdata->_buffer_size - presentDataCount);
+        }
+            else {
+                ret_val = _connections_pull[connection_id]._socket_1->reciveData(&pdata->_buffer[presentDataCount], pdata->_buffer_size - presentDataCount);
             }
         if (ret_val >= 0) {
-            pdata->_max_id = ret_val;
-            pdata->_current_position = 0;
-            count = std::min(ret_val, count);
+            pdata->_max_id += ret_val;
+            count = std::min(ret_val + presentDataCount, count);
         }
-        else {
-            SLEEP(1);
-            return ret_val;
-        }
+            else {
+                SLEEP(1);
+                return ret_val;
+            }
     }
-
     memcpy(data_ptr, &(pdata->_buffer[pdata->_current_position]), count);
-
     // Update transfer statistics
     if (ret_val > 0) {
         _connections_pull[connection_id]._bytes_downloaded += count;
