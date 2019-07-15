@@ -84,36 +84,37 @@ bool EMULATOR::onMessageId(unsigned short objectId, int startCoordInMM, eUMUSide
     eOBJECT_ORDER order;
     unsigned int len;
     int N0EMSShift;
-    switch(objectId)
-    {
-// превращаем код объекта (внутренний дефект) 201 в число 201..209, код 301 - в 301..306, код 531 - в 531...533, код 551 - в 551...555, код 661 - в 661...665
-        case 201:
-        {
-            objectId += getRandomNumber(0, 8);
+
+// превращаем код объекта (внутренний дефект) 201..209 в случайное число из этого же диапазона
+// и тоже самое для дефектов 301..306, 531...533, 551...555, 661...665
+        if ((objectId >= 201) && (objectId <= 209)) {
+            objectId =  201 + getRandomNumber(0, 8);
             emit message(QString::asprintf("onMessageId: ObjectId 201 renumberred to %d", objectId));
-            break;
         }
-        case 301:
-        {
-            objectId += getRandomNumber(0, 5);
-            emit message(QString::asprintf("onMessageId: ObjectId 301 renumberred to %d", objectId));
-            break;
-        }
-        case 531:
-        {
-            objectId += getRandomNumber(0, 2);
-            emit message(QString::asprintf("onMessageId: ObjectId 531 renumberred to %d", objectId));
-            break;
-        }
-        case 551:
-        case 661:
-        {
-            objectId += getRandomNumber(0, 4);
-            emit message(QString::asprintf("onMessageId: ObjectId (551 or 661) renumberred to %d", objectId));
-            break;
-        }
-    default: break;
-    }
+            else {
+                if ((objectId >= 301) && (objectId <= 306)) {
+                objectId = 301 + getRandomNumber(0, 5);
+                emit message(QString::asprintf("onMessageId: ObjectId 301 renumberred to %d", objectId));
+                }
+                    else {
+                        if ((objectId >= 531) && (objectId <= 533)) {
+                        objectId = 531 + getRandomNumber(0, 2);
+                        emit message(QString::asprintf("onMessageId: ObjectId 531 renumberred to %d", objectId));
+                        }
+                            else {
+                                if ((objectId >= 551) && (objectId <= 555)) {
+                                    objectId = 551 + getRandomNumber(0, 4);
+                                    emit message(QString::asprintf("onMessageId: ObjectId 551 renumberred to %d", objectId));
+                                }
+                                    else {
+                                        if ((objectId >= 661) && (objectId <= 665)) {
+                                            objectId = 661 + getRandomNumber(0, 4);
+                                            emit message(QString::asprintf("onMessageId: ObjectId 661 renumberred to %d", objectId));
+                                        }
+                                    }
+                            }
+                  }
+            }
     SCANOBJECT* pObject = _pStorage->extractObject(order, len, N0EMSShift, objectId);
     if (pObject) {
         if ((order == ExpandedOverPlacing) && (N0EMSShift > 0)) {
