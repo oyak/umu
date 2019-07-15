@@ -5,6 +5,7 @@
 #include <QList>
 #include <QTimer>
 #include <queue>
+#include <QDebug>
 #include "platforms.h"
 #ifdef DEFCORE_OS_WIN
 #include "unitwin.h"
@@ -49,7 +50,6 @@ struct tLAN_PCMessage
     {
         // PC
         LanDataMaxSize = 65536,
-        LANBufferSize = 4096
     };
 
     unsigned char Id;
@@ -81,6 +81,77 @@ struct tLAN_PCMessage
         Size = 0;
         memset(Data, 0, LanDataMaxSize);
     }
+
+    void dbgPrint()
+    {
+        qWarning() << "tLAN_PCMessage header:" << hex << Id << "0x00" << Size;
+        if (Size)
+        {
+            qWarning() << "tLAN_PCMessage body:";
+            for(unsigned int ii=0; ii < Size; )
+            {
+                if ((Size - ii) >= 8) {
+                    qWarning() << hex << Data[ii+0] << Data[ii+1] << Data[ii+2]<< Data[ii+3] << Data[ii+4]<< Data[ii+5]<< Data[ii+6]<< Data[ii+7];
+                    ii += 8;
+                }
+                    else {
+                        switch((Size-ii))
+                        {
+                            case 1:
+                            {
+                                qWarning() << hex << Data[ii];
+                                ii += 1;
+                                break;
+                            }
+                            case 2:
+                            {
+                                qWarning() << hex << Data[ii+0] << Data[ii+1] << Data[ii+2]<< Data[ii+3] << Data[ii+4]<< Data[ii+5]<< Data[ii+6]<< Data[ii+7];
+                                ii += 2;
+                                break;
+                            }
+                            case 3:
+                            {
+                                qWarning() << hex << Data[ii+0] << Data[ii+1] << Data[ii+2];
+                                ii += 3;
+                                break;
+                            }
+                            case 4:
+                            {
+                                qWarning() << hex << Data[ii+0] << Data[ii+1] << Data[ii+2] << Data[ii+3];
+                                ii += 4;
+                                break;
+                            }
+                            case 5:
+                            {
+                                qWarning() << hex << Data[ii+0] << Data[ii+1] << Data[ii+2]<< Data[ii+3] << Data[ii+4];
+                                ii += 5;
+                                break;
+                            }
+                            case 6:
+                            {
+                                qWarning() << hex << Data[ii+0] << Data[ii+1] << Data[ii+2]<< Data[ii+3] << Data[ii+4]<< Data[ii+5];
+                                ii += 6;
+                                break;
+                            }
+                            case 7:
+                            {
+                                qWarning() << hex << Data[ii+0] << Data[ii+1] << Data[ii+2]<< Data[ii+3] << Data[ii+4]<< Data[ii+5]<< Data[ii+6];
+                                ii += 7;
+                                break;
+                            }
+                            default: break;
+                        }
+                }
+            }
+       }
+    }
+    void copy(tLAN_PCMessage& sourse)
+    {
+        resetMessage();
+        Id = sourse.Id;
+        Size = sourse.Size;
+        memcpy(Data, sourse.Data, Size);
+    }
 };
 //
 struct tLAN_CDUMessage
@@ -89,7 +160,6 @@ struct tLAN_CDUMessage
     {
         // CDU
         LanDataMaxSize = 1019,
-        LANBufferSize = 1024
     };
 
     unsigned char Id;
@@ -368,6 +438,7 @@ protected:
     };
 
     tLAN_PCMessage _currentMessage;
+    tLAN_PCMessage _previousMessage;
     eReadState _read_state;
     unsigned int _read_bytes_count;
     unsigned int _error_message_count;

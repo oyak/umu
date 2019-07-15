@@ -1,3 +1,5 @@
+// в проекте QT определить DEVICE_EMULATION, AC_dis
+
 #include <assert.h>
 #include <stdlib.h>
 #include <QDebug>
@@ -41,7 +43,6 @@ PLDEMULATOR *UMUDEVICE::pldRPtr;
 // эмул€ци€ параметров настройки Ѕ”ћа, извлекаемых из файла PARAMS.INI
 const unsigned int lengthPathEncoderDividerOffPar = 0;
 
-// в проекте QT определить DEVICE_EMULATION, AC_dis
 
 void dbgPrintOfMessage(tLAN_CDUMessage* _out_block)
 {
@@ -655,7 +656,9 @@ unsigned int res = 0;
                 if (_wait_PCmesageBody_count) _wait_PCmesageBody_count--;
                 if (_wait_PCmesageBody_count == 0)
                 {// не получено сообщение в течение длительного периода
-                    emit message(QString::asprintf("Message header id = 0x%x, size = 0x%x without body", _currentMessage.Id, _currentMessage.Size));
+                    emit message(QString::asprintf("Current message header id = 0x%x, size = 0x%x without body", _currentMessage.Id, _currentMessage.Size));
+                    emit message("previous message:");
+                    _previousMessage.dbgPrint();
                 }
                 assert(_wait_PCmesageBody_count);
             }
@@ -733,7 +736,6 @@ unsigned char UMUDEVICE::readFromRAM(eUMUSide side, unsigned int regAddress)
 
 void UMUDEVICE::readPCMessageHead(unsigned int& res, bool& fRepeat)
 {
-    _currentMessage.resetMessage();
     res = _dtLan->read(_PCConnection_id, reinterpret_cast<unsigned char*>(&_currentMessage), LAN_MESSAGE_SHORT_HEADER_SIZE);
 
     if (res == LAN_MESSAGE_SHORT_HEADER_SIZE) {
@@ -781,6 +783,8 @@ void UMUDEVICE::readPCMessageBody(unsigned int& res, bool& fRepeat)
         fRepeat = true;
         _read_state = rsHead;
         unPack(_currentMessage);
+        _previousMessage.copy(_currentMessage);
+       _currentMessage.resetMessage();
 #ifdef DbgLog
         if (useLog) onAddLog(_common_state._umu_id, (unsigned char*) &_currentMessage, 1);
 #endif
