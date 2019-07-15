@@ -86,7 +86,7 @@ bool EMULATOR::onMessageId(unsigned short objectId, int startCoordInMM, eUMUSide
     int N0EMSShift;
     switch(objectId)
     {
-// превращаем код объекта (внутренний дефект) 201 в число 201..209, код 301 - в 301..306, код 551 - в 551...555, код 661 - в 661...665
+// превращаем код объекта (внутренний дефект) 201 в число 201..209, код 301 - в 301..306, код 531 - в 531...533, код 551 - в 551...555, код 661 - в 661...665
         case 201:
         {
             objectId += getRandomNumber(0, 8);
@@ -97,6 +97,12 @@ bool EMULATOR::onMessageId(unsigned short objectId, int startCoordInMM, eUMUSide
         {
             objectId += getRandomNumber(0, 5);
             emit message(QString::asprintf("onMessageId: ObjectId 301 renumberred to %d", objectId));
+            break;
+        }
+        case 531:
+        {
+            objectId += getRandomNumber(0, 2);
+            emit message(QString::asprintf("onMessageId: ObjectId 531 renumberred to %d", objectId));
             break;
         }
         case 551:
