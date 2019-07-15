@@ -22,7 +22,7 @@ protected:
     {
         enum
         {
-            _buffer_size = 2048
+            _buffer_size = 65536
         };
         int _current_position;
         int _max_id;
