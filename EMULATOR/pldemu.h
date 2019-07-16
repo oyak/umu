@@ -148,7 +148,7 @@ private:
     // параметров такта после установки числа тактов
     unsigned char _tactWorkArea[TACT_WORK_AREA_SIZE];
 
-    unsigned char codeToDB(unsigned int code)
+    int codeToDB(unsigned int code)
     {
         return _amplInDB[code & 0xF];
     }
