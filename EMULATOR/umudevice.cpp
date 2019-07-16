@@ -646,7 +646,14 @@ unsigned int res = 0;
         switch (_read_state) {
         case rsHead: {
             readPCMessageHead(res, fRepeat);
-            if (fRepeat) _wait_PCmesageBody_count = 1000;
+            if (fRepeat) {
+                if (_currentMessage.messageCorrectness() == false)
+                {
+                    whenUnCorrectPCMessage();
+                    assert(0);
+                }
+                _wait_PCmesageBody_count = 1000;
+            }
             break;
         }
         case rsBody: {
@@ -656,9 +663,7 @@ unsigned int res = 0;
                 if (_wait_PCmesageBody_count) _wait_PCmesageBody_count--;
                 if (_wait_PCmesageBody_count == 0)
                 {// не получено сообщение в течение длительного периода
-                    emit message(QString::asprintf("Current message header id = 0x%x, size = 0x%x without body", _currentMessage.Id, _currentMessage.Size));
-                    emit message("previous message:");
-                    _previousMessage.dbgPrint();
+                    whenUnCorrectPCMessage();
                 }
                 assert(_wait_PCmesageBody_count);
             }
@@ -1083,7 +1088,14 @@ SignalsData *pSignalsData;
                  strokeAndLine = _pEmulator->CIDToLineAndStroke(*it);
                  _pldr->resetSignals(strokeAndLine.Stroke, strokeAndLine.Line);
              }
-        }
+    }
+}
+
+void UMUDEVICE::whenUnCorrectPCMessage()
+{
+    emit message(QString::asprintf("Current message header id = 0x%x, size = 0x%x without body", _currentMessage.Id, _currentMessage.Size));
+    emit message("previous message:");
+    _previousMessage.dbgPrint();
 }
 
 unsigned int UMUDEVICE::getNumberOfTacts()

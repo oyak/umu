@@ -38,12 +38,56 @@
 
 #define cReceiveStartOffsetMax 0x35  // самое длинное сообщение протокола для БУМ минус 1
 
-
 #define LAN_MESSAGE_SHORT_HEADER_SIZE 4
 #define LAN_MESSAGE_BIG_HEADER_SIZE 6
 
+// идентификаторы сообщений обмена БУМ-тренажер
+enum MessageId  //: unsigned char
+{
+    ChangeCduModeId = 1,            //смена режима CDU - планшет
+    ChangeRcModeId = 2,             //смена режима RC – пульт (смартфон)
+    RegistrationOnId = 3,           //включена регистрация
+    RegistrationOffId = 4,          //выключена регистрация
+    AnswerToQuestionId = 5,         //ответ на вопрос
+    BoltJointOnId = 6,              //кнопка болтовой стык нажата
+    BoltJointOffId = 7,             //кнопка болтовой стык отпущена
+    OperatorTrackCoordinateId = 8,  //координата отмечена оператором (км пк)
+    OperatorActionId = 9,           //действие оператора
+    DefectMarkId = 10,              //отметка о дефекте
+    RailroadSwitchMarkId = 11,      //отметка о стрелке
+    TrackMapId = 12,                //маршрут пути
+    NextTrackCoordinateId = 13,     //следующая координата
+    JumpTrackCoordinateId = 14,     //прыжок на координату (разбор)
+    ManipulatorStateId = 15,        //состояние манипулятора (скорость)
+    PingId = 16                     //контроль соединения
+};
 
 #pragma pack(push, 1)
+
+typedef struct _NEXT_TRACK_COORD  //
+{
+    int32_t Coord;
+    int32_t LeftDebugCoord;
+    int32_t RightDebugCoord;
+    float Speed;
+    uint32_t Time;
+} tNEXTTRACKCOORD;
+
+typedef struct _JUMP_TRACK_COORD  //
+{
+    int32_t Coord;
+    int32_t LeftDebugCoord;
+    int32_t RightDebugCoord;
+    uint32_t Time;
+} tJUMPTRACKCOORD;
+
+typedef struct _OBJECT_DATA
+{
+    int32_t StartCoordinate;
+    unsigned short Id;
+} tOBJECTDATA;
+
+
 struct tLAN_PCMessage
 {
     enum eCONSTANTS
@@ -84,7 +128,7 @@ struct tLAN_PCMessage
 
     void dbgPrint()
     {
-        qWarning() << "tLAN_PCMessage header:" << hex << Id << "0x00" << Size;
+        qWarning() << QString::asprintf("tLAN_PCMessage header: 0x%x 0x%x 0x%x", Id, Size & 0xFF, Size >> 8);
         if (Size)
         {
             qWarning() << "tLAN_PCMessage body:";
@@ -152,6 +196,35 @@ struct tLAN_PCMessage
         Size = sourse.Size;
         memcpy(Data, sourse.Data, Size);
     }
+
+    bool messageCorrectness()
+    {
+     bool res = false;
+        switch(Id)
+        {
+            case PingId:
+            {
+                if (Size == 0) res = true;
+                break;
+            }
+            case NextTrackCoordinateId:
+            {
+                if (Size == sizeof (tNEXTTRACKCOORD)) res = true;
+                break;
+            }
+            case JumpTrackCoordinateId:
+            {
+                if (Size == sizeof (tJUMPTRACKCOORD)) res = true;
+                break;
+            }
+            case TrackMapId:
+            {
+                res = true;
+                break;
+            }
+        }
+        return res;
+    }
 };
 //
 struct tLAN_CDUMessage
@@ -201,67 +274,13 @@ struct tLAN_CDUMessage
     }
 };
 
-/*
-// заголовок сообщения и ответа на него
-typedef struct _MESSAGEHEADER
-{
-    unsigned char Id;    // eMESSAGEID
-    unsigned char Reserved1;
-    unsigned short Size; // размер блока данных, который следует за заголовком
-} tMESSAGEHEADER;
-*/
-//
-typedef struct _NEXT_TRACK_COORD  //
-{
-    int32_t Coord;
-    int32_t LeftDebugCoord;
-    int32_t RightDebugCoord;
-    float Speed;
-    uint32_t Time;
-} tNEXTTRACKCOORD;
-
-typedef struct _JUMP_TRACK_COORD  //
-{
-    int32_t Coord;
-    int32_t LeftDebugCoord;
-    int32_t RightDebugCoord;
-    uint32_t Time;
-} tJUMPTRACKCOORD;
-
-
-typedef struct _OBJECT_DATA
-{
-    int32_t StartCoordinate;
-    unsigned short Id;
-} tOBJECTDATA;
-
 #pragma pack(pop)
 
-// идентификаторы сообщений обмена БУМ-тренажер
-enum MessageId  //: unsigned char
-{
-    ChangeCduModeId = 1,            //смена режима CDU - планшет
-    ChangeRcModeId = 2,             //смена режима RC – пульт (смартфон)
-    RegistrationOnId = 3,           //включена регистрация
-    RegistrationOffId = 4,          //выключена регистрация
-    AnswerToQuestionId = 5,         //ответ на вопрос
-    BoltJointOnId = 6,              //кнопка болтовой стык нажата
-    BoltJointOffId = 7,             //кнопка болтовой стык отпущена
-    OperatorTrackCoordinateId = 8,  //координата отмечена оператором (км пк)
-    OperatorActionId = 9,           //действие оператора
-    DefectMarkId = 10,              //отметка о дефекте
-    RailroadSwitchMarkId = 11,      //отметка о стрелке
-    TrackMapId = 12,                //маршрут пути
-    NextTrackCoordinateId = 13,     //следующая координата
-    JumpTrackCoordinateId = 14,     //прыжок на координату (разбор)
-    ManipulatorStateId = 15,        //состояние манипулятора (скорость)
-    PingId = 16                     //контроль соединения
-};
+
 
 
 #define PING_PERIOD 500             // мс
 #define PC_LINK_FAULT_TIMEOUT 3000  // мс
-
 
 //
 class UMUDEVICE : public QObject
@@ -458,6 +477,7 @@ protected:
     void sendPingToPC();
 
     void whenTrolleyCoordChanged(int coordLInMM, int coordRInMM);
+    void whenUnCorrectPCMessage();
 };
 
 #endif
