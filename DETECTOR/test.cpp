@@ -65,27 +65,57 @@ int startmM;
             assert(abs(descriptor.N0EMSShift) < 1000);
             if (descriptor.N0EMSShift < 0)
             { // начальную точку объекта сдвигаем влево
-                startmM += descriptor.N0EMSShift;
-                if (startmM < 0)
-                {
-                    if (startM == 0)
-                    {
-                    tMRFCrd post;
-                    int pkLen; // длина прерыдущего участка в мм
-                    int mm;
-                    int m;
-                        res = getPKLen(&startPost, pkLen, true);
-                        if (res)
-                        {
-                            assert(pkLen);
-                            m = pkLen / 1000;
-                            mm = pkLen % 1000;
-                            if (m == 0)
-                            { // и такое безобразие, наыерное, может быть
-                                assert(mm >= abs(startmM));
-                                startmM += mm;
-                                startM = m;
+                if (_Header.MoveDir == -1) { // координата должна увеличиться
+                tMRFCrd post;
+                int pkLen; // длина текущего участка в мм
+                int mm;
+                int m;
+                    res = getPKLen(&startPost, pkLen, false);
+                    assert(res); // следующий пикетный столб не найден
+                    assert(pkLen);
+                    m = pkLen / 1000;
+                    assert(m);
+                    mm = pkLen % 1000;
+                    startmM -= descriptor.N0EMSShift;
+                    if ((startM == m-1) &&  (startmM > mm)) {
+                        post.Km = startKM;
+                        post.Pk = startPk;
+                        post = GetPrevMRFPostCrd(post, _Header.MoveDir);
+                        startKM = post.Km;
+                        startPk = post.Pk;
+                        startM = 0;
+                        startmM -= mm;
+                    }
+                        else {// не отошли за предыдущий пикетный столб
+                            if (startmM >= 1000)
+                            {
+                                startmM -= 1000;
+                                startM++;
                             }
+                        }
+                }
+                    else {//
+                    startmM += descriptor.N0EMSShift;
+                    if (startmM < 0)
+                    {
+                        if (startM == 0)
+                        {
+                            tMRFCrd post;
+                            int pkLen; // длина прерыдущего участка в мм
+                            int mm;
+                            int m;
+                            res = getPKLen(&startPost, pkLen, true);
+                            if (res)
+                            {
+                                assert(pkLen);
+                                m = pkLen / 1000;
+                                mm = pkLen % 1000;
+                                if (m == 0)
+                                { // и такое безобразие, наыерное, может быть
+                                    assert(mm >= abs(startmM));
+                                    startmM += mm;
+                                    startM = m;
+                                }
                                 else
                                 {
                                     if (mm >= abs(startmM))
@@ -93,24 +123,29 @@ int startmM;
                                         startmM += mm;
                                         startM = m;
                                     }
-                                        else
-                                        {
-                                            startmM += 1000 + mm;
-                                            startM = m - 1;
-                                        }
+                                    else
+                                    {
+                                        startmM += 1000 + mm;
+                                        startM = m - 1;
+                                    }
                                 }
-                            post.Km = startKM;
-                            post.Pk = startPk;
-                            post = GetPrevMRFPostCrd(post, _Header.MoveDir);
-                            startKM = post.Km;
-                            startPk = post.Pk;
+                                post.Km = startKM;
+                                post.Pk = startPk;
+                                post = GetPrevMRFPostCrd(post, _Header.MoveDir);
+                                startKM = post.Km;
+                                startPk = post.Pk;
+                            }
+                                else
+                                {
+                                    assert(0); // предыдущий пикетный столб не найден
+                                }
                         }
-                    }
                         else
                         {//если не отошли за предыдущий пикетный столб
                             startmM += 1000;
                             startM --;
                         }
+                    }
                 }
             }
         }
@@ -138,24 +173,53 @@ int startmM;
             if (condition2)
             {
               int currentCoord = _fullCoordinate;
-                res = findAndParseStolbID(startPost, &currentCoord, _Header.MoveDir);
-                if (res)
-                {
-                    _fullCoordinate = currentCoord;
-                    qDebug() << "Disared Stolb found - currentCoord = " << _fullCoordinate << "fileOffset = " << _fileOffset;
-                    systemCoord = _fullCoordinate + convertMMToSystemCoord(startM * 1000 + startmM);
-                }
+              if (_Header.MoveDir == -1) {
+              int pkLen; // длина текущего участка в мм
+                  res = getPKLen(&startPost, pkLen, false);
+                  assert(res); // следующий пикетный столб не найден
+                  assert(pkLen);
+                  res = findAndParseStolbID(startPost, &currentCoord, _Header.MoveDir);
+                  if (res)
+                  {
+                      _fullCoordinate = currentCoord;
+                      qDebug() << "Disared Stolb found - currentCoord = " << _fullCoordinate << "fileOffset = " << _fileOffset;
+                      systemCoord = _fullCoordinate + convertMMToSystemCoord(pkLen - startmM - 1000 * startM);
+                  }
+              }
+              else {
+                  res = findAndParseStolbID(startPost, &currentCoord, _Header.MoveDir);
+                  if (res)
+                  {
+                      _fullCoordinate = currentCoord;
+                      qDebug() << "Disared Stolb found - currentCoord = " << _fullCoordinate << "fileOffset = " << _fileOffset;
+                      systemCoord = _fullCoordinate + convertMMToSystemCoord(startM * 1000 + startmM);
+                  }
+              }
             }
                 else
                 {// начинаем на начальном пикете файла
-                    if (_Header.StartMetre <= startM)
-                    {
-                        systemCoord = _fullCoordinate + convertMMToSystemCoord((startM - _Header.StartMetre) * 1000 + startmM);
+                    if (_Header.MoveDir == -1) {
+                        if (_Header.StartMetre >= startM)
+                        {
+                        int pkLen; // длина текущего участка в мм
+                            res = getPKLen(&startPost, pkLen, false);
+                            assert(res); // следующий пикетный столб не найден
+                            assert(pkLen);
+                            systemCoord = _fullCoordinate + convertMMToSystemCoord(pkLen - startmM - (_Header.StartMetre - startM) * 1000);
+                        }
+                            else res = false;
                     }
-                       else res = false;
+                    else {
+                        if (_Header.StartMetre <= startM)
+                        {
+                            systemCoord = _fullCoordinate + convertMMToSystemCoord((startM - _Header.StartMetre) * 1000 + startmM);
+                        }
+                        else res = false;
+                    }
                 }
             if (res)
             {
+               qWarning() << QString::asprintf("object = %d, start system coord in file = 0x%x", objectId, systemCoord);
                unsigned int objSize = descriptor.LengthMM + abs(descriptor.N0EMSShift) - descriptor.LngCutting - 2;
                res = extractScanObject(systemCoord, descriptor.Side, objSize, object);
                object.ObjectOrder = descriptor.Order;
