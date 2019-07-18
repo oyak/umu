@@ -77,7 +77,7 @@ int startmM;
                     assert(m);
                     mm = pkLen % 1000;
                     startmM -= descriptor.N0EMSShift;
-                    if ((startM == m-1) &&  (startmM > mm)) {
+                    if ((startM == m) &&  (startmM > mm)) {
                         post.Km = startKM;
                         post.Pk = startPk;
                         post = GetPrevMRFPostCrd(post, _Header.MoveDir);
@@ -199,22 +199,32 @@ int startmM;
                 else
                 {// начинаем на начальном пикете файла
                     if (_Header.MoveDir == -1) {
-                        if (_Header.StartMetre >= startM)
+                        if ((_Header.StartKM != 0) && (_Header.StartPk > 1))
                         {
-                        int pkLen; // длина текущего участка в мм
-                            res = getPKLen(&startPost, pkLen, false);
-                            assert(res); // следующий пикетный столб не найден
-                            assert(pkLen);
-                            systemCoord = _fullCoordinate + convertMMToSystemCoord(pkLen - startmM - (_Header.StartMetre - startM) * 1000);
+                            if (_Header.StartMetre >= startM)
+                            {
+                                int pkLen; // длина текущего участка до следующего столба в мм
+                                res = getPKLen(&startPost, pkLen, false);
+                                assert(res); // следующий пикетный столб не найден
+                                assert(pkLen);
+                                systemCoord = _fullCoordinate + convertMMToSystemCoord(pkLen - startmM - (_Header.StartMetre - startM) * 1000);
+                            }
+                                else res = false;
                         }
-                            else res = false;
+                            else
+                            { // метры и миллиметры растут в отрицательную сторону
+                                assert(_Header.StartMetre == 0);
+                                assert(startmM <= 0);
+                                assert(startM <= 0);
+                                systemCoord = _fullCoordinate + convertMMToSystemCoord(startM  * -1000 - startmM);
+                            }
                     }
-                    else {
+                        else {
                         if (_Header.StartMetre <= startM)
                         {
                             systemCoord = _fullCoordinate + convertMMToSystemCoord((startM - _Header.StartMetre) * 1000 + startmM);
                         }
-                        else res = false;
+                            else res = false;
                     }
                 }
             if (res)
@@ -396,7 +406,8 @@ CID Test::convertToCID(CID chIdx, eMovingDir movingDirection)
 }
 // определяет длину участка в мм от пикетного столба *postCoordPtr
 // до следующего/предыдущего столба(начала файла) в зависимости inverseDirection = false/true
-// возвращает true, если пикетный столб найден
+// возвращает true, если расстояние удалось определить
+// если задано inverseDirection = false и пикетного столба, следующего за *postCoordPtr нет, то расстояние определить невозможно
 // возвращает указатель в файле на позицию, соответствующую после чтения заголовка
 bool Test::getPKLen(sCoordPostMRF *postCoordPtr, int& len, bool inverseDirection)
 {
@@ -406,14 +417,14 @@ sCoordPostMRF postCoord2;
 int startCoord;
 int nextCoord;
     readHeader();
-    res = readNextStolb(&firstPostCoord, &startCoord);
+    res = readNextStolb(&firstPostCoord, &startCoord); // ищем первый пикетный столб в файле
     readHeader();
-    res = findAndParseStolbID(*postCoordPtr, &startCoord, _Header.MoveDir);
+    if (res) res = findAndParseStolbID(*postCoordPtr, &startCoord, _Header.MoveDir);
     if (res)
     {
        len = 0;
        if (inverseDirection == false)
-       { // направление поиска совпадает с направлением в файле
+       { // направление поиска совпадает с направлением увеличения смещения в файле
            res = readNextStolb(&postCoord2, &nextCoord);
            if (res)
            {
@@ -601,6 +612,7 @@ unsigned char id;
 bool res;
 unsigned int tempCoord;
     assert(postCoordPtr);
+    if (systemCoordPtr) *systemCoordPtr = 0;
     do
     {
         id = 0xFF;
@@ -661,7 +673,9 @@ bool res = true;
 unsigned char ID[4];
 
     assert(_pFile != NULL);
-
+    if ((_Header.TableLink != 0xFFFFFFFF) && (_pFile->pos() >= _Header.TableLink)) {
+        return false;
+    }
 //    qDebug() << "readAndParseEventID: start file position = " << _pFile->pos();
 
     if (_pFile->read(reinterpret_cast<char*>(ID), 1) < 1) return false;
@@ -1082,7 +1096,3 @@ eUMUSide Test::convertToUMUSide(unsigned char sideByte)
     return (sideByte == 0x01) ? usRight : usLeft;
 }
 
-
-bool Test::footerExist() {
-    return _Header.TableLink != 0xFFFFFFFF;
-}

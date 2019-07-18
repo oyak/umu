@@ -55,7 +55,6 @@ private:
       void closeFile();
       bool openFile(QString& fileName);
 
-      bool footerExist();
       bool readAndParseEventID(unsigned char& Id, void *pParsedData, bool readIDOnly);
 //      long long convertToMM(tMRFCrd coord);
       unsigned char getSideByte(eUMUSide Side);

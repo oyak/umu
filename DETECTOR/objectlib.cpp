@@ -5723,8 +5723,8 @@ tObjectSourceDescr descriptor;
     descriptor.Side = usRight;
     descriptor.StartKm = 0;
     descriptor.StartPk = 1;
-    descriptor.StartM = 3;
-    descriptor.StartmM = 597;
+    descriptor.StartM = -3;
+    descriptor.StartmM = -597;
     descriptor.LengthMM = 500;
     table.insert(551, descriptor);
 //
@@ -5743,8 +5743,8 @@ tObjectSourceDescr descriptor;
     descriptor.Side = usRight;
     descriptor.StartKm = 0;
     descriptor.StartPk = 1;
-    descriptor.StartM = 3;
-    descriptor.StartmM = 628;
+    descriptor.StartM = -3;
+    descriptor.StartmM = -628;
     descriptor.LengthMM = 500;
     table.insert(553, descriptor);
 //
@@ -5774,7 +5774,7 @@ tObjectSourceDescr descriptor;
     descriptor.StartKm = 0;
     descriptor.StartPk = 1;
     descriptor.StartM = 0;
-    descriptor.StartmM = 898;
+    descriptor.StartmM = -898;
     descriptor.LengthMM = 500;
     table.insert(661, descriptor);
 //
