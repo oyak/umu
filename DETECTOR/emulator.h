@@ -29,10 +29,10 @@ public:
         return _ampl[code & 0xF];
     }
 //
-    tStrokeConfig CIDToLineAndStroke(CID channel)
+    tStrokeConfig CIDToLineAndStroke(CID channel, eUMUSide side)
     {
-        assert(_config.contains(channel));
-        return _config[channel];
+        assert(_config[side].contains(channel));
+        return _config[side][channel];
     }
 
     SignalsData* getScanObject(eUMUSide side, int coord, bool &isDataObject);
@@ -58,7 +58,7 @@ private:
 
     OBJECTSTOR *_pStorage;
     Test *_pFileParser;
-    QMap<CID, tStrokeConfig> _config;
+    QMap<CID, tStrokeConfig> _config[2]; // на каждую из нитей - usLeft, usRight
     QList <CID> _channelList;
     unsigned char _ampl[16];
 };

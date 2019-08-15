@@ -1019,7 +1019,7 @@ SignalsData *pSignalsData;
     {
         for (it=_channelList.begin(); it != _channelList.end(); ++it)
         {
-            strokeAndLine = _pEmulator->CIDToLineAndStroke(*it);
+            strokeAndLine = _pEmulator->CIDToLineAndStroke(*it, usLeft);
             pSignalsData->getSignals(*it, &pSignals);
             _pldl->resetSignals(strokeAndLine.Stroke, strokeAndLine.Line);
             if (pSignals != 0)
@@ -1047,7 +1047,7 @@ SignalsData *pSignalsData;
              {
                  for (it=_channelList.begin(); it != _channelList.end(); ++it)
                  {
-                     strokeAndLine = _pEmulator->CIDToLineAndStroke(*it);
+                     strokeAndLine = _pEmulator->CIDToLineAndStroke(*it, usLeft);
                      _pldl->resetSignals(strokeAndLine.Stroke, strokeAndLine.Line);
                  }
              }
@@ -1057,7 +1057,7 @@ SignalsData *pSignalsData;
     {
         for (it=_channelList.begin(); it != _channelList.end(); ++it)
         {
-            strokeAndLine = _pEmulator->CIDToLineAndStroke(*it);
+            strokeAndLine = _pEmulator->CIDToLineAndStroke(*it, usRight);
             pSignalsData->getSignals(*it, &pSignals);
             _pldr->resetSignals(strokeAndLine.Stroke, strokeAndLine.Line);
             if (pSignals != 0)
@@ -1085,7 +1085,7 @@ SignalsData *pSignalsData;
         {
              for (it=_channelList.begin(); it != _channelList.end(); ++it)
              {
-                 strokeAndLine = _pEmulator->CIDToLineAndStroke(*it);
+                 strokeAndLine = _pEmulator->CIDToLineAndStroke(*it, usRight);
                  _pldr->resetSignals(strokeAndLine.Stroke, strokeAndLine.Line);
              }
     }

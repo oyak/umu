@@ -13,33 +13,42 @@ EMULATOR::EMULATOR(cCriticalSection* cs1, cCriticalSection* cs2, float pathStep,
 
     config.Stroke = 0;
     config.Line = ulRU1;
-    _config.insert(F70E, config);
+    _config[usLeft].insert(F70E, config);
+    _config[usRight].insert(F70E, config);
     //
     config.Line = ulRU2;
-    _config.insert(B70E, config);
+    _config[usLeft].insert(B70E, config);
+    _config[usRight].insert(B70E, config);
     //
     config.Stroke = 1;
-    _config.insert(F42E, config);
+    _config[usLeft].insert(F42E, config);
+    _config[usRight].insert(F42E, config);
     //
     config.Line = ulRU1;
-    _config.insert(B42E, config);
+    _config[usLeft].insert(B42E, config);
+    _config[usRight].insert(B42E, config);
     //
     config.Stroke = 2;
-    _config.insert(F58ELU, config);
-    //
+    _config[usLeft].insert(F58ELU, config);
     config.Line = ulRU2;
-    _config.insert(F58ELW, config);
+    _config[usRight].insert(F58ELU, config);
+    //
+    _config[usLeft].insert(F58ELW, config);
+    config.Line = ulRU1;
+    _config[usRight].insert(F58ELW, config);
     //
     config.Stroke = 3;
-    _config.insert(B58ELW, config);
-    //
-    config.Line = ulRU1;
-    _config.insert(B58ELU, config);
+    _config[usLeft].insert(B58ELU, config);
+    _config[usRight].insert(B58ELW, config);
+    config.Line = ulRU2;
+    _config[usLeft].insert(B58ELW, config);
+    _config[usRight].insert(B58ELU, config);
     //
     config.Stroke = 4;
-    _config.insert(N0EMS, config);
+    config.Line = ulRU1;
+    _config[usLeft].insert(N0EMS, config);
 
-    _channelList = _config.keys();
+    _channelList = _config[usLeft].keys();
     // таблица перевода кодировани€ дЅ относительно порога в 32
     // отсчета  в амплитуду
     for (int ii = 0; ii < (int) sizeof(_ampl); ++ii) {
@@ -64,7 +73,8 @@ EMULATOR::~EMULATOR()
     disconnect(_pPathModel[usLeft], SIGNAL(messge(QString)), this, SLOT(onLeftSideMessage(QString)));
     disconnect(_pPathModel[usRight], SIGNAL(messge(QString)), this, SLOT(onRightSideMessage(QString)));
     _channelList.clear();
-    _config.clear();
+    _config[usLeft].clear();
+    _config[usRight].clear();
     deletePathObjects();
     delete _pPathModel[usLeft];
     delete _pPathModel[usRight];
