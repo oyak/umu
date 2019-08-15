@@ -47,6 +47,7 @@ EMULATOR::EMULATOR(cCriticalSection* cs1, cCriticalSection* cs2, float pathStep,
     config.Stroke = 4;
     config.Line = ulRU1;
     _config[usLeft].insert(N0EMS, config);
+    _config[usRight].insert(N0EMS, config);
 
     _channelList = _config[usLeft].keys();
     // таблица перевода кодирования дБ относительно порога в 32
