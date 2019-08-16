@@ -87,20 +87,27 @@ int coord;
 int clearenceLen;
 int clearenceStart;
 
-    coord = _pathStartCoordinate;
-    do
+    if (_pathStartCoordinate >= _pathEndCoordinate)
     {
-        if (testCoordinate(coord, _pathEndCoordinate - coord, clearenceLen, clearenceStart) == true)
+        res = false;
+        emit message("testPathMap: there is nothing to test");
+    }
+    if (res)
+    {
+        coord = _pathStartCoordinate;
+        do
         {
-            break;
-        }
-            else
+            if (testCoordinate(coord, _pathEndCoordinate - coord, clearenceLen, clearenceStart) == true)
             {
-                res = false;
-                emit message(QString::asprintf("testPathMap: gap = %d on coordinate %d", clearenceLen, clearenceStart));
+                break;
             }
-    } while (coord <= _pathEndCoordinate);
-
+                else
+                {
+                    res = false;
+                    emit message(QString::asprintf("testPathMap: gap = %d on coordinate %d", clearenceLen, clearenceStart));
+                }
+        } while (coord <= _pathEndCoordinate);
+    }
     if ((res) && (dbgOut))
     {
         emit message("testPathMap: passed");
