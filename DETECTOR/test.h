@@ -46,7 +46,6 @@ private:
     QFile *_pFile;
 
       sFileHeader_v5 _Header;
-      qint64 _fileOffset;    // Смещение последнего записанного события
       tDaCo_BScanSignals currentSignal;
       unsigned int _fullCoordinate; // последняя прочитанная полная координата в файле
 //
@@ -61,6 +60,32 @@ private:
       eUMUSide convertToUMUSide(unsigned char sideByte);
       CID convertToCID(CID chIdx, eMovingDir movingDirection);
       bool getPKLen(sCoordPostMRF *postCoordPtr, int& len, bool inverseDirection);
+      void setFilePos(qint64 pos)
+      {
+          _pFile->seek(pos);
+      }
+
+      qint64 getFilePos()
+      {
+          return _pFile->pos();
+      }
+//
+// изменяет значение системной полной координаты в соответствии со значением newCoord
+// fShort - признак для newCoord - короткая или полная
+      void changeSystemCoord(int *systemCoordPtr, unsigned int newCoord, bool fShort)
+      {
+      if (fShort)
+      {
+          *systemCoordPtr &= 0xffffff00;
+          *systemCoordPtr += newCoord & 0xFF;
+      }
+          else
+          {
+              *systemCoordPtr = newCoord;
+          }
+      }
+      bool findMovingZone(unsigned int span, eMovingDir dir);
+      bool findFilePosByCoord(int coordinate);
 };
 
 

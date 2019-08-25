@@ -182,7 +182,7 @@ int startmM;
                   if (res)
                   {
                       _fullCoordinate = currentCoord;
-                      qDebug() << "Disared Stolb found - currentCoord = " << _fullCoordinate << "fileOffset = " << _fileOffset;
+                      qDebug() << "Disared Stolb found - currentCoord = " << _fullCoordinate << "fileOffset = " << getFilePos();
                       systemCoord = _fullCoordinate + convertMMToSystemCoord(pkLen - startmM - 1000 * startM);
                   }
               }
@@ -191,7 +191,7 @@ int startmM;
                   if (res)
                   {
                       _fullCoordinate = currentCoord;
-                      qDebug() << "Disared Stolb found - currentCoord = " << _fullCoordinate << "fileOffset = " << _fileOffset;
+                      qDebug() << "Disared Stolb found - currentCoord = " << _fullCoordinate << "fileOffset = " << getFilePos();
                       systemCoord = _fullCoordinate + convertMMToSystemCoord(startM * 1000 + startmM);
                   }
               }
@@ -229,12 +229,37 @@ int startmM;
                 }
             if (res)
             {
-               qWarning() << QString::asprintf("object = %d, start system coord in file = 0x%x", objectId, systemCoord);
                unsigned int objSize = descriptor.LengthMM + abs(descriptor.N0EMSShift) - descriptor.LngCutting - 2;
-               res = extractScanObject(systemCoord, descriptor.Side, objSize, object);
-               object.ObjectOrder = descriptor.Order;
-               object.Size = objSize;
-               object.N0EMSShift = descriptor.N0EMSShift;
+               if (systemCoord > 1)
+               {
+                   qint64 currentFilePos;
+                   res = findFilePosByCoord(static_cast<int>(systemCoord - 1));
+                   if (res)
+                   {
+                       currentFilePos = getFilePos();
+                       if (findMovingZone(objSize, DirDownWard))
+                       {
+                           res = findMovingZone(0, DirUpWard);
+                           // найти системную координату (systemCoord - 1)после зоны движения назад
+                           if (res)
+                           {
+                               res = findFilePosByCoord(static_cast<int>(systemCoord - 1));
+                           }
+                       }
+                       else
+                       {
+                           setFilePos(currentFilePos);
+                       }
+                   }
+               }
+               if (res)
+               {
+                   qWarning() << QString::asprintf("object = %d, start system coord in file = 0x%x", objectId, systemCoord);
+                   res = extractScanObject(systemCoord, descriptor.Side, objSize, object);
+                   object.ObjectOrder = descriptor.Order;
+                   object.Size = objSize;
+                   object.N0EMSShift = descriptor.N0EMSShift;
+               }
             }
          }
              else res = false;
@@ -291,7 +316,6 @@ void Test::closeFile()
 bool Test::readHeader()
 {
     _fullCoordinate = 0;
-    _fileOffset = 0;
     return readHeader(true, &_Header);
 }
 
@@ -305,7 +329,7 @@ bool res = true;
     if(toResetFilePos)
     {
         _fullCoordinate = 0;
-        _pFile->seek(0);
+        setFilePos(0);
     }
 //    _fileHeader = _pFile->read(cHeaderLen);
     rBytes = _pFile->read(reinterpret_cast<char*>(pHeader), sizeof(_Header));
@@ -314,6 +338,7 @@ bool res = true;
         error = _pFile->error();
         res = false;
     }
+    getFilePos();
     return res;
 }
 
@@ -339,7 +364,7 @@ bool res;
     while ((res != false) && (Id != EID_EndFile) ) ;
     if (res == false)
     {
-        qDebug() << "Ошибка разбора. Позиция" << _fileOffset;
+        qDebug() << "Ошибка разбора. Позиция" << getFilePos();
     }
     return res;
 }
@@ -474,15 +499,17 @@ tDaCo_BScanSignals BSSignals; // здесь номер канала в терминах индекса канала в 
     do
     {
         res = readNextCoord(currentCoord, fShort);
-        if (fShort)
+        if (res)
         {
-            currentCoord |= _fullCoordinate & ~0xFF;
-        }
-            else
+            if (fShort)
             {
-                _fullCoordinate = currentCoord;
+                currentCoord |= _fullCoordinate & ~0xFF;
             }
-
+                else
+                {
+                    _fullCoordinate = currentCoord;
+                }
+        }
 //    qDebug() << "res = " << res << "currenCoord = " << currentCoord;
 
     } while ((res) && !(currentCoord >= coord) );
@@ -492,7 +519,7 @@ tDaCo_BScanSignals BSSignals; // здесь номер канала в терминах индекса канала в 
     {// нашли координату
         do
         {
-            qDebug() << "currenCoord = " << currentCoord << "fileOffset = " << _fileOffset;
+            qDebug() << "currenCoord = " << currentCoord << "fileOffset = " << getFilePos();
 
             id = 0xFF;
             res = readAndParseEventID(id, NULL, true);
@@ -632,15 +659,7 @@ unsigned int tempCoord;
                         bool fShort = (id == EID_SysCrd_NS);
                         res = readAndParseEventID(id, static_cast<void*>(&tempCoord), false);
                         if (res == false) break;
-                        if (fShort)
-                        {
-                            *systemCoordPtr &= 0xffffff00;
-                            *systemCoordPtr += tempCoord & 0xFF;
-                        }
-                            else
-                            {
-                                *systemCoordPtr = tempCoord;
-                            }
+                        changeSystemCoord(systemCoordPtr, tempCoord, fShort);
                     }
             }
                 else
@@ -673,16 +692,16 @@ bool res = true;
 unsigned char ID[4];
 
     assert(_pFile != NULL);
-    if ((_Header.TableLink != 0xFFFFFFFF) && (_pFile->pos() >= _Header.TableLink)) {
+    if ((_Header.TableLink != 0xFFFFFFFF) && (getFilePos() >= _Header.TableLink)) {
         return false;
     }
-//    qDebug() << "readAndParseEventID: start file position = " << _pFile->pos();
+//    qDebug() << "readAndParseEventID: start file position = " << getFilePos();
 
     if (_pFile->read(reinterpret_cast<char*>(ID), 1) < 1) return false;
     if (readIDOnly)
     {
         Id = ID[0];
-        _pFile->seek(_pFile->pos() - 1);
+        setFilePos(getFilePos() - 1);
         return true;
     }
 //
@@ -699,7 +718,7 @@ unsigned char ID[4];
         {
             const QByteArray& data = _pFile->read(4);
             quint32 dataSize = qFromLittleEndian<quint32>(reinterpret_cast<const unsigned char*>(data.data()));
-            _pFile->seek(_pFile->pos() + dataSize);
+            setFilePos(getFilePos() + dataSize);
             break;
         }
         case EID_AutomaticSearchRes:
@@ -739,26 +758,26 @@ unsigned char ID[4];
         }
         case EID_CheckSum:
         {
-           _pFile->seek(_pFile->pos() + 4);
+           setFilePos(getFilePos() + 4);
            break;
         }
         case EID_DEBUG:
         {
-            _pFile->seek(_pFile->pos() + 128);
+            setFilePos(getFilePos() + 128);
             break;
         }
         case EID_BigDate:
         {
             const QByteArray& data = _pFile->read(4);
             quint32 dataSize = qFromLittleEndian<quint32>(reinterpret_cast<const unsigned char*>(data.data()));
-            _pFile->seek(_pFile->pos() + 1 + dataSize);
+            setFilePos(getFilePos() + 1 + dataSize);
             break;
         }
         case EID_DefLabel:
         {
             unsigned char length = '\0';
             _pFile->getChar(reinterpret_cast<char*>(&length));
-            _pFile->seek(_pFile->pos() + 1);
+            setFilePos(getFilePos() + 1);
             const QByteArray& data = _pFile->read(length * 2);
             break;
         }
@@ -766,7 +785,7 @@ unsigned char ID[4];
         {
             const QByteArray& data = _pFile->read(4);
             quint32 dataSize = qFromLittleEndian<quint32>(reinterpret_cast<const unsigned char*>(data.data()));
-            _pFile->seek(_pFile->pos() + 7 + dataSize);
+            setFilePos(getFilePos() + 7 + dataSize);
             break;
         }
         case EID_PrismDelay:
@@ -778,17 +797,17 @@ unsigned char ID[4];
 //
         case EID_Media:
         {
-            _pFile->seek(_pFile->pos() + 1);
+            setFilePos(getFilePos() + 1);
            const QByteArray& data = _pFile->read(4);
             quint32 dataSize = qFromLittleEndian<quint32>(reinterpret_cast<const unsigned char*>(data.data()));
-            _pFile->seek(_pFile->pos() + dataSize);
+            setFilePos(getFilePos() + dataSize);
             break;
         }
         case EID_MediumDate:
         {
             const QByteArray& data = _pFile->read(2);
             quint16 dataSize = qFromLittleEndian<quint16>(reinterpret_cast<const unsigned char*>(data.data()));
-            _pFile->seek(_pFile->pos() + 1 + dataSize);
+            setFilePos(getFilePos() + 1 + dataSize);
             break;
         }
         case EID_Mode:
@@ -799,12 +818,12 @@ unsigned char ID[4];
         }
         case EID_NORDCO_Rec:
         {
-            _pFile->seek(_pFile->pos() + 2015);
+            setFilePos(getFilePos() + 2015);
             break;
         }
         case EID_SatelliteCoordAndSpeed:
         {
-            _pFile->seek(_pFile->pos() + 12);
+            setFilePos(getFilePos() + 12);
             break;
         }
         case EID_SCReceiverStatus:
@@ -866,7 +885,7 @@ unsigned char ID[4];
         }
         case EID_LongLabel:
         {
-            _pFile->seek(_pFile->pos() + 24);
+            setFilePos(getFilePos() + 24);
             break;
         }
         case EID_SetRailType:
@@ -883,51 +902,51 @@ unsigned char ID[4];
         {
             unsigned char textLen = '\0';
             _pFile->getChar(reinterpret_cast<char*>(&textLen));
-            _pFile->seek(_pFile->pos() + 10 + 2 * textLen);
+            setFilePos(getFilePos() + 10 + 2 * textLen);
         }
         case EID_PaintSystemRes_Debug:
         {
-            _pFile->seek(_pFile->pos() + 246);
+            setFilePos(getFilePos() + 246);
             break;
         }
         case EID_PaintMarkRes:
         case EID_SatelliteCoord:
         {
-            _pFile->seek(_pFile->pos() + 8);
+            setFilePos(getFilePos() + 8);
             break;
         }
         case EID_PaintSystemParams:
         {
-            _pFile->seek(_pFile->pos() + 2048);
+            setFilePos(getFilePos() + 2048);
             break;
         }
         case EID_PaintSystemRes:
         {
-            _pFile->seek(_pFile->pos() + 182);
+            setFilePos(getFilePos() + 182);
             break;
         }
         case EID_AlarmTempOff:
         case EID_PaintSystemTempOff:
         case EID_Temperature:
         {
-            _pFile->seek(_pFile->pos() + 5);
+            setFilePos(getFilePos() + 5);
             break;
         }
         case EID_QualityCalibrationRec:
         {
-            _pFile->seek(_pFile->pos() + 15);
+            setFilePos(getFilePos() + 15);
             break;
         }
         case EID_SmallDate:
         {
             unsigned char dataSize = '\0';
             _pFile->getChar(reinterpret_cast<char*>(&dataSize));
-            _pFile->seek(_pFile->pos() + 1 + dataSize);
+            setFilePos(getFilePos() + 1 + dataSize);
             break;
         }
         case EID_StolbChainage:
         {
-            _pFile->seek(_pFile->pos() + 136);
+            setFilePos(getFilePos() + 136);
             break;
         }
         case EID_SysCrd_NS:
@@ -961,18 +980,18 @@ unsigned char ID[4];
         case EID_Time:
         case EID_Sensor1:
         {
-            _pFile->seek(_pFile->pos() + 2);
+            setFilePos(getFilePos() + 2);
             break;
         }
         case EID_UMUPaintJob:
         {
-            _pFile->seek(_pFile->pos() + 9);
+            setFilePos(getFilePos() + 9);
             break;
         }
         case EID_ZerroProbMode:
         case EID_ACState:
         {
-            _pFile->seek(_pFile->pos() + 1);
+            setFilePos(getFilePos() + 1);
             break;
         }
         default:
@@ -1047,7 +1066,6 @@ unsigned char ID[4];
             }
         }
     Id = ID[0];
-    _fileOffset = _pFile->pos();
     return res;
 }
 // перевод длины в шагах ДП в длину в мм
@@ -1055,6 +1073,7 @@ unsigned int Test::convertSystemCoordToMM(unsigned int steps)
 {
     return static_cast<unsigned int>(steps * _Header.ScanStep / 100.0);
 }
+
 // перевод длины в мм в длину в шагах ДП
 unsigned int Test::convertMMToSystemCoord(unsigned int mm)
 {
@@ -1062,6 +1081,8 @@ unsigned long long res;
     res = mm * 100 / _Header.ScanStep;
     return static_cast<unsigned int>(res);
 }
+
+//определяет системную координату, соответствующую заданному смещению в файле
 //файл должен быть открыт
 unsigned int Test::countCoordUntilFileOffet(unsigned int objectId, qint64 fileOffset)
 {
@@ -1076,12 +1097,81 @@ tObjectSourceDescr descriptor;
     {
         if (readHeader())
         {
-            while (_fileOffset < fileOffset) {
+            while (getFilePos() < fileOffset) {
                 if (readNextCoord(res, fShort) == false) break;
             }
         }
     }
    }
+    return res;
+}
+
+// ищет зону движения вперед или назад, начиная с текущего смещения в файле на отрезке,
+// span, заданному в мм, span == 0 - искать до конца файла
+bool Test::findMovingZone(unsigned int span, eMovingDir dir)
+{
+unsigned int coord;
+int currentSystemCoord;
+int startCoord;
+bool fShort;
+bool res = false;
+qint64 filePos;
+
+    assert(dir != DirNotDefined);
+    if (span) span = convertMMToSystemCoord(span);
+    currentSystemCoord = startCoord = static_cast<int>(_fullCoordinate);
+    do
+    {
+        filePos = getFilePos();
+        if (readNextCoord(coord, fShort))
+        {
+            changeSystemCoord(&currentSystemCoord, coord, fShort);
+            if (dir == DirUpWard)
+            {
+                if (_fullCoordinate < static_cast<unsigned int>(currentSystemCoord))
+                {//идет увеличение координаты - зона движения вперед
+                    res = true;
+                    setFilePos(filePos);
+                }
+                    else
+                    {
+                        _fullCoordinate = static_cast<unsigned int>(currentSystemCoord);
+                    }
+            }
+                else if (dir == DirDownWard)
+                     {
+                         if (_fullCoordinate > static_cast<unsigned int>(currentSystemCoord))
+                         {//идет уменьшение координаты - зона движения назад
+                             res = true;
+                             setFilePos(filePos);
+                         }
+                             else _fullCoordinate = static_cast<unsigned int>(currentSystemCoord);
+                     }
+        }
+            else break; // координата не найдена
+    } while( (!res) && !((span && (abs(_fullCoordinate - static_cast<unsigned int>(startCoord))) > span)) );
+    return res;
+}
+
+// ищет позицию в файле, соответствующую заданной координате
+// файл должен быть открыт и прочитан заголовок
+bool Test::findFilePosByCoord(int coordinate)
+{
+unsigned int coord;
+bool fShort;
+bool res = false;
+    do
+    {
+        if (readNextCoord(coord, fShort))
+        {
+            changeSystemCoord(reinterpret_cast<int*>(&_fullCoordinate), coord, fShort);
+            if (static_cast<int>(_fullCoordinate) == coordinate)
+            {
+                res = true;
+            }
+        }
+            else break; // координата не найдена
+    } while(!res);
     return res;
 }
 
