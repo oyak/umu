@@ -638,39 +638,49 @@ int res;
 //
 void UMUDEVICE::TickPCReceive()
 {
-bool fRepeat = false;
-unsigned int res = 0;
+bool fRepeat;
 
     do {
         fRepeat = false;
         switch (_read_state) {
         case rsHead: {
-            readPCMessageHead(res, fRepeat);
-            if (fRepeat) {
-                if (_currentMessage.messageCorrectness() == false)
-                {
-                    whenUnCorrectPCMessage();
-                    assert(0);
-                }
-                _wait_PCmesageBody_count = 1000;
+            readPCMessageHead(fRepeat);
+            if (fRepeat)
+            {
+                _read_state = rsTestHead;
             }
             break;
         }
         case rsBody: {
-            readPCMessageBody(res, fRepeat);
-            if (!fRepeat)
+            readPCMessageBody(fRepeat);
+            if (fRepeat)
             {
-                if (_wait_PCmesageBody_count) _wait_PCmesageBody_count--;
-                if (_wait_PCmesageBody_count == 0)
-                {// не получено сообщение в течение длительного периода
-                    whenUnCorrectPCMessage();
-                }
-                assert(_wait_PCmesageBody_count);
+                _read_state = rsHead;
+                unPack(_currentMessage);
+                _currentMessage.resetMessage();
             }
             break;
         }
-        case rsOff:
+        case rsTestHead: {
+            fRepeat = true;
+            if (_currentMessage.messageCorrectness() == true) {
+                _read_state = rsBody;
+            }
+                else {
+                    _read_state = rsSkipWrongId;
+                }
             break;
+        }
+        case rsSkipWrongId:{
+            unsigned char wrongId = skipWrongMessageId(fRepeat);
+            if (fRepeat)
+            {// wrongId - содержит неверный Id
+             // считали один байт из потока
+                _read_state = rsTestHead;
+            }
+            break;
+        }
+        case rsOff: break;
         }
     } while (fRepeat);
 }
@@ -739,13 +749,13 @@ unsigned char UMUDEVICE::readFromRAM(eUMUSide side, unsigned int regAddress)
 
 
 
-void UMUDEVICE::readPCMessageHead(unsigned int& res, bool& fRepeat)
+void UMUDEVICE::readPCMessageHead(bool& done)
 {
+unsigned int res;
     res = _dtLan->read(_PCConnection_id, reinterpret_cast<unsigned char*>(&_currentMessage), LAN_MESSAGE_SHORT_HEADER_SIZE);
 
     if (res == LAN_MESSAGE_SHORT_HEADER_SIZE) {
-        fRepeat = true;
-        _read_state = rsBody;
+        done = true;
         _read_bytes_count = _currentMessage.Size;
 
 /*
@@ -777,24 +787,21 @@ void UMUDEVICE::readPCMessageHead(unsigned int& res, bool& fRepeat)
     }
 }
 
-void UMUDEVICE::readPCMessageBody(unsigned int& res, bool& fRepeat)
+void UMUDEVICE::readPCMessageBody(bool& done)
 {
+unsigned int res = 0;
     DEFCORE_ASSERT(_read_bytes_count <= tLAN_PCMessage::LanDataMaxSize);
     if (_read_bytes_count != 0)
-    {// если сообщение содержит только заголовок
+    {// если сообщение содержит данные
         res = _dtLan->read(_PCConnection_id, reinterpret_cast<unsigned char*>(&_currentMessage.Data), _read_bytes_count);
     }
     if (res == _read_bytes_count) {
-        fRepeat = true;
-        _read_state = rsHead;
-        unPack(_currentMessage);
-        _previousMessage.copy(_currentMessage);
-       _currentMessage.resetMessage();
+        done = true;
 #ifdef DbgLog
         if (useLog) onAddLog(_common_state._umu_id, (unsigned char*) &_currentMessage, 1);
 #endif
     }
-    else if (res != 0) {
+        else if (res != 0) {
         ++_error_message_count;
 #ifdef DbgLog
         if (useLog) onAddLog(_common_state._umu_id, (unsigned char*) &_currentMessage, 3);  // Ошибка приема данных
@@ -802,9 +809,27 @@ void UMUDEVICE::readPCMessageBody(unsigned int& res, bool& fRepeat)
     }
 }
 
+// читает из потока входных данных 1 байт, если он принят,
+//выкидывает неправильный идентификатор сообщения и возвращает его значение, при этом done == true
+unsigned char UMUDEVICE::skipWrongMessageId(bool& done)
+{
+unsigned char res = 0;
+unsigned int byteCount = 0;
+unsigned char byte;
+    byteCount = _dtLan->read(_PCConnection_id, &byte, 1);
+    if (byteCount)
+    {
+        done = true;
+        res = _currentMessage.Id;
+        _currentMessage.Id = _currentMessage.Reserved;
+        _currentMessage.Reserved = static_cast<unsigned char>(_currentMessage.Size);
+        _currentMessage.Size = (_currentMessage.Size >> 8) | (byte << 8);
+    }
+    return res;
+}
+
 void UMUDEVICE::unPack(tLAN_PCMessage &buff)
 {
-
     switch (buff.Id)
     {
         case PingId:
@@ -1091,12 +1116,6 @@ SignalsData *pSignalsData;
     }
 }
 
-void UMUDEVICE::whenUnCorrectPCMessage()
-{
-    emit message(QString::asprintf("Current message header id = 0x%x, size = 0x%x without body", _currentMessage.Id, _currentMessage.Size));
-    emit message("previous message:");
-    _previousMessage.dbgPrint();
-}
 
 unsigned int UMUDEVICE::getNumberOfTacts()
 {

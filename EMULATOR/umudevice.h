@@ -454,22 +454,23 @@ protected:
         rsOff = 0,   // Выключенно
         rsHead = 1,  // Ожидаем заголовок сообщения
         rsBody = 2,  // Ожидаем тело сообщения
+        rsTestHead = 3, // проверка заголовка
+        rsSkipWrongId = 4, // выбырасываем недействительный идентификатор
     };
 
     tLAN_PCMessage _currentMessage;
-    tLAN_PCMessage _previousMessage;
     eReadState _read_state;
     unsigned int _read_bytes_count;
     unsigned int _error_message_count;
-    unsigned int _wait_PCmesageBody_count;
 //
 #ifdef _test_message_numeration_integrity
     unsigned char _messageNumber;
     unsigned char _lastMessageID;
 #endif
 
-    void readPCMessageHead(unsigned int& res, bool& fRepeat);
-    void readPCMessageBody(unsigned int& res, bool& fRepeat);
+    void readPCMessageHead(bool& done);
+    void readPCMessageBody(bool& done);
+    unsigned char skipWrongMessageId(bool &done);
     void unPack(tLAN_PCMessage& buf);
     //
     void AddToOutBuffSync(tLAN_PCMessage* _out_block);
@@ -477,7 +478,6 @@ protected:
     void sendPingToPC();
 
     void whenTrolleyCoordChanged(int coordLInMM, int coordRInMM);
-    void whenUnCorrectPCMessage();
 };
 
 #endif
