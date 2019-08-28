@@ -77,6 +77,7 @@ MainWindow::~MainWindow()
 {
     pDevice->stop();
     delete pDevice;
+    delete pConfig;
     delete ui;
 }
 

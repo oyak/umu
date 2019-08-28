@@ -52,7 +52,8 @@ SOURCES += main.cpp\
     DETECTOR/objectsarray.cpp \
     config.cpp \
     defcoreM/datacontainer/dc_functions.cpp \
-    DETECTOR/variety.cpp
+    DETECTOR/variety.cpp \
+    EMULATOR/logfile.cpp
 
 
 
@@ -90,7 +91,8 @@ HEADERS  += mainwindow.h \
     defcoreM/datacontainer/dc_functions.h \
     defcoreM/datacontainer/dc_definitions.h \
     DETECTOR/defsubst.h \
-    EMULATOR/variety.h
+    EMULATOR/variety.h \
+    EMULATOR/logfile.h
 
 
 INCLUDEPATH += UMU3204/MAIN \

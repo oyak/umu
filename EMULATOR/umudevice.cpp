@@ -446,6 +446,11 @@ cCriticalSection *pCS2;
     _PCLinkFaultTimer.start();
      connect(this, SIGNAL(restartPCLinkFaultTimer()), this, SLOT(_onRestartPCLinkFaultTimer()));
 
+     QString logFilePath = _pConfig->getPathToObjectsFiles() + "/logs";
+     QString logFileName = "pathmap.txt";
+    _pPathMapLogFile = new LOGFILE(&logFilePath, &logFileName);
+    logFileName = "lanmessages.txt";
+    _pLANPCMessageLogFile = new LOGFILE(&logFilePath, &logFileName);
 
     _engineThreadIndex = _thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, engine));
     _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, Tick)));
@@ -457,6 +462,8 @@ UMUDEVICE::~UMUDEVICE()
     delete _pldl;
     delete _pldr;
     delete _pTrolley;
+    delete _pPathMapLogFile;
+    delete _pLANPCMessageLogFile;
 }
 
 void UMUDEVICE::start(void)
@@ -655,6 +662,16 @@ bool fRepeat;
             readPCMessageBody(fRepeat);
             if (fRepeat)
             {
+             QStringList prnStrings;
+             QStringList::iterator it;
+                prnStrings = _currentMessage.printBody();
+                if(!prnStrings.isEmpty())
+                {
+                    for (it=prnStrings.begin(); it != prnStrings.end(); ++it)
+                    {
+                        _pLANPCMessageLogFile->addNote(*it);
+                    }
+                }
                 _read_state = rsHead;
                 unPack(_currentMessage);
                 _currentMessage.resetMessage();
@@ -664,6 +681,9 @@ bool fRepeat;
         case rsTestHead: {
             fRepeat = true;
             if (_currentMessage.messageCorrectness() == true) {
+                QString prnString = _currentMessage.printHeader();
+                _pLANPCMessageLogFile->startBlock();
+                _pLANPCMessageLogFile->addNote(prnString);
                 _read_state = rsBody;
             }
                 else {
@@ -676,6 +696,9 @@ bool fRepeat;
             if (fRepeat)
             {// wrongId - содержит неверный Id
              // считали один байт из потока
+                QString note = QString::asprintf("Skipped: 0x%x", wrongId);
+                _pLANPCMessageLogFile->startBlock();
+                _pLANPCMessageLogFile->addNote(note);
                 _read_state = rsTestHead;
             }
             break;
@@ -745,9 +768,6 @@ unsigned char UMUDEVICE::readFromRAM(eUMUSide side, unsigned int regAddress)
     }
     return _pldr->readFromRAM(regAddress);
 }
-
-
-
 
 void UMUDEVICE::readPCMessageHead(bool& done)
 {
@@ -845,6 +865,7 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
         unsigned int byteCount;
         int coord;
         unsigned short id;
+        QString messageString;
 
             _pEmulator->deletePathObjects();
 //
@@ -872,14 +893,19 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
             bytePtr += sizeof(int32_t);
 
             byteCount = static_cast<int>(buff.Size - sizeof(int32_t));
+
+            _pPathMapLogFile->startBlock();
+            connect(_pEmulator, SIGNAL(message(QString)), _pPathMapLogFile, SLOT(addNote(QString)));
+
             for (unsigned int jj=0; jj < 2; ++jj)
             {
                 if (byteCount == 0) break;
                 IdCount = ReadLE16U (bytePtr);
                 if (byteCount < IdCount * (sizeof(coord) + sizeof(id) )) break;
 
-                if (jj == 0) qWarning() << "left side flaw count = " << IdCount;
-                    else qWarning() << "right side flaw count = " << IdCount;
+                if (jj == 0) messageString = QString::asprintf("left side flaw count = %d", IdCount);
+                    else messageString = QString::asprintf("right side flaw count = %d", IdCount);
+                qWarning() << messageString;
 
                 bytePtr += sizeof(unsigned short);
                 for (unsigned short ii=0; ((ii < IdCount) && (byteCount > 0)); ++ii)
@@ -893,21 +919,23 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                       bool res;
 
                         res = _pEmulator->onMessageId(id, coord, usLeft);
-                        if (res) qWarning() << "left side flaw: id = " << id << ", coord = " << coord;
-                            else qWarning() << "left side flaw: id = " << id << ", coord = " << coord << " - ignored";
+                        if (res) messageString = QString::asprintf("left side flaw: id = %d, coord = %d", id, coord);
+                            else messageString = QString::asprintf("left side flaw: id = %d, coord = %d - ignored", id, coord);
                     }
                        else
                        {
                            bool res;
                            res = _pEmulator->onMessageId(id, coord, usRight);
-                           if (res) qWarning() << "right side flaw: id = " << id << ", coord = " << coord;
-                               else qWarning() << "right side flaw: id = " << id << ", coord = " << coord << " - ignored";
+                           if (res) messageString = QString::asprintf("right side flaw: id = %d, coord = %d", id, coord);
+                               else messageString = QString::asprintf("right side flaw: id = %d, coord = %d - ignored", id, coord);
                        }
-
+                        qWarning() << messageString;
+                        _pPathMapLogFile->addNote(messageString);
                 }
                 byteCount -= IdCount * (sizeof(coord) + sizeof(id));
             }
             _pEmulator->testPathMap();
+            disconnect(_pEmulator, SIGNAL(message(QString)), _pPathMapLogFile, SLOT(addNote(QString)));
             break;
         }
 //

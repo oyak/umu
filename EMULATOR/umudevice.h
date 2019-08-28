@@ -6,6 +6,8 @@
 #include <QTimer>
 #include <queue>
 #include <QDebug>
+#include <QString>
+#include <QStringList>
 #include "platforms.h"
 #ifdef DEFCORE_OS_WIN
 #include "unitwin.h"
@@ -22,6 +24,8 @@
 #include "trolley.h"
 #include "emulator.h"
 #include "config.h"
+#include "logfile.h"
+
 
 //#define SKIP_CDU_CONNECTING
 //#define SKIP_PC_CONNECTING
@@ -126,16 +130,21 @@ struct tLAN_PCMessage
         memset(Data, 0, LanDataMaxSize);
     }
 
-    void dbgPrint()
+   QString printHeader()
+   {
+       return QString::asprintf("header: 0x%x 0x%x 0x%x", Id, Size & 0xFF, Size >> 8);
+   }
+
+    QStringList printBody()
     {
-        qWarning() << QString::asprintf("tLAN_PCMessage header: 0x%x 0x%x 0x%x", Id, Size & 0xFF, Size >> 8);
+     QStringList res;
         if (Size)
         {
-            qWarning() << "tLAN_PCMessage body:";
+            res.append("body:");
             for(unsigned int ii=0; ii < Size; )
             {
                 if ((Size - ii) >= 8) {
-                    qWarning() << hex << Data[ii+0] << Data[ii+1] << Data[ii+2]<< Data[ii+3] << Data[ii+4]<< Data[ii+5]<< Data[ii+6]<< Data[ii+7];
+                    res.append(QString::asprintf("0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x", Data[ii+0], Data[ii+1], Data[ii+2], Data[ii+3], Data[ii+4], Data[ii+5], Data[ii+6], Data[ii+7]));
                     ii += 8;
                 }
                     else {
@@ -143,7 +152,7 @@ struct tLAN_PCMessage
                         {
                             case 1:
                             {
-                                qWarning() << hex << Data[ii];
+                                res.append(QString::asprintf("0x%x", Data[ii]));
                                 ii += 1;
                                 break;
                             }
@@ -435,6 +444,9 @@ private:
     cCriticalSection* _pPingTimerCS;
     bool _needToPing;
     CONFIG* _pConfig;
+
+    LOGFILE *_pPathMapLogFile;
+    LOGFILE *_pLANPCMessageLogFile;
 
     bool isEndWork();
 
