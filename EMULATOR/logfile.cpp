@@ -17,7 +17,7 @@ void LOGFILE::startBlock()
 QString blockHeader;
 QTime currentT = QTime::currentTime();
     addString(blockHeader); // выведем пустую строку
-    blockHeader = QString::asprintf("%d:%d:%d:%d", currentT.hour(), currentT.minute(), currentT.second(), currentT.msec());
+    blockHeader = QString::asprintf("-------------------- %d:%d:%d:%d --------------------", currentT.hour(), currentT.minute(), currentT.second(), currentT.msec());
     addString(blockHeader);
 }
 
