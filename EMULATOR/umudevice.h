@@ -158,37 +158,37 @@ struct tLAN_PCMessage
                             }
                             case 2:
                             {
-                                qWarning() << hex << Data[ii+0] << Data[ii+1] << Data[ii+2]<< Data[ii+3] << Data[ii+4]<< Data[ii+5]<< Data[ii+6]<< Data[ii+7];
+                                res.append(QString::asprintf("0x%x 0x%x", Data[ii+0], Data[ii+1]));
                                 ii += 2;
                                 break;
                             }
                             case 3:
                             {
-                                qWarning() << hex << Data[ii+0] << Data[ii+1] << Data[ii+2];
+                                res.append(QString::asprintf("0x%x, 0x%x, 0x%x", Data[ii+0], Data[ii+1], Data[ii+2]));
                                 ii += 3;
                                 break;
                             }
                             case 4:
                             {
-                                qWarning() << hex << Data[ii+0] << Data[ii+1] << Data[ii+2] << Data[ii+3];
+                                res.append(QString::asprintf("0x%x, 0x%x, 0x%x, 0x%x", Data[ii+0], Data[ii+1], Data[ii+2], Data[ii+3]));
                                 ii += 4;
                                 break;
                             }
                             case 5:
                             {
-                                qWarning() << hex << Data[ii+0] << Data[ii+1] << Data[ii+2]<< Data[ii+3] << Data[ii+4];
+                                res.append(QString::asprintf("0x%x, 0x%x, 0x%x, 0x%x, 0x%x", Data[ii+0], Data[ii+1], Data[ii+2], Data[ii+3], Data[ii+4]));
                                 ii += 5;
                                 break;
                             }
                             case 6:
                             {
-                                qWarning() << hex << Data[ii+0] << Data[ii+1] << Data[ii+2]<< Data[ii+3] << Data[ii+4]<< Data[ii+5];
+                                res.append(QString::asprintf("0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x", Data[ii+0], Data[ii+1], Data[ii+2], Data[ii+3], Data[ii+4], Data[ii+5]));
                                 ii += 6;
                                 break;
                             }
                             case 7:
                             {
-                                qWarning() << hex << Data[ii+0] << Data[ii+1] << Data[ii+2]<< Data[ii+3] << Data[ii+4]<< Data[ii+5]<< Data[ii+6];
+                                res.append(QString::asprintf("0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x", Data[ii+0], Data[ii+1], Data[ii+2], Data[ii+3], Data[ii+4], Data[ii+5], Data[ii+6]));
                                 ii += 7;
                                 break;
                             }
@@ -197,6 +197,7 @@ struct tLAN_PCMessage
                 }
             }
        }
+       return res;
     }
     void copy(tLAN_PCMessage& sourse)
     {

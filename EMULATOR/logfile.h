@@ -16,7 +16,7 @@ public:
     void startBlock();
 
 public slots:
-    void addNote(QString &note);
+    void addNote(QString note);
 private:
     QString _fileName;
     void addString(QString& string);

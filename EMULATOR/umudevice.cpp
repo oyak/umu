@@ -919,8 +919,8 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                       bool res;
 
                         res = _pEmulator->onMessageId(id, coord, usLeft);
-                        if (res) messageString = QString::asprintf("left side flaw: id = %d, coord = %d", id, coord);
-                            else messageString = QString::asprintf("left side flaw: id = %d, coord = %d - ignored", id, coord);
+                        if (res) messageString = QString::asprintf("left  side flaw: id = %d, coord = %d", id, coord);
+                            else messageString = QString::asprintf("left  side flaw: id = %d, coord = %d - ignored", id, coord);
                     }
                        else
                        {
