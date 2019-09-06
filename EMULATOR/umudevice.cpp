@@ -903,9 +903,9 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                 IdCount = ReadLE16U (bytePtr);
                 if (byteCount < IdCount * (sizeof(coord) + sizeof(id) )) break;
 
-                if (jj == 0) messageString = QString::asprintf("left side flaw count = %d", IdCount);
-                    else messageString = QString::asprintf("right side flaw count = %d", IdCount);
-                qWarning() << messageString;
+//                if (jj == 0) messageString = QString::asprintf("left side flaw count = %d", IdCount);
+//                    else messageString = QString::asprintf("right side flaw count = %d", IdCount);
+//                qWarning() << messageString;
 
                 bytePtr += sizeof(unsigned short);
                 for (unsigned short ii=0; ((ii < IdCount) && (byteCount > 0)); ++ii)
@@ -929,7 +929,7 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                            if (res) messageString = QString::asprintf("right side flaw: id = %d, coord = %d", id, coord);
                                else messageString = QString::asprintf("right side flaw: id = %d, coord = %d - ignored", id, coord);
                        }
-                        qWarning() << messageString;
+//                        qWarning() << messageString;
                         _pPathMapLogFile->addNote(messageString);
                 }
                 byteCount -= IdCount * (sizeof(coord) + sizeof(id));

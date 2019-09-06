@@ -7,7 +7,7 @@ UNITLIN::UNITLIN(CONFIG *pConfig)
 {
     _pDevice = new UMUDEVICE(&_thList, (void*)this, pConfig);
      connect(_pDevice, SIGNAL(CDUconnected()), this, SLOT(on_CDU_connected()));
-    connect(_pDevice, SIGNAL(message(QString)), this, SLOT(onMessage(QString)));
+//    connect(_pDevice, SIGNAL(message(QString)), this, SLOT(onMessage(QString)));
 }
 
 UNITLIN::~UNITLIN()
