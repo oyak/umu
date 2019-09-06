@@ -38,9 +38,10 @@ QString key;
 
 void OBJECTSTOR::createStorage(QString& pathToFiles)
 {
+    Q_UNUSED(pathToFiles);
 QVector<unsigned int> objectIdsArray;
 OBJECTLIB lib;
-SOBFMAKER maker(pathToFiles);
+SOBFMAKER maker(":/files/files"); // файлы объектов включены в проект как ресурсы
 tSCANOBJECT_EX* pObjectEx;
 
     lib.getAllIds(objectIdsArray);
