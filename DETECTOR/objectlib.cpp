@@ -5817,6 +5817,46 @@ tObjectSourceDescr descriptor;
     descriptor.StartmM = 535;
     descriptor.LengthMM = 500;
     table.insert(665, descriptor);
+//
+    descriptor.ObjectName = "кривая-левый рельс 1";
+    descriptor.SourceFileName = "180809-103456.a31";
+    descriptor.Side = usLeft;
+    descriptor.StartKm = 354;
+    descriptor.StartPk = 6;
+    descriptor.StartM = 0;
+    descriptor.StartmM = 4;
+    descriptor.LengthMM = 23626;
+    table.insert(1011, descriptor);
+//
+    descriptor.ObjectName = "кривая-левый рельс 2";
+    descriptor.SourceFileName = "180809-103456.a31";
+    descriptor.Side = usRight;
+    descriptor.StartKm = 354;
+    descriptor.StartPk = 6;
+    descriptor.StartM = 0;
+    descriptor.StartmM = 4;
+    descriptor.LengthMM = 23626;
+    table.insert(1021, descriptor);
+//
+    descriptor.ObjectName = "кривая-правый рельс 1";
+    descriptor.SourceFileName = "180809-103456.a31";
+    descriptor.Side = usLeft;
+    descriptor.StartKm = 354;
+    descriptor.StartPk = 6;
+    descriptor.StartM = 24;
+    descriptor.StartmM = 5;
+    descriptor.LengthMM = 23561;
+    table.insert(1012, descriptor);
+//
+    descriptor.ObjectName = "кривая-правый рельс 1";
+    descriptor.SourceFileName = "180809-103456.a31";
+    descriptor.Side = usRight;
+    descriptor.StartKm = 354;
+    descriptor.StartPk = 6;
+    descriptor.StartM = 24;
+    descriptor.StartmM = 5;
+    descriptor.LengthMM = 23561;
+    table.insert(1022, descriptor);
 }
 
 OBJECTLIB::~OBJECTLIB()
