@@ -877,7 +877,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>Путь к файлам</string>
+                   <string>Путь к лог-файлам</string>
                   </property>
                  </widget>
                 </item>

@@ -446,7 +446,7 @@ cCriticalSection *pCS2;
     _PCLinkFaultTimer.start();
      connect(this, SIGNAL(restartPCLinkFaultTimer()), this, SLOT(_onRestartPCLinkFaultTimer()));
 
-     QString logFilePath = _pConfig->getPathToObjectsFiles() + "/logs";
+     QString logFilePath = _pConfig->getPathToObjectsFiles();
      QString logFileName = "pathmap.txt";
     _pPathMapLogFile = new LOGFILE(&logFilePath, &logFileName);
     logFileName = "lanmessages.txt";
