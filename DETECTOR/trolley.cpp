@@ -249,7 +249,7 @@ unsigned int timeSpan;
                         changeCoordinate(1); // изменяем координату только на _currentV, не бошльше - см условие if
                         if (stoppingDuration >= queerStoppingTime)
                         {
-                            qWarning() << "stopped: _coordinate changed to " << _coordinate << "by currentV = " << _currentV << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5 << "targetCoord =" << _targetCoordinate;
+//                            qWarning() << "stopped: _coordinate changed to " << _coordinate << "by currentV = " << _currentV << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5 << "targetCoord =" << _targetCoordinate;
                         }
                     }
                         else
@@ -259,7 +259,7 @@ unsigned int timeSpan;
                             _movingState = Normal;
                             if (stoppingDuration >= queerStoppingTime)
                             {
-                                qWarning() << "stopped: _coordinate changed to " << _coordinate << "by coordDiscrepancy = " << coordDiscrepancy << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
+//                                qWarning() << "stopped: _coordinate changed to " << _coordinate << "by coordDiscrepancy = " << coordDiscrepancy << "_coordL =" << _coordinate + _rotationDegree * 0.5 << "_coordR =" << _coordinate - _rotationDegree * 0.5;
                             }
                         }
                 break;
