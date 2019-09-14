@@ -2704,7 +2704,7 @@ tObjectSourceDescr descriptor;
     descriptor.N0EMSShift = -91;
     descriptor.ObjectName = "БС без дефекта";
     descriptor.SourceFileName = "190208-085216.a31";
-    descriptor.Side = usLeft;
+    descriptor.Side = usRight;
     descriptor.StartKm = 1150;
     descriptor.StartPk = 5;
     descriptor.StartM = 83;
