@@ -2,6 +2,10 @@
 #include "sobfmaker.h"
 //#include "objectlib.h"
 
+OBJECTSTOR::OBJECTSTOR()
+{
+    createStorage();
+}
 
 OBJECTSTOR::OBJECTSTOR(QString& pathToFiles)
 {
@@ -41,7 +45,7 @@ void OBJECTSTOR::createStorage(QString& pathToFiles)
     Q_UNUSED(pathToFiles);
 QVector<unsigned int> objectIdsArray;
 OBJECTLIB lib;
-SOBFMAKER maker(":/files/files"); // файлы объектов включены в проект как ресурсы
+SOBFMAKER maker(pathToFiles);
 tSCANOBJECT_EX* pObjectEx;
 
     lib.getAllIds(objectIdsArray);
@@ -59,25 +63,12 @@ tSCANOBJECT_EX* pObjectEx;
             }
         }
     }
+}
 
-    /*
-
-    pObjectEx = maker.restoreObjectFromFile(21);
-    if(pObjectEx)
-    {
-        _storage.insert("21d", pObjectEx);
-    }
-    pObjectEx = maker.restoreObjectFromFile(81);
-    if(pObjectEx)
-    {
-        _storage.insert("81d", pObjectEx);
-    }
-    pObjectEx = maker.restoreObjectFromFile(91);
-    if(pObjectEx)
-    {
-        _storage.insert("91d", pObjectEx);
-    }
-*/
+void OBJECTSTOR::createStorage() // файлы объектов включены в проект как ресурсы
+{
+QString filesPath(":/files/files");
+    createStorage(filesPath);
 }
 
 bool OBJECTSTOR::addObject(unsigned int id, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject)

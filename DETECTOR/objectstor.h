@@ -8,6 +8,7 @@
 class OBJECTSTOR
 {
 public:
+    OBJECTSTOR(); // если файлы объектов включены в проект как ресурсы
     OBJECTSTOR(QString& pathToFiles);
     ~OBJECTSTOR();
     SCANOBJECT *extractObject(eOBJECT_ORDER& ObjectOrder, unsigned int& len, int& N0EMSShift, unsigned int objectId);
@@ -16,6 +17,7 @@ private:
     QMap<QString, tSCANOBJECT_EX*> _storage;
 
     void createStorage(QString &pathToFiles);
+    void createStorage(); // если файлы объектов включены в проект как ресурсы
     bool addObject(unsigned int id, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject);
     void constructKey(QString& key, unsigned int objectId);
 

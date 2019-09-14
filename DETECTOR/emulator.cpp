@@ -63,7 +63,7 @@ EMULATOR::EMULATOR(cCriticalSection* cs1, cCriticalSection* cs2, float pathStep,
     _pPathModel[0] = new PATHMODEL(cs1, pathStep);
     _pPathModel[1] = new PATHMODEL(cs2, pathStep);
 
-    _pStorage = new OBJECTSTOR(pathToObjectsFiles);
+    _pStorage = new OBJECTSTOR();
 
     connect(_pPathModel[usLeft], SIGNAL(message(QString)), this, SLOT(onLeftSideMessage(QString)));
     connect(_pPathModel[usRight], SIGNAL(message(QString)), this, SLOT(onRightSideMessage(QString)));
