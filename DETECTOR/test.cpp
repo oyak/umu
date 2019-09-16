@@ -255,6 +255,11 @@ int startmM;
                if (res)
                {
                    qWarning() << QString::asprintf("object = %d, start system coord in file = 0x%x", objectId, systemCoord);
+                   if (_Header.CorrespondenceSides != 0)
+                   {
+                       if (descriptor.Side == usLeft) descriptor.Side = usRight;
+                           else descriptor.Side = usLeft;
+                   }
                    res = extractScanObject(systemCoord, descriptor.Side, objSize, object);
                    object.ObjectOrder = descriptor.Order;
                    object.Size = objSize;
