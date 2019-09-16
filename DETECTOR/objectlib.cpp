@@ -5613,8 +5613,8 @@ tObjectSourceDescr descriptor;
     descriptor.Side = usRight;
     descriptor.StartKm = 0;
     descriptor.StartPk = 1;
-    descriptor.StartM = 11;
-    descriptor.StartmM = 98;
+    descriptor.StartM = -11;
+    descriptor.StartmM = -98;
     descriptor.LengthMM = 500;
     table.insert(301, descriptor);
 //
