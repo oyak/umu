@@ -5818,6 +5818,8 @@ tObjectSourceDescr descriptor;
     descriptor.LengthMM = 500;
     table.insert(665, descriptor);
 //
+    descriptor.Order = OverPlaced;
+
     descriptor.ObjectName = "кривая-левый рельс 1";
     descriptor.SourceFileName = "180809-103456.a31";
     descriptor.Side = usLeft;
