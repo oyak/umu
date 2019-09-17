@@ -29,12 +29,12 @@ unsigned int res;
     return res;
 }
 
-// Генерируем рандомное число между значениями min и max
+// Генерируем случайное число между значениями min и max
 // Предполагается, что функцию srand() уже вызывали
 unsigned char getRandomNumber(int min, int max)
 {
 const double fraction = 1.0 / (static_cast<double>(RAND_MAX) + 1.0);
-    // равномерно распределяем рандомное число в нашем диапазоне
+    // равномерно распределяем число в нашем диапазоне
     return static_cast<unsigned char>(qrand() * fraction * (max - min + 1) + min);
 
 }
