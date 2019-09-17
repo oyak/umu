@@ -447,8 +447,13 @@ cCriticalSection *pCS2;
      connect(this, SIGNAL(restartPCLinkFaultTimer()), this, SLOT(_onRestartPCLinkFaultTimer()));
 
      QString logFilePath = _pConfig->getPathToObjectsFiles();
-     QString logFileName = "pathmap.txt";
+     QString logFileName;
+#ifdef PATH_MAP_LOGFILE_ON
+    logFileName = "pathmap.txt";
     _pPathMapLogFile = new LOGFILE(&logFilePath, &logFileName);
+#else
+    _pPathMapLogFile = 0;
+#endif
     logFileName = "lanmessages.txt";
     _pLANPCMessageLogFile = new LOGFILE(&logFilePath, &logFileName);
 
@@ -462,7 +467,7 @@ UMUDEVICE::~UMUDEVICE()
     delete _pldl;
     delete _pldr;
     delete _pTrolley;
-    delete _pPathMapLogFile;
+    if (_pPathMapLogFile != 0) delete _pPathMapLogFile;
     delete _pLANPCMessageLogFile;
 }
 
@@ -894,8 +899,13 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
 
             byteCount = static_cast<int>(buff.Size - sizeof(int32_t));
 
-            _pPathMapLogFile->startBlock();
-            connect(_pEmulator, SIGNAL(message(QString)), _pPathMapLogFile, SLOT(addNote(QString)));
+            if (_pPathMapLogFile != 0)
+            {
+                _pPathMapLogFile->startBlock();
+#ifdef TESTING_PATH_MAP_ON
+                connect(_pEmulator, SIGNAL(message(QString)), _pPathMapLogFile, SLOT(addNote(QString)));
+#endif
+            }
 
             for (unsigned int jj=0; jj < 2; ++jj)
             {
@@ -930,12 +940,20 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                                else messageString = QString::asprintf("right side flaw: id = %d, coord = %d - ignored", id, coord);
                        }
 //                        qWarning() << messageString;
-                        _pPathMapLogFile->addNote(messageString);
+                      if (_pPathMapLogFile != 0)
+                      {
+                          _pPathMapLogFile->addNote(messageString);
+                      }
                 }
                 byteCount -= IdCount * (sizeof(coord) + sizeof(id));
             }
+#ifdef TESTING_PATH_MAP_ON
             _pEmulator->testPathMap();
-            disconnect(_pEmulator, SIGNAL(message(QString)), _pPathMapLogFile, SLOT(addNote(QString)));
+            if (_pPathMapLogFile != 0)
+            {
+                disconnect(_pEmulator, SIGNAL(message(QString)), _pPathMapLogFile, SLOT(addNote(QString)));
+            }
+#endif
             break;
         }
 //

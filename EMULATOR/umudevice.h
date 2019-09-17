@@ -27,8 +27,12 @@
 #include "logfile.h"
 
 
-//#define SKIP_CDU_CONNECTING
-//#define SKIP_PC_CONNECTING
+//define SKIP_CDU_CONNECTING
+//define SKIP_PC_CONNECTING
+
+//define PATH_MAP_LOGFILE_ON // включить запись лога по карте пути
+//define TESTING_PATH_MAP_ON // включить проверку допустимых зазоров между объектами пути
+
 
 #ifdef SKIP_CDU_CONNECTING
 #ifdef SKIP_PC_CONNECTING
