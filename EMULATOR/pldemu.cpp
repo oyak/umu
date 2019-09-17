@@ -357,52 +357,50 @@ unsigned int PLDEMULATOR::getNumberOfTacts()
 
 void PLDEMULATOR::writeIntoRAM(unsigned int address, unsigned char value)
 {
+//    assert (_RAMAccessible);
+//    assert (_numOfTacts);
+//    _cs->Enter();
+//    address -= ExtRamStartAdr;
+//    assert((address & 0x8000) == 0);
+//    if (address < (unsigned int)_tactParameterAreaSize)
+//    {
+//        _tactParameterArea[address >> 1] = value;
+////        qDebug() << "writeIntoRAM: address =" << hex << address + ExtRamStartAdr << "value =" << value << "into _tactParameterArea, offset = " << address;
+//    }
+//        else
+//        {
+//            if (_workAreaInital[(address - (unsigned int)_tactParameterAreaSize) >> 1])
+//            {
+//                _tactWorkAreaInital[(address - (unsigned int)_tactParameterAreaSize) >> 1] = value;
+//                _workAreaInital[(address - _tactParameterAreaSize) >> 1] = false;
+//            }
+//            _tactWorkArea[(address - _tactParameterAreaSize) >> 1] = value;
 
-    assert (_RAMAccessible);
-    assert (_numOfTacts);
-    _cs->Enter();
-    address -= ExtRamStartAdr;
-    assert((address & 0x8000) == 0);
-    if (address < (unsigned int)_tactParameterAreaSize)
-    {
-        _tactParameterArea[address >> 1] = value;
-//        qDebug() << "writeIntoRAM: address =" << hex << address + ExtRamStartAdr << "value =" << value << "into _tactParameterArea, offset = " << address;
-    }
-        else
-        {
-            if (_workAreaInital[(address - (unsigned int)_tactParameterAreaSize) >> 1])
-            {
-                _tactWorkAreaInital[(address - (unsigned int)_tactParameterAreaSize) >> 1] = value;
-                _workAreaInital[(address - _tactParameterAreaSize) >> 1] = false;
-            }
-            _tactWorkArea[(address - _tactParameterAreaSize) >> 1] = value;
+////            qDebug() << "writeIntoRAM: address =" << hex << address + ExtRamStartAdr << "value =" << value << "into _tactWorkArea, offset = " << ((address - _tactParameterAreaSize) >> 1);
 
-//            qDebug() << "writeIntoRAM: address =" << hex << address + ExtRamStartAdr << "value =" << value << "into _tactWorkArea, offset = " << ((address - _tactParameterAreaSize) >> 1);
-
-            defineStrobsLimits();
-//            redefineSignalAmplitudes();
-        }
-    _cs->Release();
+//            defineStrobsLimits();
+////            redefineSignalAmplitudes();
+//        }
+//    _cs->Release();
 }
 
 unsigned char PLDEMULATOR::readFromRAM(unsigned int address)
 {
-unsigned char res;
+unsigned char res = 0;
 
-    assert (_RAMAccessible);
-    assert (_numOfTacts);
-
-    _cs->Enter();
-    address -= ExtRamStartAdr;
-    if (address < (unsigned int)_tactParameterAreaSize)
-    {
-        res = _tactParameterArea[address >> 1];
-    }
-        else
-        {
-            res = _tactWorkArea[(address - (unsigned int)_tactParameterAreaSize) >> 1];
-        }
-    _cs->Release();
+//    assert (_RAMAccessible);
+//    assert (_numOfTacts);
+//    _cs->Enter();
+//    address -= ExtRamStartAdr;
+//    if (address < (unsigned int)_tactParameterAreaSize)
+//    {
+//        res = _tactParameterArea[address >> 1];
+//    }
+//        else
+//        {
+//            res = _tactWorkArea[(address - (unsigned int)_tactParameterAreaSize) >> 1];
+//        }
+//    _cs->Release();
     return res;
 }
 
