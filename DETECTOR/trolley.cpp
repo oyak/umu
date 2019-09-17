@@ -11,6 +11,7 @@
 const double TROLLEY::step = 1.83;
 const unsigned int TROLLEY::_timerPeriod = 1;
 const double TROLLEY::_absDiscrepancyMaxOfCoord = 3.0; // максимальная невязка координаты
+const double TROLLEY::AbsMaxV = 1.389;
 
 TROLLEY::TROLLEY(cCriticalSection *cs): _currentV(0.0),
                                         _rotationDegree(0.0),

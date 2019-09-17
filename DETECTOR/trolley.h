@@ -8,10 +8,7 @@
 #include "CriticalSection_Lin.h"
 #include "test.h"
 
-
-#define AbsMaxV 1.389 // модуль максимальной разрешенной скорости контроля, мм/мс
 #define queerStoppingTime 3 // при превышении времени останова более данной величины начинают выводиться лог сообщения об изменении текущей координаты
-
 
 typedef struct
 {
@@ -33,6 +30,7 @@ public:
     static const double step;
     static const unsigned int _timerPeriod;
     static const double _absDiscrepancyMaxOfCoord; // максимальное значение невязки по координате в мм
+    static const double AbsMaxV; // модуль максимальной разрешенной скорости контроля, мм/мс
 
     void changeMovingParameters(float targetSpeed, int coord, int coordL, int coordR, unsigned int time);
     void setCoordinate(int coord, int coordL, int coordR);
