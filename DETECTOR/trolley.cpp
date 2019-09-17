@@ -18,10 +18,8 @@ TROLLEY::TROLLEY(cCriticalSection *cs): _currentV(0.0),
 {
     _cs = cs;
     _correctionCounterInit = floor(_extrapolationTime / TROLLEY::_timerPeriod);
-//    setCoordinate(950000.0);
      setCoordinate(0.0, 0.0, 0.0);
 
-//    _lastCoordDiscrepancy = 0.0;
     _targetV = 0.0;
     setMovingDirection(Test::DirUpWard);
 
