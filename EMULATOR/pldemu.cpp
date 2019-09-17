@@ -313,7 +313,11 @@ unsigned char PLDEMULATOR::timeToAScanBufferOffset(unsigned char timeUs, unsigne
 unsigned int res;
 
     res = (timeUs * 10 + timeFrac) / scale;
-    assert(res && (res < 255));
+    if (res > 255)
+    {
+        qWarning() << "timeToAScanBufferOffset: wanted to return " << res << "when timeUs =" << timeUs << ", timeFrac =" << timeFrac << ", scale =" << scale << "result limited to 255";
+        res = 255;
+    }
     return (unsigned char)res;
 }
 
