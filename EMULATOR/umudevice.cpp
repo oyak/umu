@@ -964,16 +964,16 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
             {
                 pMessage = reinterpret_cast<tNEXTTRACKCOORD*>(buff.Data);
 
-                if (fabs(pMessage->Speed) > TROLLEY::AbsMaxV * 1000.0)
+                if (fabs(pMessage->Speed) > TROLLEY::AbsMaxV * 1100.0) // сделаем допуск +-10%
                 {
                     qWarning() << "unPack: Wrong value of speed" << pMessage->Speed << "was limited";
                     if (pMessage->Speed > 0.0)
                     {
-                        pMessage->Speed = TROLLEY::AbsMaxV * 1000.0;
+                        pMessage->Speed = TROLLEY::AbsMaxV * 1100.0;
                     }
                         else
                         {
-                            pMessage->Speed = TROLLEY::AbsMaxV * (-1000.0);
+                            pMessage->Speed = TROLLEY::AbsMaxV * (-1100.0);
                         }
                 }
                 _pTrolley->changeMovingParameters(pMessage->Speed, pMessage->Coord, pMessage->LeftDebugCoord, pMessage->RightDebugCoord, pMessage->Time);
