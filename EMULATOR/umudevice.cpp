@@ -454,8 +454,12 @@ cCriticalSection *pCS2;
 #else
     _pPathMapLogFile = 0;
 #endif
+#ifdef PCLAN_MESSAGE_LOGFILE_ON
     logFileName = "lanmessages.txt";
     _pLANPCMessageLogFile = new LOGFILE(&logFilePath, &logFileName);
+#else
+    _pLANPCMessageLogFile = 0;
+#endif
 
     _engineThreadIndex = _thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, engine));
     _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, Tick)));
@@ -468,7 +472,7 @@ UMUDEVICE::~UMUDEVICE()
     delete _pldr;
     delete _pTrolley;
     if (_pPathMapLogFile != 0) delete _pPathMapLogFile;
-    delete _pLANPCMessageLogFile;
+    if (_pLANPCMessageLogFile != 0) delete _pLANPCMessageLogFile;
 }
 
 void UMUDEVICE::start(void)
@@ -667,14 +671,17 @@ bool fRepeat;
             readPCMessageBody(fRepeat);
             if (fRepeat)
             {
-             QStringList prnStrings;
-             QStringList::iterator it;
-                prnStrings = _currentMessage.printBody();
-                if(!prnStrings.isEmpty())
+                if (_pLANPCMessageLogFile != 0)
                 {
-                    for (it=prnStrings.begin(); it != prnStrings.end(); ++it)
+                    QStringList prnStrings;
+                    QStringList::iterator it;
+                    prnStrings = _currentMessage.printBody();
+                    if(!prnStrings.isEmpty())
                     {
-                        _pLANPCMessageLogFile->addNote(*it);
+                        for (it=prnStrings.begin(); it != prnStrings.end(); ++it)
+                        {
+                            _pLANPCMessageLogFile->addNote(*it);
+                        }
                     }
                 }
                 _read_state = rsHead;
@@ -686,9 +693,12 @@ bool fRepeat;
         case rsTestHead: {
             fRepeat = true;
             if (_currentMessage.messageCorrectness() == true) {
-                QString prnString = _currentMessage.printHeader();
-                _pLANPCMessageLogFile->startBlock();
-                _pLANPCMessageLogFile->addNote(prnString);
+                if (_pLANPCMessageLogFile != 0)
+                {
+                    QString prnString = _currentMessage.printHeader();
+                    _pLANPCMessageLogFile->startBlock();
+                    _pLANPCMessageLogFile->addNote(prnString);
+                }
                 _read_state = rsBody;
             }
                 else {
@@ -701,9 +711,12 @@ bool fRepeat;
             if (fRepeat)
             {// wrongId - содержит неверный Id
              // считали один байт из потока
-                QString note = QString::asprintf("Skipped: 0x%x", wrongId);
-                _pLANPCMessageLogFile->startBlock();
-                _pLANPCMessageLogFile->addNote(note);
+                if (_pLANPCMessageLogFile != 0)
+                {
+                    QString note = QString::asprintf("Skipped: 0x%x", wrongId);
+                    _pLANPCMessageLogFile->startBlock();
+                    _pLANPCMessageLogFile->addNote(note);
+                }
                 _read_state = rsTestHead;
             }
             break;
