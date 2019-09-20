@@ -88,7 +88,7 @@ CONFIG::CONFIG(QString configFilePath)
     _restorePCConnection = (pSettings->value(_restorePCConnectionParameterName) == true) ? true : false;
     //
     if (pSettings->contains(_pathToObjectsFilesParameterName) == false) {
-        pSettings->setValue(_pathToObjectsFilesParameterName, getConfigFilePath() + "/");
+        pSettings->setValue(_pathToObjectsFilesParameterName, "");
         pSettings->sync();
     }
     _pathToObjectsFiles = pSettings->value(_pathToObjectsFilesParameterName).toString();
