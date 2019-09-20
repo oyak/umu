@@ -457,8 +457,10 @@ private:
     bool isEndWork();
 
     void unload(eOutBufferIndex outBufferIndex);
-    bool Tick();
-    void TickSend();
+    bool CDUTick();
+    bool PCTick();
+    void CDUTickSend();
+    void PCTickSend();
     void TickCDUReceive();
     void TickPCReceive();
     bool umuTick();

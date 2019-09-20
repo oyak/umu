@@ -462,7 +462,8 @@ cCriticalSection *pCS2;
 #endif
 
     _engineThreadIndex = _thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, engine));
-    _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, Tick)));
+    _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, CDUTick)));
+    _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, PCTick)));
 }
 //
 UMUDEVICE::~UMUDEVICE()
@@ -575,7 +576,15 @@ bool UMUDEVICE::isEndWork()
     return (_state == Finishing);
 }
 //
-bool UMUDEVICE::Tick()
+bool UMUDEVICE::CDUTick()
+{
+    CDUTickSend();
+    if (_CDUConnected) this->TickCDUReceive();
+    SLEEP(1);
+    return !_endWorkFlag;
+}
+//
+bool UMUDEVICE::PCTick()
 {
     _pPingTimerCS->Enter();
     if ((_PCConnected) && (_needToPing))
@@ -585,17 +594,20 @@ bool UMUDEVICE::Tick()
     }
     _pPingTimerCS->Release();
 
-    TickSend();
-    if (_CDUConnected) this->TickCDUReceive();
+    PCTickSend();
     if (_PCConnected) this->TickPCReceive();
 
     SLEEP(1);
     return !_endWorkFlag;
 }
 //
-void UMUDEVICE::TickSend()
+void UMUDEVICE::CDUTickSend()
 {
     if (_CDUConnected) unload(CDUoutBufferIndex);
+}
+//
+void UMUDEVICE::PCTickSend()
+{
     if (_PCConnected) unload(PCoutBufferIndex);
 }
 //
