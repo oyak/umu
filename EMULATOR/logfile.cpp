@@ -5,11 +5,10 @@
 LOGFILE::LOGFILE(QString *filePath, QString *fileName)
 {
 QDir dir(*filePath);
-    if (dir.exists())
+    if ((!filePath->isEmpty()) && (dir.exists()))
     {
         _fileName = *filePath + "/" + *fileName;
     }
-
 }
 
 void LOGFILE::startBlock()
