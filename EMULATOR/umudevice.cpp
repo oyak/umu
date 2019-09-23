@@ -897,8 +897,6 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
         unsigned short id;
         QString messageString;
 
-            _pEmulator->deletePathObjects();
-//
             bytePtr = &buff.Data[0];
             int temp;
             temp = (int)ReadLE32U(bytePtr);
@@ -920,7 +918,7 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
             }
             _pEmulator->setMovingDirection(_movingDirection);
             _pTrolley->setMovingDirection(_movingDirection);
-
+            _pEmulator->deletePathObjects();
             bytePtr += sizeof(int32_t);
 
             byteCount = static_cast<int>(buff.Size - sizeof(int32_t));
