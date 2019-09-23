@@ -915,7 +915,8 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                     break;
                 }
             default:
-                assert(0);
+                qWarning() << "unPack: wrong field movingDirection in the message TrackMapId. Message was ignored"
+                return;
             }
             _pEmulator->setMovingDirection(_movingDirection);
             _pTrolley->setMovingDirection(_movingDirection);
