@@ -1012,9 +1012,9 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
             if (buff.Size == sizeof(tJUMPTRACKCOORD))
             {
                pMessage = reinterpret_cast<tJUMPTRACKCOORD*>(buff.Data);
+              _pEmulator->testCoordinate(pMessage->Coord);
               _pTrolley->setCoordinate(pMessage->Coord, pMessage->LeftDebugCoord, pMessage->RightDebugCoord);
             }
-            _pEmulator->testCoordinate(pMessage->Coord);
             break;
         }
     }
