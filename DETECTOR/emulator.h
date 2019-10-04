@@ -31,7 +31,7 @@ public:
 //
     tStrokeConfig CIDToLineAndStroke(CID channel, eUMUSide side)
     {
-        assert(_config[side].contains(channel));
+        DEFCORE_ASSERT(_config[side].contains(channel));
         return _config[side][channel];
     }
 

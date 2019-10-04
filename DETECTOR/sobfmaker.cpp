@@ -36,7 +36,7 @@ unsigned char delay;
 QString fileName;
 QString filePath;
 
-    assert(_pFileParser); // нужно вызывать правильный конструктор
+    DEFCORE_ASSERT(_pFileParser); // нужно вызывать правильный конструктор
 
 //        qDebug() << "offset coord = " << _pFileParser->countCoordUntilFileOffet(81, 0x67c4fe);
 
@@ -70,12 +70,12 @@ QString filePath;
                {
                    fileBlock.push_back(static_cast<unsigned char>(*it)); // CID
                    pSignalsData->getNumOfSignals(*it, &signalCounter);
-                   assert(signalCounter != 0);
+                   DEFCORE_ASSERT(signalCounter != 0);
                    fileBlock.push_back((unsigned char)signalCounter); // кол-во сигналов
                    for(unsigned int ii=0; ii < signalCounter; ++ii)
                    {
                        res = pSignalsData->getSignalParamters(*it, amplitude, delay, ii);
-                       assert(res);
+                       DEFCORE_ASSERT(res);
                        fileBlock.push_back(delay);
 
 //                       if (delay == 0)

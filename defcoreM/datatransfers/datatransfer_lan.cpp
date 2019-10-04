@@ -110,7 +110,7 @@ int cDataTransferLan::openConnection(const int connection_id)
     p_param->_local_port_num = p_param->_port_in;
     if ((p_param->_port_out != p_param->_port_in)) {
         p_param->_server = p_param->_socket_1_server;
-        assert((p_param->_socket_1_transfer_direction == cSocketLan::DirectionToLocal) || (p_param->_socket_1_transfer_direction == cSocketLan::DirectionToRemoute));
+        DEFCORE_ASSERT((p_param->_socket_1_transfer_direction == cSocketLan::DirectionToLocal) || (p_param->_socket_1_transfer_direction == cSocketLan::DirectionToRemoute));
         p_param->_transferDirection = p_param->_socket_1_transfer_direction;
         bool_result = s1->connect(p_param);
         if (bool_result) {

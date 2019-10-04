@@ -73,7 +73,7 @@ bool res = false;
 bool SOBFile::writeHeader(tSOBHeader *pHeader, bool DontCloseFile)
 {
 bool res;
-    assert(_fileHandle != nullptr);
+    DEFCORE_ASSERT(_fileHandle != nullptr);
     close();
     res = open();
     if (res)
@@ -111,7 +111,7 @@ bool SOBFile::open()
 bool SOBFile::writeBlock(QVector<unsigned char>& data)
 {
 bool res;
-    assert(_fileHandle != nullptr);
+    DEFCORE_ASSERT(_fileHandle != nullptr);
     res = (_fileHandle->write((const char*)data.data(), data.size()) != 0);
     if (res) _fileHandle->flush();
     return res;
@@ -120,9 +120,7 @@ bool res;
 bool SOBFile::readByte(unsigned char *pByte)
 {
 bool res;
-//qint64 pos;
-    assert(_fileHandle != nullptr);
-//    pos = _fileHandle->pos();
+    DEFCORE_ASSERT(_fileHandle != nullptr);
     res = (_fileHandle->read((char*)pByte, 1) != 0);
     return res;
 }

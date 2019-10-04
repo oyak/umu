@@ -3,6 +3,7 @@
 
 #include "ascanpulse.h"
 #include "variety.h"
+#include "platforms.h"
 
 
 ASCANPULSE::ASCANPULSE(unsigned int maxOffsetInAScanBuffer)
@@ -34,7 +35,7 @@ unsigned int ASCANPULSE::scaleToDotsIdx(unsigned char scale)
        case 8:
            return 4; // Dots5;
        default:
-        assert(0); //
+        DEFCORE_ASSERT(0); //
     }
     return 0;
 }
@@ -54,7 +55,7 @@ unsigned int ASCANPULSE::dotsToDotsIdx(int numOfDots)
        case Dots5:
            return 4;
        default:
-        assert(0); //
+        DEFCORE_ASSERT(0); //
     }
     return 0;
 }
@@ -74,7 +75,7 @@ int ASCANPULSE::idxToDots(unsigned int index)
        case 4:
            return Dots5;
        default:
-        assert(0); //
+        DEFCORE_ASSERT(0); //
     }
     return 0;
 }
@@ -82,7 +83,7 @@ int ASCANPULSE::idxToDots(unsigned int index)
 // значения копируются только в те точки, которые изначально равны 0
 void ASCANPULSE::drawSample(unsigned char *AScanBuffer,  unsigned char offsetOfCenter, unsigned char scale, unsigned int amplitude)
 {
-    assert(amplitude >= getMinAmplitude());
+    DEFCORE_ASSERT(amplitude >= getMinAmplitude());
 register unsigned int ampIndex = amplitude -  getMinAmplitude();
 register unsigned int offsetShiftOnLeft;
 register int startOffsetInBuffer;
@@ -104,7 +105,7 @@ unsigned int dotsIdx;
     tSample::iterator it = _sample[dotsIdx][ampIndex].begin() + startOffsetInSample;
     for(int ii=0; ii < numOfDots; ++ii)
     {
-        assert(it != _sample[dotsIdx][ampIndex].end());
+        DEFCORE_ASSERT(it != _sample[dotsIdx][ampIndex].end());
         if (AScanBuffer[startOffsetInBuffer] == 0) AScanBuffer[startOffsetInBuffer] = *it;
         ++startOffsetInBuffer;
         ++it;

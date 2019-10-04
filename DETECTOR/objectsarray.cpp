@@ -81,7 +81,7 @@ int seekDir = 0; // 0- не определено, -1 - к началу массива, 1 - к концу массива
                 QVector<tSCANOBJECT_EX>::iterator it;
                 isDataObject = true;
                 unsigned int offsetInData;
-                assert(_movingDirection != Test::DirNotDefined);
+                DEFCORE_ASSERT(_movingDirection != Test::DirNotDefined);
                 if (_movingDirection == Test::DirUpWard)
                 {
                     offsetInData = (coord - _currentObject->FirstCoordinate) * 100 / _currentObject->pScanObject->getPathStep();

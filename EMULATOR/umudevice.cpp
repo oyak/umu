@@ -1,6 +1,5 @@
 // в проекте QT определить DEVICE_EMULATION, AC_dis
 
-#include <assert.h>
 #include <stdlib.h>
 #include <QDebug>
 #include <time.h>
@@ -200,8 +199,8 @@ void putmsg(UCHAR *srcbuf, USHORT size, vfuncpv userproc)
 
 void put_DataByWord(unsigned int address, USHORT size)
 {
-    assert(UMUDEVICE::pldRPtr);
-    assert(UMUDEVICE::pldLPtr);
+    DEFCORE_ASSERT(UMUDEVICE::pldRPtr);
+    DEFCORE_ASSERT(UMUDEVICE::pldLPtr);
     while((size) && (UMUDEVICE::_BScanMessageCounter < UMUDEVICE::_BScanMessage.Size))
     {
         UMUDEVICE::_BScanMessage.Data[UMUDEVICE::_BScanMessageCounter++] = UMUDEVICE::pldRPtr->readRegister(address);
@@ -215,7 +214,7 @@ void put_DataByWord(unsigned short *srcBuf, USHORT size)
 {
 unsigned char *destPtr;
 
-    assert (!(size & 0x01) && size); // size - четное число (размер в байтах), неравное 0
+    DEFCORE_ASSERT(!(size & 0x01) && size); // size - четное число (размер в байтах), неравное 0
     destPtr = reinterpret_cast<unsigned char*>(&UMUDEVICE::_BScanMessage);
     for(unsigned short ii=0; ii < size; ii += 2)
     {
@@ -246,27 +245,27 @@ unsigned char *srcPtr; \
 
 unsigned short Rd_RegPLD(unsigned int regAddr)
 {
-    assert(UMUDEVICE::deviceObjectPtr);
+    DEFCORE_ASSERT(UMUDEVICE::deviceObjectPtr);
     return (UMUDEVICE::deviceObjectPtr->readPLDRegister(usLeft, regAddr) << 8) | UMUDEVICE::deviceObjectPtr->readPLDRegister(usRight, regAddr);
 }
 
 void Wr_RegPLD(unsigned int regAddr, unsigned short value)
 {
-    assert(UMUDEVICE::deviceObjectPtr);
+    DEFCORE_ASSERT(UMUDEVICE::deviceObjectPtr);
     UMUDEVICE::deviceObjectPtr->writePLDRegister(usLeft, regAddr, (unsigned char)(value >> 8));
     UMUDEVICE::deviceObjectPtr->writePLDRegister(usRight, regAddr, (unsigned char)(value & 0xFF));
 }
 
 void writeIntoRAM(unsigned short address, unsigned short value)
 {
-    assert(UMUDEVICE::deviceObjectPtr);
+    DEFCORE_ASSERT(UMUDEVICE::deviceObjectPtr);
     UMUDEVICE::deviceObjectPtr->writeIntoRAM(usLeft, address, (unsigned char)(value >> 8));
     UMUDEVICE::deviceObjectPtr->writeIntoRAM(usRight, address, (unsigned char)(value & 0xFF));
 }
 
 unsigned short readFromRAM(unsigned short address)
 {
-    assert(UMUDEVICE::deviceObjectPtr);
+    DEFCORE_ASSERT(UMUDEVICE::deviceObjectPtr);
     return (UMUDEVICE::deviceObjectPtr->readFromRAM(usLeft, address) << 8) | UMUDEVICE::deviceObjectPtr->readFromRAM(usRight, address);
 }
 
@@ -289,7 +288,7 @@ void get_Access(USHORT size);
 
 void get_Access(USHORT size)
 {
-    assert(size >= LAN_MESSAGE_BIG_HEADER_SIZE);
+    DEFCORE_ASSERT(size >= LAN_MESSAGE_BIG_HEADER_SIZE);
     UMUDEVICE::_critical_sectionPtr->Enter();
     UMUDEVICE::_BScanMessage.Size = size - LAN_MESSAGE_BIG_HEADER_SIZE;
     UMUDEVICE::_BScanMessageCounter = 0;
@@ -461,6 +460,11 @@ cCriticalSection *pCS2;
     _pLANPCMessageLogFile = 0;
 #endif
 
+#ifdef DEFCORE_DEBUG
+    QString stdErrorPathAndFileName = logFilePath + "/stderr.txt";
+    freopen(stdErrorPathAndFileName.toLatin1().data(), "a", stderr);
+#endif
+
     _engineThreadIndex = _thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, engine));
     _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, CDUTick)));
     _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, PCTick)));
@@ -556,7 +560,8 @@ bool UMUDEVICE::engine(void)
         case Finishing:
         break;
 
-        default: assert(0);
+        default:
+            DEFCORE_ASSERT(0);
     }
     return !_endWorkFlag;
 }
@@ -614,7 +619,7 @@ void UMUDEVICE::PCTickSend()
 void UMUDEVICE::unload(eOutBufferIndex outBufferIndex)
 {
 bool res;
-    assert((outBufferIndex == CDUoutBufferIndex) || (outBufferIndex == PCoutBufferIndex));
+    DEFCORE_ASSERT((outBufferIndex == CDUoutBufferIndex) || (outBufferIndex == PCoutBufferIndex));
     _critical_section[outBufferIndex]->Enter();
     switch(outBufferIndex)
     {

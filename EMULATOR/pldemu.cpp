@@ -1,16 +1,17 @@
-#include <assert.h>
+#include <platforms.h>
 #include <QDebug>
 #include "pldemu.h"
 #include "math.h"
 #include "MISC46_2.H"
 
-PLDEMULATOR::PLDEMULATOR(cCriticalSection *cs): _cycledAScan(false),
-                             _AScanReady(false),
+PLDEMULATOR::PLDEMULATOR(cCriticalSection *cs):
                              _numOfTacts(1),
                              _AScanLine(0),
+                             _AScanTact(0),
+                             _cycledAScan(false),
+                             _AScanReady(false),
                              _started(false),
                              _RAMAccessible(false),
-                             _AScanTact(0),
                              _BScanLine(0),
                              _DPShift(0),
                              _ASDBufferAccessible(false)
@@ -79,8 +80,8 @@ void PLDEMULATOR::constructAScan(bool needBlocked)
 unsigned char offsetOfCenterSignal;
 int indexOfBScanSignal;
 
-    assert((_AScanLine == 0) || (_AScanLine == 1));
-    assert(_AScanTact < MaxNumOfTacts);
+    DEFCORE_ASSERT((_AScanLine == 0) || (_AScanLine == 1));
+    DEFCORE_ASSERT(_AScanTact < MaxNumOfTacts);
     if (needBlocked) _cs->Enter();
 
 //    for (int ii = QTime::currentTime().msecsSinceStartOfDay() & 0xFF; ii < _AMaxAmplOffset; ++ii)
@@ -124,7 +125,7 @@ int indexOfBScanSignal;
 
 bool PLDEMULATOR::addBScanSignal(unsigned int tact, unsigned int line, unsigned int delayMS, unsigned int delayFrac, unsigned int amplitudeCode)
 {
-    assert((line == 0) || (line == 1));
+    DEFCORE_ASSERT((line == 0) || (line == 1));
 unsigned int numOfSignals = _BScanBuffer[line][tact][0].SignalCount;
 bool res = true;
 
@@ -182,7 +183,7 @@ void PLDEMULATOR::redefineSignalAmplitudes(unsigned int line)
 
 void PLDEMULATOR::resetSignals(unsigned char tact, unsigned int line)
 {
-    assert((line == 0) || (line == 1));
+    DEFCORE_ASSERT((line == 0) || (line == 1));
     _cs->Enter();
     _BScanBuffer[line][tact][0].SignalCount = 0;
 
@@ -197,7 +198,7 @@ unsigned char PLDEMULATOR::readRegister(unsigned int regAddress)
 unsigned char res = 0;
 unsigned int regAddressMasked = regAddress & ~LineMaskForAScan;
 
-    assert((_AScanLine == 0) || (_AScanLine == 1));
+    DEFCORE_ASSERT((_AScanLine == 0) || (_AScanLine == 1));
     _cs->Enter();
     if (regAddressMasked ==  Aaddr1 + (0xFF<<1))
     {
@@ -245,8 +246,8 @@ void PLDEMULATOR::writeRegister(unsigned int regAddress, unsigned char regValue)
     }
         else if (regAddress == a0x1301)
              {
-                 assert(regValue <= MaxNumOfTacts);
-                 assert(_started == false);
+                 DEFCORE_ASSERT(regValue <= MaxNumOfTacts);
+                 DEFCORE_ASSERT(_started == false);
                  _numOfTacts = regValue + 1; // в ПЛИС записываем максимальный номер такта
                  _tactParameterAreaSize = parreg_sz * _numOfTacts;
                  for(int ii=0; ii< TACT_WORK_AREA_SIZE; ++ii)
@@ -269,13 +270,13 @@ void PLDEMULATOR::writeRegister(unsigned int regAddress, unsigned char regValue)
                                  }
                                      else if (regAddressMasked ==  Aaddr1 + (0xFC<<1))
                                           {
-                                              assert((regValue & tactbitmsk) < MaxNumOfTacts);
+                                              DEFCORE_ASSERT((regValue & tactbitmsk) < MaxNumOfTacts);
                                               _AScanTact = regValue & tactbitmsk;
                                               _AScanLine = (regValue & 0x80) ? 1:0;
                                           }
                                               else if (regAddressMasked ==  Aaddr1 + (0xFF<<1))
                                                    {
-//                                                       assert(_started);
+//                                                       DEFCORE_ASSERT(_started);
                                                        _AScanStrobForMax = (regValue >> 2) & 0x3;
                                                        _AScanReady = false;
 
@@ -357,11 +358,11 @@ unsigned int PLDEMULATOR::getNumberOfTacts()
 
 void PLDEMULATOR::writeIntoRAM(unsigned int address, unsigned char value)
 {
-//    assert (_RAMAccessible);
-//    assert (_numOfTacts);
+//    DEFCORE_ASSERT(_RAMAccessible);
+//    DEFCORE_ASSERT(_numOfTacts);
 //    _cs->Enter();
 //    address -= ExtRamStartAdr;
-//    assert((address & 0x8000) == 0);
+//    DEFCORE_ASSERT((address & 0x8000) == 0);
 //    if (address < (unsigned int)_tactParameterAreaSize)
 //    {
 //        _tactParameterArea[address >> 1] = value;
@@ -387,9 +388,8 @@ void PLDEMULATOR::writeIntoRAM(unsigned int address, unsigned char value)
 unsigned char PLDEMULATOR::readFromRAM(unsigned int address)
 {
 unsigned char res = 0;
-
-//    assert (_RAMAccessible);
-//    assert (_numOfTacts);
+//    DEFCORE_ASSERT(_RAMAccessible);
+//    DEFCORE_ASSERT(_numOfTacts);
 //    _cs->Enter();
 //    address -= ExtRamStartAdr;
 //    if (address < (unsigned int)_tactParameterAreaSize)
@@ -499,9 +499,8 @@ bool PLDEMULATOR::isInstantInStrob(unsigned char timeUS, unsigned int tactNumber
 // если сигналов в стробе нет - возвращает -1
 int PLDEMULATOR::findMaxBScanSignal(unsigned int tact, unsigned line, unsigned int strob)
 {
-unsigned int currentMaxAmplitude;
+unsigned int currentMaxAmplitude = 0;
 unsigned int signalCount;
-int res = -1;
 
     if (_BScanBuffer[line][tact][0].SignalCount == 0) return -1;
 

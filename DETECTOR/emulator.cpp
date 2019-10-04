@@ -90,7 +90,7 @@ bool EMULATOR::onMessageId(unsigned short objectId, int startCoordInMM, eUMUSide
 {
     bool res = false;
 
-    assert((side == 0) || (side == 1));
+    DEFCORE_ASSERT((side == 0) || (side == 1));
 
     eOBJECT_ORDER order;
     unsigned int len;
@@ -144,7 +144,7 @@ void EMULATOR::deletePathObjects()
 
 SignalsData* EMULATOR::getScanObject(eUMUSide side, int coordInMM, bool& isDataObject)
 {
-    assert((side == 0) || (side == 1));
+    DEFCORE_ASSERT((side == 0) || (side == 1));
     return _pPathModel[side]->getObject(coordInMM, isDataObject);
 }
 

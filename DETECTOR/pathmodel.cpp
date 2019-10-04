@@ -149,7 +149,7 @@ bool isClearence = true;
 bool isObject;
 int currentCoord;
 
-    assert(shift!= 0);
+    DEFCORE_ASSERT(shift!= 0);
 
     clearenceLen = 0;
     currentCoord = coordinate;

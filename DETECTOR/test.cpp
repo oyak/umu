@@ -62,7 +62,7 @@ int startmM;
         startmM = descriptor.StartmM;
         if (descriptor.Order == ExpandedOverPlacing)
         {
-            assert(abs(descriptor.N0EMSShift) < 1000);
+            DEFCORE_ASSERT(abs(descriptor.N0EMSShift) < 1000);
             if (descriptor.N0EMSShift < 0)
             { // начальную точку объекта сдвигаем влево
                 if (_Header.MoveDir == -1) { // координата должна увеличиться
@@ -71,10 +71,10 @@ int startmM;
                 int mm;
                 int m;
                     res = getPKLen(&startPost, pkLen, false);
-                    assert(res); // следующий пикетный столб не найден
-                    assert(pkLen);
+                    DEFCORE_ASSERT(res); // следующий пикетный столб не найден
+                    DEFCORE_ASSERT(pkLen);
                     m = pkLen / 1000;
-                    assert(m);
+                    DEFCORE_ASSERT(m);
                     mm = pkLen % 1000;
                     startmM -= descriptor.N0EMSShift;
                     if ((startM == m) &&  (startmM > mm)) {
@@ -107,12 +107,12 @@ int startmM;
                             res = getPKLen(&startPost, pkLen, true);
                             if (res)
                             {
-                                assert(pkLen);
+                                DEFCORE_ASSERT(pkLen);
                                 m = pkLen / 1000;
                                 mm = pkLen % 1000;
                                 if (m == 0)
                                 { // и такое безобразие, наыерное, может быть
-                                    assert(mm >= abs(startmM));
+                                    DEFCORE_ASSERT(mm >= abs(startmM));
                                     startmM += mm;
                                     startM = m;
                                 }
@@ -137,7 +137,7 @@ int startmM;
                             }
                                 else
                                 {
-                                    assert(0); // предыдущий пикетный столб не найден
+                                    DEFCORE_ASSERT(0); // предыдущий пикетный столб не найден
                                 }
                         }
                         else
@@ -176,8 +176,8 @@ int startmM;
               if (_Header.MoveDir == -1) {
               int pkLen; // длина текущего участка в мм
                   res = getPKLen(&startPost, pkLen, false);
-                  assert(res); // следующий пикетный столб не найден
-                  assert(pkLen);
+                  DEFCORE_ASSERT(res); // следующий пикетный столб не найден
+                  DEFCORE_ASSERT(pkLen);
                   res = findAndParseStolbID(startPost, &currentCoord, _Header.MoveDir);
                   if (res)
                   {
@@ -205,17 +205,17 @@ int startmM;
                             {
                                 int pkLen; // длина текущего участка до следующего столба в мм
                                 res = getPKLen(&startPost, pkLen, false);
-                                assert(res); // следующий пикетный столб не найден
-                                assert(pkLen);
+                                DEFCORE_ASSERT(res); // следующий пикетный столб не найден
+                                DEFCORE_ASSERT(pkLen);
                                 systemCoord = _fullCoordinate + convertMMToSystemCoord(pkLen - startmM - (_Header.StartMetre - startM) * 1000);
                             }
                                 else res = false;
                         }
                             else
                             { // метры и миллиметры растут в отрицательную сторону
-                                assert(_Header.StartMetre == 0);
-                                assert(startmM <= 0);
-                                assert(startM <= 0);
+                                DEFCORE_ASSERT(_Header.StartMetre == 0);
+                                DEFCORE_ASSERT(startmM <= 0);
+                                DEFCORE_ASSERT(startM <= 0);
                                 systemCoord = _fullCoordinate + convertMMToSystemCoord(startM  * -1000 - startmM);
                             }
                     }
@@ -294,8 +294,7 @@ bool res = false;
             {
                 _pFile = new QFile(fileName);
             }
-        assert(_pFile->exists());
-
+        DEFCORE_ASSERT(_pFile->exists());
         if (_pFile->open(QIODevice::ReadOnly/*Write*/ ) == true)
         {
             res = true;
@@ -330,7 +329,7 @@ qint64 rBytes;
 unsigned int error;
 bool res = true;
 
-    assert(_pFile != NULL);
+    DEFCORE_ASSERT(_pFile != NULL);
     if(toResetFilePos)
     {
         _fullCoordinate = 0;
@@ -355,11 +354,11 @@ sFileHeader_v5 tempHeader;
 unsigned char Id;
 bool res;
 
-    assert(_pFile != NULL);
+    DEFCORE_ASSERT(_pFile != NULL);
     readHeader(false, &tempHeader);
     if (tempHeader.HeaderVer != 5)
     {
-    //    assert(0);
+    //    DEFCORE_ASSERT(0);
     }
     do
     {
@@ -430,7 +429,7 @@ CID Test::convertToCID(CID chIdx, eMovingDir movingDirection)
                     return B42E;
                 case B42E:
                     return F42E;
-                default: assert(0);
+                default: DEFCORE_ASSERT(0);
             }
     }
 }
@@ -643,7 +642,7 @@ bool Test::readNextStolb(sCoordPostMRF *postCoordPtr, int *systemCoordPtr)
 unsigned char id;
 bool res;
 unsigned int tempCoord;
-    assert(postCoordPtr);
+    DEFCORE_ASSERT(postCoordPtr);
     if (systemCoordPtr) *systemCoordPtr = 0;
     do
     {
@@ -696,7 +695,7 @@ bool Test::readAndParseEventID(unsigned char& Id, void *pParsedData, bool readID
 bool res = true;
 unsigned char ID[4];
 
-    assert(_pFile != NULL);
+    DEFCORE_ASSERT(_pFile != NULL);
     if ((_Header.TableLink != 0xFFFFFFFF) && (getFilePos() >= _Header.TableLink)) {
         return false;
     }
@@ -1002,7 +1001,7 @@ unsigned char ID[4];
         default:
         {
             res = false;
-            assert(0);
+            DEFCORE_ASSERT(0);
         }
     }
     }
@@ -1122,7 +1121,7 @@ bool fShort;
 bool res = false;
 qint64 filePos;
 
-    assert(dir != DirNotDefined);
+    DEFCORE_ASSERT(dir != DirNotDefined);
     if (span) span = convertMMToSystemCoord(span);
     currentSystemCoord = startCoord = static_cast<int>(_fullCoordinate);
     do
@@ -1187,7 +1186,7 @@ unsigned char Test::getSideByte(eUMUSide Side)
 
 eUMUSide Test::convertToUMUSide(unsigned char sideByte)
 {
-    assert((sideByte == 0) || (sideByte == 1));
+    DEFCORE_ASSERT((sideByte == 0) || (sideByte == 1));
     return (sideByte == 0x01) ? usRight : usLeft;
 }
 

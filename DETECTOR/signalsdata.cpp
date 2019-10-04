@@ -55,7 +55,7 @@ void SignalsData::getNumOfSignals(CID channel, unsigned int *pSignalCount)
 {
 tSignalObject *pSignals;
 
-    assert(pSignalCount != nullptr);
+    DEFCORE_ASSERT(pSignalCount != nullptr);
     *pSignalCount = 0;
     getSignals(channel, &pSignals);
     if (pSignals)
