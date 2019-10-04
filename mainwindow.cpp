@@ -69,6 +69,7 @@ MainWindow::MainWindow(QWidget* parent)
     pDevice->start();
     ui->startButtonwidget->show();
     ui->settingsWidget->hide();
+    setWindowTitle(APP_VERSION);
 
     QTimer::singleShot(1000, this, &MainWindow::on_startCduButton_released);
 }
@@ -275,6 +276,7 @@ void MainWindow::on_lineEdit_4_textChanged(const QString& arg1)
 void MainWindow::on_lineEdit_5_cursorPositionChanged(int arg1, int arg2)
 {
     (void) arg1;
+    (void) arg2;
     if (!testCDULocalIPAddress()) drawCDULocalIPAddress();
 }
 

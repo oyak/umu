@@ -110,7 +110,7 @@ INCLUDEPATH += UMU3204/MAIN \
 
 FORMS    += mainwindow.ui
 
-DEFINES += DEVICE_EMULATION AC_dis
+DEFINES += DEVICE_EMULATION AC_dis DEFCORE_DEBUG
 
 DISTFILES += \
     android/AndroidManifest.xml \
@@ -130,3 +130,4 @@ contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
 RESOURCES += \
     objectfiles.qrc
 
+include(./version.pri)
