@@ -181,7 +181,7 @@ tres res;
 //
 unsigned char lanmsgparcer(UCHAR* buf, USHORT lng)
 {
-register tres res;
+register tres res = 0;
 register int l;
 register UCHAR *p = buf;
 register unsigned char receiveStartOffset;

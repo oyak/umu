@@ -73,7 +73,10 @@ QString filesPath(":/files/files");
 
 bool OBJECTSTOR::addObject(unsigned int id, eOBJECT_ORDER objectOrder, SCANOBJECT *pObject)
 {
-
+    (void) id;
+    (void) objectOrder;
+    (void) pObject;
+    return false;
 }
 
 void OBJECTSTOR::constructKey(QString& key, unsigned int objectId)

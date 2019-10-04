@@ -200,6 +200,7 @@ void CONFIG::setPathToObjectsFiles(QString path)
 
 bool CONFIG::testPassword(QString& password)
 {
+    (void) password;
     bool res;
     if (_qAttempts < 10)
         res = true;

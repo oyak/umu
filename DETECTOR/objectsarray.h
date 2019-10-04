@@ -38,10 +38,11 @@ class OBJECTSARRAY:public QObject
     Q_OBJECT
 public:
 //
-    OBJECTSARRAY(cCriticalSection* cs, float pathStep): _cs(cs),
-                                     _currentObject(nullptr),
+    OBJECTSARRAY(cCriticalSection* cs, float pathStep):
                                      _step(pathStep),
+                                     _currentObject(nullptr),
                                      _lastObject(nullptr),
+                                     _cs(cs),
                                      _movingDirection(Test::DirNotDefined)
     {
 
