@@ -14,7 +14,7 @@ typedef class cCriticalSection* xSemaphoreHandle;
 #define xTaskHandle int
 
 #define smprintf simplePrintf
-#define simplePrintf(c, ...) // qWarning()<<c
+#define simplePrintf(c, ...) while(0) // qWarning()<<c
 
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))

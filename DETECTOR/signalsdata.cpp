@@ -29,10 +29,10 @@ unsigned int cnt;
     {
      _signals[channel].Signals[cnt + ii].Delay = (*pSignalList)[ii].Delay;
      _signals[channel].Signals[cnt + ii].Ampl = (*pSignalList)[ii].Ampl;
-
-//     qDebug() << "addSignals: addition - channel = " << channel << ", signal index = " << cnt+ii << \
-//                 ", Delay = " << (*pSignalList)[ii].Delay << ", Amplitude = " << (*pSignalList)[ii].Ampl;
-
+/*
+     qDebug() << "addSignals: addition - channel = " << channel << ", signal index = " << cnt+ii << \
+                 ", Delay = " << (*pSignalList)[ii].Delay << ", Amplitude = " << (*pSignalList)[ii].Ampl;
+*/
     }
     _signals[channel].Count += signalCount;
     return true;

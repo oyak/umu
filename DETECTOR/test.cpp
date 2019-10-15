@@ -326,7 +326,7 @@ bool Test::readHeader()
 bool Test::readHeader(bool toResetFilePos, sFileHeader_v5 *pHeader)
 {
 qint64 rBytes;
-unsigned int error;
+//unsigned int error;
 bool res = true;
 
     DEFCORE_ASSERT(_pFile != NULL);
@@ -339,7 +339,7 @@ bool res = true;
     rBytes = _pFile->read(reinterpret_cast<char*>(pHeader), sizeof(_Header));
     if (rBytes == 0)
     {
-        error = _pFile->error();
+//        error = _pFile->error();
         res = false;
     }
     getFilePos();
@@ -731,8 +731,8 @@ unsigned char ID[4];
             _pFile->getChar(reinterpret_cast<char*>(&Side));
             unsigned char Channel = '\0';
             _pFile->getChar(reinterpret_cast<char*>(&Channel));
-            const QByteArray& data = _pFile->read(4);
-            int CentrCoord = qFromLittleEndian<int>(reinterpret_cast<const unsigned char*>(data.data()));
+/*            const QByteArray& data =*/  _pFile->read(4);
+//            int CentrCoord = qFromLittleEndian<int>(reinterpret_cast<const unsigned char*>(data.data()));
             unsigned char CoordWidth = '\0';
             _pFile->getChar(reinterpret_cast<char*>(&CoordWidth));
             unsigned char StDelay = '\0';
@@ -757,7 +757,7 @@ unsigned char ID[4];
         {
             unsigned char strSize = '\0';
             _pFile->getChar(reinterpret_cast<char*>(&strSize));
-            const QByteArray& data = _pFile->read(128);
+            /*const QByteArray& data = */ _pFile->read(128);
             break;
         }
         case EID_CheckSum:
@@ -782,7 +782,7 @@ unsigned char ID[4];
             unsigned char length = '\0';
             _pFile->getChar(reinterpret_cast<char*>(&length));
             setFilePos(getFilePos() + 1);
-            const QByteArray& data = _pFile->read(length * 2);
+            /*const QByteArray& data =*/ _pFile->read(length * 2);
             break;
         }
         case EID_HandScan:
@@ -876,7 +876,7 @@ unsigned char ID[4];
         {
         unsigned char length = '\0';
             _pFile->getChar(reinterpret_cast<char*>(&length));
-            const QByteArray& data = _pFile->read(length * 2);
+            /*const QByteArray& data =*/ _pFile->read(length * 2);
             break;
         }
         case EID_EndFile:

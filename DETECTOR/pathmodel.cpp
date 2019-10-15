@@ -22,9 +22,9 @@ bool PATHMODEL::addObject(unsigned int id, int startCoord, unsigned int lenInSte
             {
                 _pathStartCoordinate = startCoord;
             }
-            if (_pathEndCoordinate < startCoord + pObject->len() )
+            if (_pathEndCoordinate < startCoord + (int)pObject->len() )
             {
-                _pathEndCoordinate = startCoord + pObject->len();
+                _pathEndCoordinate = startCoord + (int)pObject->len();
             }
         }
         return true;

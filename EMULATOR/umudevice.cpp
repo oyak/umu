@@ -157,7 +157,8 @@ int xTaskGetTickCount(void)
 // задавать задержки не более секунды
 void delay(unsigned int value)
 {
-timespec t = {t.tv_sec = 0};
+timespec t;
+    t.tv_sec = 0;
     t.tv_nsec = value * 168;
     nanosleep(&t, NULL);
 }
