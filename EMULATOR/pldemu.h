@@ -74,6 +74,8 @@ typedef struct
 
 } tStrobLimit;
 
+#define AmplArraySize 31 // размер массива _ampl в элементах
+
 class PLDEMULATOR: public QObject
 {
     Q_OBJECT
@@ -139,7 +141,7 @@ private:
 
     cCriticalSection* _cs;
     int _amplInDB[16];
-    int _ampl[31];
+    int _ampl[AmplArraySize];
 
 
     bool _workAreaInital[TACT_WORK_AREA_SIZE];

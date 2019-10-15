@@ -48,7 +48,7 @@ PLDEMULATOR::PLDEMULATOR(cCriticalSection *cs):
 
     // таблица перевода кодирования дБ относительно порога в 32
     // отсчета  в амплитуду
-    for (int ii = 0; ii < (int) sizeof(_ampl); ++ii) {
+    for (int ii = 0; ii < AmplArraySize; ++ii) {
         float bell = (ii - 12) / 20.0;
         _ampl[ii] = (unsigned char) (pow(10.0, bell) * 32.0);
     }
@@ -250,7 +250,7 @@ void PLDEMULATOR::writeRegister(unsigned int regAddress, unsigned char regValue)
                  DEFCORE_ASSERT(_started == false);
                  _numOfTacts = regValue + 1; // в ПЛИС записываем максимальный номер такта
                  _tactParameterAreaSize = parreg_sz * _numOfTacts;
-                 for(int ii=0; ii< TACT_WORK_AREA_SIZE; ++ii)
+                 for(int ii=0; ii < (int)TACT_WORK_AREA_SIZE; ++ii)
                  {
                      _workAreaInital[ii] = true;
                  }
@@ -358,6 +358,8 @@ unsigned int PLDEMULATOR::getNumberOfTacts()
 
 void PLDEMULATOR::writeIntoRAM(unsigned int address, unsigned char value)
 {
+    Q_UNUSED(address);
+    Q_UNUSED(value);
 //    DEFCORE_ASSERT(_RAMAccessible);
 //    DEFCORE_ASSERT(_numOfTacts);
 //    _cs->Enter();
@@ -388,6 +390,7 @@ void PLDEMULATOR::writeIntoRAM(unsigned int address, unsigned char value)
 unsigned char PLDEMULATOR::readFromRAM(unsigned int address)
 {
 unsigned char res = 0;
+    Q_UNUSED(address);
 //    DEFCORE_ASSERT(_RAMAccessible);
 //    DEFCORE_ASSERT(_numOfTacts);
 //    _cs->Enter();
@@ -514,7 +517,7 @@ unsigned int signalCount;
     }
     if (signalCount == _BScanBuffer[line][tact][0].SignalCount) return -1; // нет сигналов в стробе
     if (_BScanBuffer[line][tact][0].SignalCount == 1) return signalCount;
-    if (signalCount < _BScanBuffer[line][tact][0].SignalCount - 1)
+    if ((signalCount+1) < (unsigned int)_BScanBuffer[line][tact][0].SignalCount)
     {
         for(unsigned int ii=signalCount+1; ii < _BScanBuffer[line][tact][0].SignalCount; ++ii)
         {
