@@ -461,11 +461,6 @@ cCriticalSection *pCS2;
     _pLANPCMessageLogFile = 0;
 #endif
 
-#ifdef DEFCORE_DEBUG
-    QString stdErrorPathAndFileName = logFilePath + "/stderr.txt";
-    freopen(stdErrorPathAndFileName.toLatin1().data(), "a", stderr);
-#endif
-
     _engineThreadIndex = _thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, engine));
     _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, CDUTick)));
     _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, PCTick)));
@@ -1337,4 +1332,34 @@ void UMUDEVICE::save()
 void UMUDEVICE::onMessage(QString s) // слот на сигналы с текстовыми сообщениями от используемых классов
 {
     emit message(s);
+}
+
+void UMUDEVICE::messageHandler(QtMsgType type, const QMessageLogContext& context, const QString &msg)
+{
+    QString txt;
+    bool res;
+    switch (type) {
+        case QtInfoMsg:
+            txt = QString("Info: %1").arg(msg);
+        break;
+        case QtDebugMsg:
+            txt = QString("Debug: %1").arg(msg);
+            break;
+        case QtWarningMsg:
+            txt = QString("Warning: %1").arg(msg);
+        break;
+        case QtCriticalMsg:
+            txt = QString("Critical: %1").arg(msg);
+        break;
+        case QtFatalMsg:
+            txt = QString("Fatal: %1").arg(msg);
+            abort();
+        break;
+    }
+
+    QFile outFile(_pConfig->getPathToObjectsFiles() + "/qtMessages.log");
+    res = outFile.open(QIODevice::WriteOnly | QIODevice::Append);
+    QTextStream ts(&outFile);
+    ts << txt << endl;
+    outFile.close();
 }

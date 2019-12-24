@@ -408,6 +408,7 @@ public slots:
     void _onPCLinkFaultTimer();         // слот на срабатывание _PCLinkFaultTimer
     void _onRestartPCLinkFaultTimer();  // перезапускаем _PCLinkFaultTimer, чтобы не сработал
     void onMessage(QString s); // слот на сигналы с текстовыми сообщениями от используемых классов
+    void messageHandler(QtMsgType type, const QMessageLogContext& context, const QString &msg); // обработчик сообщений из QDebug
 
 private:
     eState _state;

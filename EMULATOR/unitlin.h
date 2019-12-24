@@ -13,6 +13,9 @@ class UNITLIN: public QObject
     Q_OBJECT
 public:
 
+    static class UMUDEVICE *DevicePtr;
+    static void messageHandler(QtMsgType type, const QMessageLogContext& context, const QString &msg);
+
     UNITLIN(CONFIG *pConfig);
     ~UNITLIN();
     void start();
@@ -59,6 +62,7 @@ public:
     void _onPathStep(int shift, unsigned int coordInSteps);
     void printConnectionStatus();
 
+//
 signals:
     void CDUconnected();
     void message(QString s);

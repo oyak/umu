@@ -20,6 +20,9 @@ MainWindow::MainWindow(QWidget* parent)
     pConfig = new CONFIG("");
 
     pDevice = new UNITLIN(pConfig);
+#ifdef DEFCORE_DEBUG
+    qInstallMessageHandler(&pDevice->messageHandler);
+#endif
     //
     drawCDULocalIPAddress();
     drawCDULocalPort();

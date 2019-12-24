@@ -4,6 +4,7 @@
 
 #if defined(DEFCORE_CC_GNU)
 #include <sys/time.h>
+#include <QDebug>
 #endif
 
 #include <iostream>
@@ -30,6 +31,12 @@ TDateTime CurrentDateTime()
 
 void defcore_assert(const char* assertion, const char* file, int line)
 {
+#if defined(DEFCORE_CC_BOR)
     std::cerr << "ASSERT: \"" << assertion << "\" in file:" << file << ", line:" << line << std::endl;
+#elif defined(DEFCORE_CC_GNU)
+    qWarning() << "ASSERT: \"" << assertion << "\" in file:" << file << ", line:" << line;
+#else
+#error "function defcore_assert() doesn't implemented for this platform!";
+#endif
     assert(false);
 }

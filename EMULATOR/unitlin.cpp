@@ -1,11 +1,14 @@
 
 #include "unitlin.h"
 #include "QDebug"
+#include "assert.h"
 
+class UMUDEVICE *UNITLIN::DevicePtr;
 
 UNITLIN::UNITLIN(CONFIG *pConfig)
 {
     _pDevice = new UMUDEVICE(&_thList, (void*)this, pConfig);
+    DevicePtr = _pDevice;
      connect(_pDevice, SIGNAL(CDUconnected()), this, SLOT(on_CDU_connected()));
 //    connect(_pDevice, SIGNAL(message(QString)), this, SLOT(onMessage(QString)));
 }
@@ -202,4 +205,11 @@ void UNITLIN::printConnectionStatus()
 void UNITLIN::onMessage(QString s)
 {
     qWarning() << s;
+}
+
+// в случае использования в проект вставить DEFINES += QT_MESSAGELOGCONTEXT
+void UNITLIN::messageHandler(QtMsgType type, const QMessageLogContext& context, const QString &msg)
+{
+    assert(DevicePtr);
+    DevicePtr->messageHandler(type, context, msg);
 }
