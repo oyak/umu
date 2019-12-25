@@ -4,6 +4,7 @@
 #include "assert.h"
 
 class UMUDEVICE *UNITLIN::DevicePtr;
+class cCriticalSection_Lin UNITLIN::classCs;
 
 UNITLIN::UNITLIN(CONFIG *pConfig)
 {
@@ -16,7 +17,10 @@ UNITLIN::UNITLIN(CONFIG *pConfig)
 UNITLIN::~UNITLIN()
 {
 QVector <cCriticalSection_Lin*>::iterator it;
+    classCs.Enter();
     delete _pDevice;
+    DevicePtr = 0;
+    classCs.Release();
     for (it = _cs.begin(); it < _cs.end(); ++it) delete *it;
     _cs.clear();
 }
@@ -210,6 +214,7 @@ void UNITLIN::onMessage(QString s)
 // в случае использования в проект вставить DEFINES += QT_MESSAGELOGCONTEXT
 void UNITLIN::messageHandler(QtMsgType type, const QMessageLogContext& context, const QString &msg)
 {
-    assert(DevicePtr);
-    DevicePtr->messageHandler(type, context, msg);
+    classCs.Enter();
+    if (DevicePtr != 0) DevicePtr->messageHandler(type, context, msg);
+    classCs.Release();
 }

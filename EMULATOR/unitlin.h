@@ -14,6 +14,7 @@ class UNITLIN: public QObject
 public:
 
     static class UMUDEVICE *DevicePtr;
+    static class cCriticalSection_Lin classCs;
     static void messageHandler(QtMsgType type, const QMessageLogContext& context, const QString &msg);
 
     UNITLIN(CONFIG *pConfig);

@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <time.h>
 #include <math.h>
+#include <QDateTime>
 #include "platforms.h"
 #include "ChannelsIds.h"
 
@@ -668,7 +669,6 @@ int res;
 void UMUDEVICE::TickPCReceive()
 {
 bool fRepeat;
-
     do {
         fRepeat = false;
         switch (_read_state) {
@@ -906,11 +906,13 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                 case 1:
                 {
                     _movingDirection = Test::DirUpWard;
+                    qWarning() << "upWard";
                     break;
                 }
                 case -1:
                 {
                     _movingDirection = Test::DirDownWard;
+                    qWarning() << "downWard";
                     break;
                 }
             default:
@@ -1356,10 +1358,14 @@ void UMUDEVICE::messageHandler(QtMsgType type, const QMessageLogContext& context
             abort();
         break;
     }
-
     QFile outFile(_pConfig->getPathToObjectsFiles() + "/qtMessages.log");
     res = outFile.open(QIODevice::WriteOnly | QIODevice::Append);
-    QTextStream ts(&outFile);
-    ts << txt << endl;
-    outFile.close();
+    if (res)
+    {
+        QDateTime dateTime = QDateTime::currentDateTime();
+        QTextStream ts(&outFile);
+        txt = QString("%1:").arg(dateTime.toString(Qt::SystemLocaleShortDate)) + txt;
+        ts << txt << endl;
+        outFile.close();
+    }
 }
