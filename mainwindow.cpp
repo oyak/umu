@@ -73,6 +73,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui->startButtonwidget->show();
     ui->settingsWidget->hide();
     setWindowTitle(APP_VERSION);
+    ui->label_12->setText(APP_VERSION);
 
     QTimer::singleShot(1000, this, &MainWindow::on_startCduButton_released);
 }
