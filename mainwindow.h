@@ -91,6 +91,7 @@ private slots:
 
     void on_startCduButton_released();
 
+    void on_MessageHandler(QString s);
 private:
     Ui::MainWindow* ui;
     UNITLIN* pDevice;

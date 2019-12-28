@@ -12,11 +12,14 @@ UNITLIN::UNITLIN(CONFIG *pConfig)
     DevicePtr = _pDevice;
      connect(_pDevice, SIGNAL(CDUconnected()), this, SLOT(on_CDU_connected()));
 //    connect(_pDevice, SIGNAL(message(QString)), this, SLOT(onMessage(QString)));
+     connect(_pDevice, SIGNAL(messageHandlerSignal(QString)), this, SLOT(on_MessageHandler(QString)));
 }
 
 UNITLIN::~UNITLIN()
 {
 QVector <cCriticalSection_Lin*>::iterator it;
+    disconnect(_pDevice, SIGNAL(CDUconnected()), this, SLOT(on_CDU_connected()));
+//  disconnect(_pDevice, SIGNAL(message(QString)), this, SLOT(onMessage(QString)));
     classCs.Enter();
     delete _pDevice;
     DevicePtr = 0;
@@ -195,6 +198,11 @@ QStringList list;
     }
 }
 
+void UNITLIN::restartCDUConection()
+{
+    _pDevice->restartCDUConection();
+}
+
 // для отладки
 void UNITLIN::_onPathStep(int shift, unsigned int coordInMM)
 {
@@ -209,6 +217,11 @@ void UNITLIN::printConnectionStatus()
 void UNITLIN::onMessage(QString s)
 {
     qWarning() << s;
+}
+
+void UNITLIN::on_MessageHandler(QString s)
+{
+    emit messageHandlerSignal(s);
 }
 
 // в случае использования в проект вставить DEFINES += QT_MESSAGELOGCONTEXT

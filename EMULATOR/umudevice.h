@@ -301,15 +301,6 @@ struct tLAN_CDUMessage
 class UMUDEVICE : public QObject
 {
     Q_OBJECT
-    enum eState
-    {
-        Stopped = 0,
-        CDUConnected,
-        PCConnecting,
-        WhenConnected,  // все требуемые подключения установлены
-        Working,
-        Finishing  // разъединение, закрытие тредов
-    };
 
     enum eOutBufferIndex
     {
@@ -317,7 +308,6 @@ class UMUDEVICE : public QObject
         PCoutBufferIndex = 1,
         NumOfOutBuffers = 2  // общее число буферов
     };
-
 
 public:
     static UMUDEVICE* deviceObjectPtr;
@@ -347,7 +337,6 @@ public:
 
     bool _enablePLDInt;  // флаг "прерывания" от ПЛИС разрешены
 
-    eState getState(void);
     void start();
 
     void stop();
@@ -392,6 +381,9 @@ public:
 
     bool testPassword(QString& password);
     void save();
+
+    void restartCDUConection();
+
 #ifdef _test_message_numeration_integrity
     void testMessageNumerationIntegrity(tLAN_CDUMessage* _out_block);
 #endif
@@ -400,6 +392,7 @@ signals:
     void CDUconnected();
     void restartPCLinkFaultTimer();
     void message(QString s);
+    void messageHandlerSignal(QString s); // порождается в messageHandler()
 
 public slots:
     void _onPLDInt();                                             // срабатывание таймера _PLDIntTimer
@@ -411,8 +404,8 @@ public slots:
     void messageHandler(QtMsgType type, const QMessageLogContext& context, const QString &msg); // обработчик сообщений из QDebug
 
 private:
-    eState _state;
     bool _endWorkFlag;
+    bool _restartCDUConnectionFlag;
     int _PCConnection_id;   // Идентификатор соединения в cDatatr c ПК тренажера
     int _CDUConnection_id;  // идентияикатор соединения с БУИ
 
@@ -435,6 +428,7 @@ private:
     cCriticalSection* _critical_section[NumOfOutBuffers];
     cThreadClassList* _thlist;
     int _engineThreadIndex;
+    int _UmuTickThreadIndex;
 
     QTimer _PLDIntTimer;
 
@@ -455,8 +449,6 @@ private:
     LOGFILE *_pPathMapLogFile;
     LOGFILE *_pLANPCMessageLogFile;
 
-    bool isEndWork();
-
     void unload(eOutBufferIndex outBufferIndex);
     bool CDUTick();
     bool PCTick();
@@ -465,9 +457,6 @@ private:
     void TickCDUReceive();
     void TickPCReceive();
     bool umuTick();
-
-    void setState(eState newState);
-
 
 protected:
     enum eReadState  // Состояние процесса чтения сообщения

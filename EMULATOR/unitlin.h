@@ -57,7 +57,7 @@ public:
     bool testPassword(const QString& password);
     void save();
     void scatterIPAddress(QString& IPAddressPart3, QString& IPAddressPart2, QString& IPAddressPart1, QString& IPAddressPart0, QString sourceString);
-
+    void restartCDUConection(void);
 
 // для отладки
     void _onPathStep(int shift, unsigned int coordInSteps);
@@ -67,10 +67,12 @@ public:
 signals:
     void CDUconnected();
     void message(QString s);
+    void messageHandlerSignal(QString s);
 
 private slots:
     void on_CDU_connected();
     void onMessage(QString s); // слот на сигналы с текстовыми сообщениями от используемых классов
+    void on_MessageHandler(QString s); // слот на сигнал обработчика UMUDEVICE::messageHandler(), порождает messageHandlerSignal
 
 private:
     class UMUDEVICE *_pDevice;

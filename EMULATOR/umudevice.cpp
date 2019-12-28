@@ -372,8 +372,8 @@ cCriticalSection *pCS2;
     _write_error_count[CDUoutBufferIndex] = 0;
     _write_error_count[PCoutBufferIndex] = 0;
 
-    setState(Stopped);
     _endWorkFlag = false;
+    _restartCDUConnectionFlag = false;
 
     _dtLan = new (std::nothrow) cDataTransferLan;
 // БУИ-соединение
@@ -463,6 +463,7 @@ cCriticalSection *pCS2;
 #endif
 
     _engineThreadIndex = _thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, engine));
+    _UmuTickThreadIndex = 0;
     _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, CDUTick)));
     _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, PCTick)));
 }
@@ -484,7 +485,6 @@ void UMUDEVICE::start(void)
 
 void UMUDEVICE::stop(void)
 {
-    setState(Finishing);
     _endWorkFlag = true;
     SLEEP(2000);
 }
@@ -492,91 +492,55 @@ void UMUDEVICE::stop(void)
 bool UMUDEVICE::engine(void)
 {
     SLEEP(1);
-    switch (_state)
-    {
-        case Stopped:
 #ifndef SKIP_CDU_CONNECTING
-        if (_dtLan->openConnection(_CDUConnection_id) == 0)
-        {
-            _CDUConnected = true;
-            setState(CDUConnected);
+   if (_CDUConnected == false)
+   {
+       if (_dtLan->openConnection(_CDUConnection_id) == 0)
+       {
+           _restartCDUConnectionFlag = false;
+           _CDUConnected = true;
+           qWarning() << "CDU connected";
+           if(_UmuTickThreadIndex == 0)
+           {
+               _UmuTickThreadIndex = _thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, umuTick));
+               _thlist->Resume(_UmuTickThreadIndex);
+           }
+       }
+   }
+   else {
+       if(_restartCDUConnectionFlag)
+       {
+           _restartCDUConnectionFlag = false;
+           qWarning() << "CDU reconnection...";
+           _dtLan->closeConnection(_CDUConnection_id);
+           _CDUConnected = false;
         }
-            else
-            {
-                SLEEP(500);
-            }
-#else
-        setState(CDUConnected);
+    }
 #endif
-        break;
 //
-        case CDUConnected:
-//            emit CDUconnected();
-        if (_CDUConnected)
-         {
-            _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, umuTick)));
-        }
-        setState(PCConnecting);
-        break;
-//
-       case PCConnecting:
-        _PCConnected = false;
-        _read_state = rsHead;
 #ifndef SKIP_PC_CONNECTING
+    if (_PCConnected == false)
+    {
         if (_dtLan->openConnection(_PCConnection_id) == 0)
         {
             _PCLinkFault = false;
             _PCConnected = true;
-            setState(WhenConnected);
+            qWarning() << "PC connected";
         }
-            else
-            {
-                SLEEP(500);
-            }
-#else
-        setState(WhenConnected);
-#endif
-        break;
-
-//
-        case WhenConnected:
-            setState(Working);
-            break;
-//
-        case Working:
-#ifndef SKIP_PC_CONNECTING
-        if ((_pConfig->getRestorePCConnectionFlagState()) && (_PCLinkFault))
-        {
-            emit message("UMUDEVICE::engine(): PC LAN reconnection !");
-            _dtLan->closeConnection(_PCConnection_id);
-            setState(PCConnecting);
-        }
-#endif
-        break;
-
-        case Finishing:
-        break;
-
-        default:
-            DEFCORE_ASSERT(0);
     }
+        else {
+            if ((_pConfig->getRestorePCConnectionFlagState()) && (_PCLinkFault))
+            {
+                qWarning() << "PC LAN reconnection due to ping timeout";
+                _dtLan->closeConnection(_PCConnection_id);
+                _PCConnected = false;
+                _read_state = rsHead;
+            }
+        }
+#endif
     return !_endWorkFlag;
 }
 
-UMUDEVICE::eState UMUDEVICE::getState(void)
-{
-    return _state;
-}
-
-void UMUDEVICE::setState(UMUDEVICE::eState newState)
-{
-    _state = newState;
-}
-
-bool UMUDEVICE::isEndWork()
-{
-    return (_state == Finishing);
-}
 //
 bool UMUDEVICE::CDUTick()
 {
@@ -743,7 +707,7 @@ bool UMUDEVICE::umuTick()
 {
     ustsk(0);
     SLEEP(1);
-    return !isEndWork();
+    return !_endWorkFlag;
 }
 
 #ifdef _test_message_numeration_integrity
@@ -906,13 +870,11 @@ void UMUDEVICE::unPack(tLAN_PCMessage &buff)
                 case 1:
                 {
                     _movingDirection = Test::DirUpWard;
-                    qWarning() << "upWard";
                     break;
                 }
                 case -1:
                 {
                     _movingDirection = Test::DirDownWard;
-                    qWarning() << "downWard";
                     break;
                 }
             default:
@@ -1331,6 +1293,12 @@ void UMUDEVICE::save()
     _pConfig->save();
 }
 
+void UMUDEVICE::restartCDUConection()
+{
+    _restartCDUConnectionFlag = true;
+    qWarning() << "_restartCDUConnectionFlag = " << _restartCDUConnectionFlag;
+}
+
 void UMUDEVICE::onMessage(QString s) // слот на сигналы с текстовыми сообщениями от используемых классов
 {
     emit message(s);
@@ -1358,6 +1326,7 @@ void UMUDEVICE::messageHandler(QtMsgType type, const QMessageLogContext& context
             abort();
         break;
     }
+    emit messageHandlerSignal(txt);
     QFile outFile(_pConfig->getPathToObjectsFiles() + "/qtMessages.log");
     res = outFile.open(QIODevice::WriteOnly | QIODevice::Append);
     if (res)
