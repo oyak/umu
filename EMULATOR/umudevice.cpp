@@ -1296,7 +1296,6 @@ void UMUDEVICE::save()
 void UMUDEVICE::restartCDUConection()
 {
     _restartCDUConnectionFlag = true;
-    qWarning() << "_restartCDUConnectionFlag = " << _restartCDUConnectionFlag;
 }
 
 void UMUDEVICE::onMessage(QString s) // слот на сигналы с текстовыми сообщениями от используемых классов
