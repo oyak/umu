@@ -1044,6 +1044,12 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>300</width>
+             <height>50</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>30</pointsize>
@@ -1066,13 +1072,6 @@
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPlainTextEdit" name="plainTextEdit">
-           <property name="readOnly">
-            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -1105,7 +1104,7 @@
      <x>0</x>
      <y>0</y>
      <width>1462</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>

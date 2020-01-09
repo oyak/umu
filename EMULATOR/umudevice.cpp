@@ -1325,7 +1325,7 @@ void UMUDEVICE::messageHandler(QtMsgType type, const QMessageLogContext& context
             abort();
         break;
     }
-    emit messageHandlerSignal(txt);
+//    emit messageHandlerSignal(txt);
     QFile outFile(_pConfig->getPathToObjectsFiles() + "/qtMessages.log");
     res = outFile.open(QIODevice::WriteOnly | QIODevice::Append);
     if (res)

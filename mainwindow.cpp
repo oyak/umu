@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget* parent)
     pDevice = new UNITLIN(pConfig);
 #ifdef DEFCORE_DEBUG
     qInstallMessageHandler(&pDevice->messageHandler);
-    connect(pDevice, SIGNAL(messageHandlerSignal(QString)), this, SLOT(on_MessageHandler(QString)));
+//    connect(pDevice, SIGNAL(messageHandlerSignal(QString)), this, SLOT(on_MessageHandler(QString)));
 #endif
     //
     drawCDULocalIPAddress();
@@ -426,5 +426,5 @@ void MainWindow::on_startCduButton_released()
 
 void MainWindow::on_MessageHandler(QString s)
 {
-    ui->plainTextEdit->appendPlainText(s);
+//    ui->plainTextEdit->appendPlainText(s);
 }
