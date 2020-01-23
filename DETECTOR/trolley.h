@@ -31,6 +31,7 @@ public:
     static const unsigned int _timerPeriod;
     static const double _absDiscrepancyMaxOfCoord; // максимальное значение нев€зки по координате в мм
     static const double AbsMaxV; // модуль максимальной разрешенной скорости контрол€, мм/мс
+    static const double AbsMinimalCoordinateDifference;  // неразличима€ разница между двум€ координатами в формате double
 
     void changeMovingParameters(float targetSpeed, int coord, int coordL, int coordR, unsigned int time);
     void setCoordinate(int coord, int coordL, int coordR);
@@ -49,7 +50,7 @@ private:
 
     int _stepCoordinate;
     int _startStepCoordinate;
-    double _coordinate;
+    double _coordinate; // мм
     double _memCoordinate;
     double _memRotationDegree;
     double _rotationCoefficient; // рассчитываем в момент прихода данных от ѕ  (_targetRotationDegree - _rotationDegree) / (_targetCoordinate - _coordinate)

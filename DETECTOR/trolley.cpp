@@ -12,6 +12,7 @@ const double TROLLEY::step = 1.83;
 const unsigned int TROLLEY::_timerPeriod = 1;
 const double TROLLEY::_absDiscrepancyMaxOfCoord = 3.0; // максимальная невязка координаты
 const double TROLLEY::AbsMaxV = 1.389;
+const double TROLLEY::AbsMinimalCoordinateDifference = 0.1;
 
 TROLLEY::TROLLEY(cCriticalSection *cs): _currentV(0.0),
                                         _rotationDegree(0.0),
@@ -113,7 +114,7 @@ void TROLLEY::setTrolleyTargetRotation(double targetCoordL, double targetCoordR)
 {
     _targetRotationDegree = targetCoordL - targetCoordR;
 
-    if (_targetCoordinate != _coordinate)
+    if (fabs(_targetCoordinate) - fabs(_coordinate) > AbsMinimalCoordinateDifference)
     {
         _rotationCoefficient = (_targetRotationDegree - _rotationDegree) / (_targetCoordinate - _coordinate);
     }
@@ -281,12 +282,11 @@ unsigned int timeSpan;
                 break;
             }
     }
-
-    if (_coordinate != _lastCoordinate)
-    {
+//    if (fabs(_coordinate) - fabs(_lastCoordinate) > AbsMinimalCoordinateDifference)
+//    {
 //        qWarnin() << "Coordinate = " << _coordinate;
-        _lastCoordinate = _coordinate;
-    }
+//        _lastCoordinate = _coordinate;
+//    }
 
     _cs->Release();
 }
