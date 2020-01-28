@@ -5,7 +5,7 @@
 #include <QTimer>
 #include <QTime>
 #include <QVector>
-#include "CriticalSection_Lin.h"
+#include "CriticalSection.h"
 #include "test.h"
 
 #define queerStoppingTime 3 // при превышении времени останова более данной величины начинают выводиться лог сообщения об изменении текущей координаты

@@ -40,13 +40,21 @@ bool cSocketLanTcp::connect(const cConnectionParams* socket_params)
     remoute_port_num = params->_remoute_port_num;
     char* remoute_ip_address = params->_remoute_ip_address;
 
+#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+    *pSocket = _socketProc(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+#else
     *pSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+#endif
     if (*pSocket < 0) {
         return false;
     }
 
     int i = 1;  // ?
+#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+    int sockopt_res = _setsockoptProc(*pSocket, SOL_SOCKET, SO_REUSEADDR, (char*) &i, sizeof(i));
+#else
     int sockopt_res = setsockopt(*pSocket, SOL_SOCKET, SO_REUSEADDR, (char*) &i, sizeof(i));
+#endif
     if (sockopt_res < 0) {
         disconnect();
         return false;
@@ -57,41 +65,81 @@ bool cSocketLanTcp::connect(const cConnectionParams* socket_params)
 
     target.sin_family = AF_INET;
 
+#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+    target.sin_port = _htonsProc(local_port_num);
+#else
     target.sin_port = htons(local_port_num);
-
+#endif
     if (local_ip_address) {
+#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+        target.sin_addr.s_addr = _inet_addrProc(local_ip_address);
+#else
         target.sin_addr.s_addr = inet_addr(local_ip_address);
+#endif
     }
     else {
+#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+        target.sin_addr.s_addr = _htonlProc(INADDR_ANY);
+#else
         target.sin_addr.s_addr = htonl(INADDR_ANY);
+#endif
     }
 
     if (params->_transferDirection != cSocketLan::DirectionToRemoute) {
+#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+        if (_bindProc(*pSocket, reinterpret_cast<sockaddr*>(&target), sizeof(target)) < 0) {
+#else
         if (bind(*pSocket, reinterpret_cast<sockaddr*>(&target), sizeof(target)) < 0) {
+#endif
             disconnect();
             return false;
         }
     }
+#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+    target.sin_addr.s_addr = _inet_addrProc(remoute_ip_address);
+#else
     target.sin_addr.s_addr = inet_addr(remoute_ip_address);
+#endif
 
     if (!params->_server) {
+#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+        target.sin_port = _htonsProc(remoute_port_num);
+        int resl = _connectProc(_socket, reinterpret_cast<sockaddr*>(&target), sizeof(target));
+        if (resl < 0) {
+            disconnect();
+            return false;
+        }
+#else
         target.sin_port = htons(remoute_port_num);
-
-
         int resl = ::connect(_socket, reinterpret_cast<sockaddr*>(&target), sizeof(target));
         if (resl < 0) {
             disconnect();
             return false;
         }
+#endif
+
     }
     else {
-        unsigned int socketLen = sizeof(target);
+        int socketLen = sizeof(target);
+#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+        int resl = _listenProc(_serverSocket, SOMAXCONN);
+#else
         int resl = listen(_serverSocket, SOMAXCONN);
+#endif
         if (resl < 0) {
             disconnect();
             return false;
         }
+#ifdef DEFCORE_OS_WIN
+
+#if defined DEFCORE_CC_MINGW
+         _socket = _acceptProc(this->_socket, reinterpret_cast<sockaddr*>(&target), &socketLen);
+#else
+        _socket = accept(this->_socket, reinterpret_cast<sockaddr*>(&target), &socketLen);
+#endif
+#else
         _socket = accept(_serverSocket, reinterpret_cast<sockaddr*>(&target), reinterpret_cast<socklen_t*>(&socketLen));
+#endif
         if (_socket < 0) {
             disconnect();
             return false;
@@ -112,10 +160,15 @@ bool cSocketLanTcp::sendData(const unsigned char* msg, const int length)
 
     target.sin_family = AF_INET;
 
+#ifdef DEFCORE_CC_MINGW
+    target.sin_port = _htonsProc(0);
+    target.sin_addr.s_addr = _htonlProc(INADDR_ANY);
+    int i = _sendtoProc(_socket, reinterpret_cast<const char*>(msg), length, 0, (sockaddr*) &target, sizeof(target));
+#else
     target.sin_port = htons(0);
     target.sin_addr.s_addr = htonl(INADDR_ANY);
-
     int i = sendto(_socket, reinterpret_cast<const char*>(msg), length, 0, (sockaddr*) &target, sizeof(target));
+#endif
 
 #ifdef Dbg
     std::cout << "sended - " << msg << endl;
@@ -179,22 +232,41 @@ bool cSocketLanUdp::connect(const cConnectionParams* socket_params)
     memset(&target, 0, sizeof(sockaddr_in));
 
     target.sin_family = AF_INET;
+
+#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+    target.sin_port = _htonsProc(params->_local_port_num);
+    if (local_ip_address) {
+        target.sin_addr.s_addr = _inet_addrProc(local_ip_address);
+    }
+    else {
+
+        target.sin_addr.s_addr = _htonlProc(INADDR_ANY);
+    }
+    _socket = _socketProc(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if (_socket < 0) {
+        return false;
+    }
+    {
+        int i = 1;
+        int sockopt_res_1 = _setsockoptProc(_socket, SOL_SOCKET, SO_REUSEADDR, (char*) &i, sizeof(i));
+        if (sockopt_res_1 < 0) {
+            disconnect();
+            return false;
+        }
+    }
+#else
     target.sin_port = htons(params->_local_port_num);
-
-
     if (local_ip_address) {
         target.sin_addr.s_addr = inet_addr(local_ip_address);
     }
     else {
+
         target.sin_addr.s_addr = htonl(INADDR_ANY);
     }
-
-    //_socket = socket(AF_INET, SOCK_DGRAM, 0);
     _socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (_socket < 0) {
         return false;
     }
-
     {
         int i = 1;
         int sockopt_res_1 = setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, (char*) &i, sizeof(i));
@@ -203,11 +275,16 @@ bool cSocketLanUdp::connect(const cConnectionParams* socket_params)
             return false;
         }
     }
+#endif
 
 #ifdef DEFCORE_OS_WIN
     {
         int bufsize = 262144;  //Увеличиваем размер буффера под вход. сообщения
+#ifdef DEFCORE_CC_MINGW
+        int sockopt_res_2 = _setsockoptProc(_socket, SOL_SOCKET, SO_RCVBUF, (char*) &bufsize, sizeof(bufsize));
+#else
         int sockopt_res_2 = setsockopt(_socket, SOL_SOCKET, SO_RCVBUF, (char*) &bufsize, sizeof(bufsize));
+#endif
         if (sockopt_res_2 < 0) {
             disconnect();
             return false;
@@ -222,6 +299,24 @@ bool cSocketLanUdp::connect(const cConnectionParams* socket_params)
         return false;
     }
 
+#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+    if (params->_transferDirection != cSocketLan::DirectionToRemoute) {
+        int result = _bindProc(_socket, reinterpret_cast<sockaddr*>(&target), sizeof(target));
+        if (result < 0) {
+            disconnect();
+            return false;
+        }
+    }
+    target.sin_port = _htonsProc(remoute_port_num);
+    target.sin_addr.s_addr = _inet_addrProc(remoute_ip_address);
+
+    if (params->_transferDirection == cSocketLan::DirectionToRemoute) {
+        if (_connectProc(_socket, reinterpret_cast<sockaddr*>(&target), sizeof(target)) < 0) {
+            disconnect();
+            return false;
+        }
+    }
+#else
     if (params->_transferDirection != cSocketLan::DirectionToRemoute) {
         int result = bind(_socket, reinterpret_cast<sockaddr*>(&target), sizeof(target));
         if (result < 0) {
@@ -229,7 +324,6 @@ bool cSocketLanUdp::connect(const cConnectionParams* socket_params)
             return false;
         }
     }
-    // target.sin_port = 0;//htons(remoute_port_num);
     target.sin_port = htons(remoute_port_num);
     target.sin_addr.s_addr = inet_addr(remoute_ip_address);
 
@@ -239,26 +333,31 @@ bool cSocketLanUdp::connect(const cConnectionParams* socket_params)
             return false;
         }
     }
+#endif
     return true;
 }
 // +
 bool cSocketLanUdp::sendData(const unsigned char* msg, const int length)
 {
-    //    (void) msg;
-    //    (void) length;
+int errorCode = 0;
 
 #ifdef DEFCORE_OS_WIN
-    assert(false);
-    return false;
+    int len = sizeof(errorCode);
+#ifdef DEFCORE_CC_MINGW
+    int retval = _getsockoptProc(_socket, SOL_SOCKET, SO_ERROR, (char*)&errorCode, &len);
+    if (retval == 0 && errorCode == 0) {
+    if (_sendProc(_socket, (const char*)msg, length, 0) != SOCKET_ERROR) {
+        return true;
+    }
 #else
-    //    sockaddr_in target;
-    //    memset(&target, 0, sizeof(sockaddr_in));
-    //    target.sin_port = htons(
-    //    int i =  cSocketLan::cSocketLanParams._remoute_port_num
-
-    //    target.sin_addr.s_addr = inet_addr(cSocketLanParams._remoute_ip_address);
-
-    int errorCode = 0;
+    int retval = getsockopt(_socket, SOL_SOCKET, SO_ERROR, &errorCode, &len);
+    if (retval == 0 && errorCode == 0) {
+    if (send(_socket, (const char*)msg, length, 0) != SOCKET_ERROR) {
+        return true;
+    }
+#endif
+}
+#else
     socklen_t len = sizeof(errorCode);
     int retval = getsockopt(_socket, SOL_SOCKET, SO_ERROR, &errorCode, &len);
     if (retval == 0 && errorCode == 0) {
@@ -266,6 +365,6 @@ bool cSocketLanUdp::sendData(const unsigned char* msg, const int length)
             return true;
         }
     }
-    return false;
 #endif
+    return false;
 }

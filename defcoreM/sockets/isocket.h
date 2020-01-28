@@ -18,7 +18,13 @@
 #include <winsock2.h>
 //#include "C:/Program Files/Embarcadero/RAD Studio/7.0/include/winsock2.h"
 #include <tchar.h>
+
+#ifdef DEFCORE_CC_MINGW
+#define ioctl _ioctlsocketProc
+#else
 #define ioctl ioctlsocket
+#endif
+
 #endif
 
 // POSIX and GNU C headers
@@ -40,6 +46,25 @@
 #endif
 
 #include <cerrno>
+
+#if defined (DEFCORE_OS_WIN) && defined (DEFCORE_CC_MINGW)
+typedef int WSAAPI (*WSAStartupPtr)(WORD wVersionRequested,LPWSADATA lpWSAData);
+typedef int WSAAPI (*WSACleanupPtr)(void);
+typedef SOCKET WSAAPI (*acceptPtr)(SOCKET s,struct sockaddr *addr,int *addrlen);
+typedef int WSAAPI (*bindPtr)(SOCKET s,const struct sockaddr *name,int namelen);
+typedef int WSAAPI (*connectPtr)(SOCKET s,const struct sockaddr *name,int namelen);
+typedef int WSAAPI (*getsockoptPtr)(SOCKET s,int level,int optname,char *optval,int *optlen);
+typedef u_long WSAAPI (*htonlPtr)(u_long hostlong);
+typedef u_short WSAAPI (*htonsPtr)(u_short hostshort);
+typedef unsigned __LONG32 WSAAPI (*inet_addrPtr)(const char *cp);
+typedef int WSAAPI (*ioctlsocketPtr)(SOCKET s,__LONG32 cmd,u_long *argp);
+typedef int WSAAPI (*listenPtr)(SOCKET s,int backlog);
+typedef int WSAAPI (*recvPtr)(SOCKET s,char *buf,int len,int flags);
+typedef int WSAAPI (*sendPtr)(SOCKET s,const char *buf,int len,int flags);
+typedef int WSAAPI (*sendtoPtr)(SOCKET s,const char *buf,int len,int flags,const struct sockaddr *to,int tolen);
+typedef int WSAAPI (*setsockoptPtr)(SOCKET s,int level,int optname,const char *optval,int optlen);
+typedef SOCKET WSAAPI (*socketPtr)(int af,int type,int protocol);
+#endif
 
 class cISocket
 {
@@ -68,10 +93,8 @@ public:
 
     // Общие методы для всех реализаций сокетов
     cISocket();
-    virtual ~cISocket()
-    {
-        disconnect();
-    }
+    virtual ~cISocket();
+
     int getSocket() const
     {
         return _socket;
@@ -91,6 +114,30 @@ public:
     {
         _state = state;
     }
+
+#ifdef DEFCORE_CC_MINGW
+protected:
+    WSAStartupPtr _WSAStartupProc;
+    WSACleanupPtr _WSACleanupProc;
+    acceptPtr _acceptProc;
+    bindPtr _bindProc;
+    connectPtr _connectProc;
+    getsockoptPtr _getsockoptProc;
+    htonlPtr _htonlProc;
+    htonsPtr _htonsProc;
+    inet_addrPtr _inet_addrProc;
+    ioctlsocketPtr _ioctlsocketProc;
+    listenPtr _listenProc;
+    recvPtr _recvProc;
+    sendPtr _sendProc;
+    sendtoPtr _sendtoProc;
+    setsockoptPtr _setsockoptProc;
+    socketPtr _socketProc;
+
+private:
+    HMODULE _libraryH;
+#endif
+
 #endif
 };
 

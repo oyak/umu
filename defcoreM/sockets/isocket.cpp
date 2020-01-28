@@ -1,11 +1,70 @@
 ﻿#include "isocket.h"
-//#include "errno.h"
+#include "stdio.h"
+#include "assert.h"
+
+
+#if defined (DEFCORE_OS_WIN) && defined (DEFCORE_CC_MINGW)
+const char WINSOCKET_LIBRARY_PATH[] = {"C:/WINDOWS/system32/wsock32.dll"};
+#endif
 
 cISocket::cISocket() : _socket (-1),
                        _serverSocket (-1)
 {
 #ifdef DEFCORE_OS_WIN
     _state = false;
+
+#ifdef DEFCORE_CC_MINGW
+int strLen = strlen(WINSOCKET_LIBRARY_PATH);
+wchar_t libPath[strLen + 1];
+    mbstowcs(libPath, WINSOCKET_LIBRARY_PATH, strLen);
+    _libraryH = LoadLibrary(libPath);
+    if (_libraryH)
+    {
+        _WSAStartupProc = (WSAStartupPtr)GetProcAddress(_libraryH, "WSAStartup");
+        _WSACleanupProc = (WSACleanupPtr)GetProcAddress(_libraryH, "WSACleanup");
+        _acceptProc = (acceptPtr)GetProcAddress(_libraryH, "accept");
+        _bindProc = (bindPtr)GetProcAddress(_libraryH, "bind");
+        _connectProc = (connectPtr)GetProcAddress(_libraryH, "connect");
+        _getsockoptProc = (getsockoptPtr)GetProcAddress(_libraryH, "getsockopt");
+        _htonlProc = (htonlPtr)GetProcAddress(_libraryH, "htonl");
+        _htonsProc = (htonsPtr)GetProcAddress(_libraryH, "htons");
+        _inet_addrProc = (inet_addrPtr)GetProcAddress(_libraryH, "inet_addr");
+        _ioctlsocketProc = (ioctlsocketPtr)GetProcAddress(_libraryH, "ioctlsocket");
+        _listenProc = (listenPtr)GetProcAddress(_libraryH, "listen");
+        _recvProc = (recvPtr)GetProcAddress(_libraryH, "recv");
+        _sendtoProc = (sendtoPtr)GetProcAddress(_libraryH, "sendto");
+        _sendProc = (sendPtr)GetProcAddress(_libraryH, "send");
+        _setsockoptProc = (setsockoptPtr)GetProcAddress(_libraryH, "setsockopt");
+        _socketProc = (socketPtr)GetProcAddress(_libraryH, "socket");
+
+        if (!_WSAStartupProc || \
+            !_WSACleanupProc || \
+            !_acceptProc || \
+            !_bindProc || \
+            !_connectProc || \
+            !_getsockoptProc || \
+            !_htonlProc || \
+            !_htonsProc || \
+            !_inet_addrProc || \
+            !_ioctlsocketProc || \
+            !_listenProc || \
+            !_recvProc || \
+            !_sendtoProc || \
+            !_sendProc || \
+            !_setsockoptProc || \
+            !_socketProc){
+            assert(false);
+        }
+    }
+#endif
+#endif
+}
+
+cISocket::~cISocket()
+{
+    disconnect();
+#if defined (DEFCORE_OS_WIN) && defined (DEFCORE_CC_MINGW)
+    if (_libraryH) FreeLibrary(_libraryH);
 #endif
 }
 
@@ -21,24 +80,31 @@ bool cISocket::connect(const cConnectionParams *socket_params)
         return false;
     }
 
-/*
 #if defined(DEFCORE_OS_WIN)
     WSADATA wsadata;
 
     _state = false;
 
+#ifdef DEFCORE_CC_MINGW
+    int error = _WSAStartupProc(0x0202, &wsadata);
+#else
     int error = WSAStartup(0x0202, &wsadata);
+#endif
 
     if (error)
         return false;
 
     if (wsadata.wVersion != 0x0202)
     {
+#ifdef DEFCORE_CC_MINGW
+        _WSACleanupProc();
+#else
         WSACleanup();
+#endif
         return false;
     }
 #endif
-*/
+
 
     return true;
 }
@@ -57,12 +123,15 @@ void cISocket::disconnect()
         _socket = -1;
     }
 
-    /*
 #ifdef DEFCORE_OS_WIN
+#ifdef DEFCORE_CC_MINGW
+    _WSACleanupProc();
+#else
     WSACleanup();
+#endif
     _state = false;
 #endif
-*/
+
 }
 
 int cISocket::reciveData(unsigned char *msg, const int length)
@@ -75,7 +144,11 @@ int cISocket::reciveData(unsigned char *msg, const int length)
     int read_res = -1;
 
 #ifdef DEFCORE_OS_WIN
+#if defined (DEFCORE_CC_MINGW)
+    read_res = _recvProc(_socket, reinterpret_cast<char*>(msg), length, 0);
+#else
     read_res = recv(_socket, reinterpret_cast<char*>(msg), length, 0);
+#endif
     if (read_res == SOCKET_ERROR)  read_res = 0; //FDV
 
 #else

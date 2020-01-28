@@ -171,12 +171,20 @@ void vSemaphoreCreateBinary(xSemaphoreHandle& pHandle)
 
 void TakeSemaphore(xSemaphoreHandle x)
 {
+#ifdef DEFCORE_OS_WIN
+    UMUDEVICE::_parentClass->criticalSectionEnter(reinterpret_cast <class cCriticalSection_Win*>(x));
+#else
     UMUDEVICE::_parentClass->criticalSectionEnter(reinterpret_cast <class cCriticalSection_Lin*>(x));
+#endif
 }
 
 void xSemaphoreGive(xSemaphoreHandle x)
 {
+#ifdef DEFCORE_OS_WIN
+    UMUDEVICE::_parentClass->criticalSectionRelease(reinterpret_cast <class cCriticalSection_Win*>(x));
+#else
     UMUDEVICE::_parentClass->criticalSectionRelease(reinterpret_cast <class cCriticalSection_Lin*>(x));
+#endif
 }
 
 void vTaskDelay(unsigned int value)
@@ -493,6 +501,7 @@ bool UMUDEVICE::engine(void)
 {
     SLEEP(1);
 #ifndef SKIP_CDU_CONNECTING
+    qWarning() << "CDU connecting...";
    if (_CDUConnected == false)
    {
        if (_dtLan->openConnection(_CDUConnection_id) == 0)
@@ -1325,7 +1334,7 @@ void UMUDEVICE::messageHandler(QtMsgType type, const QMessageLogContext& context
             abort();
         break;
     }
-//    emit messageHandlerSignal(txt);
+    emit messageHandlerSignal(txt);
     QFile outFile(_pConfig->getPathToObjectsFiles() + "/qtMessages.log");
     res = outFile.open(QIODevice::WriteOnly | QIODevice::Append);
     if (res)

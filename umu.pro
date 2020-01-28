@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     EMULATOR/ascanpulse.cpp \
     EMULATOR/pldemu.cpp \
     EMULATOR/umudevice.cpp \
-    EMULATOR/unitlin.cpp \
+#    EMULATOR/unitlin.cpp \
+    EMULATOR/unitwin.cpp \
     DETECTOR/emulator.cpp \
     DETECTOR/objectlib.cpp \
     DETECTOR/pathmodel.cpp \
@@ -30,7 +31,8 @@ SOURCES += main.cpp\
     DETECTOR/signalsdata.cpp \
     DETECTOR/test.cpp \
     DETECTOR/trolley.cpp \
-    DETECTOR/trolleylin.cpp \
+#    DETECTOR/trolleylin.cpp \
+    DETECTOR/trolleywin.cpp \
     UMU3204/MAIN/MISC133.C \
     UMU3204/MAIN/MISC46.C \
     UMU3204/US/_umuvar32.cpp \
@@ -41,9 +43,12 @@ SOURCES += main.cpp\
     defcoreM/datatransfers/idatatransfer.cpp \
     defcoreM/sockets/isocket.cpp \
     defcoreM/sockets/socket_lan.cpp \
-    defcoreM/CriticalSection_Lin.cpp \
-    defcoreM/ThreadClassList_Lin.cpp \
-    defcoreM/LinThread.cpp \
+#    defcoreM/CriticalSection_Lin.cpp \
+    defcoreM/CriticalSection_Win.cpp \
+#    defcoreM/ThreadClassList_Lin.cpp \
+    defcoreM/ThreadClassList_Win.cpp \
+#    defcoreM/LinThread.cpp \
+    defcoreM/WinThread.cpp \
     defcoreM/platforms.cpp \
     defcoreM/TickCount.cpp \
     DETECTOR/objectstor.cpp \
@@ -61,7 +66,8 @@ HEADERS  += mainwindow.h \
     EMULATOR/ascanpulse.h \
     EMULATOR/pldemu.h \
     EMULATOR/umudevice.h \
-    EMULATOR/unitlin.h \
+#    EMULATOR/unitlin.h \
+    EMULATOR/unitwin.h \
     DETECTOR/emulator.h \
     DETECTOR/objectlib.h \
     DETECTOR/pathmodel.h \
@@ -69,7 +75,8 @@ HEADERS  += mainwindow.h \
     DETECTOR/signalsdata.h \
     DETECTOR/test.h \
     DETECTOR/trolley.h \
-    DETECTOR/trolleylin.h \
+#    DETECTOR/trolleylin.h \
+    DETECTOR/trolleywin.h \
     UMU3204/ETHER/IPOPT43.H \
     UMU3204/MAIN/MISC133.H \
     UMU3204/MAIN/MISC46_2.H \
@@ -78,9 +85,12 @@ HEADERS  += mainwindow.h \
     defcoreM/datatransfers/idatatransfer.h \
     defcoreM/sockets/isocket.h \
     defcoreM/sockets/socket_lan.h \
-    defcoreM/CriticalSection_Lin.h \
-    defcoreM/ThreadClassList_Lin.h \
-    defcoreM/LinThread.h \
+#    defcoreM/CriticalSection_Lin.h \
+    defcoreM/CriticalSection_Win.h \
+#    defcoreM/ThreadClassList_Lin.h \
+    defcoreM/ThreadClassList_Win.h \
+#    defcoreM/LinThread.h \
+    defcoreM/WinThread.h \
     defcoreM/platforms.h \
     defcoreM/TickCount.h \
     DETECTOR/objectstor.h \
@@ -103,8 +113,7 @@ INCLUDEPATH += UMU3204/MAIN \
                defcoreM/datatransfers \
                defcoreM/sockets \
                defcoreM \
-               defcoreM/datacontainer
-
+               defcoreM/datacontainer \
 
 
 
