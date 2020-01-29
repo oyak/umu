@@ -950,11 +950,10 @@ void scanerImitProc(void)
    imitScanerLCycleProc();
 
 }
+tDPCOORDMESSAGEEX DPMessage;
 //-------------------------------------------------------------------
 void sendDPData(unsigned char sensorNum, unsigned char sensorData)
 {
-tDPCOORDMESSAGEEX DPMessage;
-
     if ((fDPCoordDataExtended != 0) && (sensorNum == mainShiftSensorNumber) )
     {
         fillDPMessageHdr((void*)&DPMessage, TRUE);
@@ -1026,6 +1025,7 @@ unsigned char getShiftSensorValue(UCHAR number)
         }
 }
 
+tSPEEDMESSAGE speedMessage;
 //-------------------------------------------------------------------
 void ustskBody(void)
 {
@@ -1057,8 +1057,6 @@ void ustskBody(void)
         tDiff = get_tickdur(speedTimer);
         if (tDiff >= speedCalcPeriod)
         {
-        tSPEEDMESSAGE speedMessage;
-
 #ifndef FAKE_V_CALCULATION
         if ((mainShiftSensorNumber & IMITATORMASK) == 0)
         { // скорость считается по основному ДП, но не имитатору
