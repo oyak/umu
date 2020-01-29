@@ -133,9 +133,9 @@ bool cSocketLanTcp::connect(const cConnectionParams* socket_params)
 #ifdef DEFCORE_OS_WIN
 
 #if defined DEFCORE_CC_MINGW
-         _socket = _acceptProc(this->_socket, reinterpret_cast<sockaddr*>(&target), &socketLen);
+         _socket = _acceptProc(_serverSocket, reinterpret_cast<sockaddr*>(&target), &socketLen);
 #else
-        _socket = accept(this->_socket, reinterpret_cast<sockaddr*>(&target), &socketLen);
+        _socket = accept(_serverSocket, reinterpret_cast<sockaddr*>(&target), &socketLen);
 #endif
 #else
         _socket = accept(_serverSocket, reinterpret_cast<sockaddr*>(&target), reinterpret_cast<socklen_t*>(&socketLen));
