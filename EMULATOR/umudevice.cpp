@@ -22,13 +22,13 @@
 
 class UMUDEVICE* UMUDEVICE::deviceObjectPtr;
 
-#ifdef DEFCORE_OS_WIN
-     class UNITWIN* UMUDEVICE::_parentClass;
-     class cCriticalSection_Win* UMUDEVICE::_critical_sectionPtr;
-#else
+//#ifdef DEFCORE_OS_WIN
+//     class UNITWIN* UMUDEVICE::_parentClass;
+//     class cCriticalSection_Win* UMUDEVICE::_critical_sectionPtr;
+//#else
      class UNITLIN* UMUDEVICE::_parentClass;
      class cCriticalSection_Lin* UMUDEVICE::_critical_sectionPtr;
-#endif
+//#endif
 
 std::queue<tLAN_CDUMessage> *UMUDEVICE::_out_bufferPtr;
 
@@ -171,20 +171,20 @@ void vSemaphoreCreateBinary(xSemaphoreHandle& pHandle)
 
 void TakeSemaphore(xSemaphoreHandle x)
 {
-#ifdef DEFCORE_OS_WIN
-    UMUDEVICE::_parentClass->criticalSectionEnter(reinterpret_cast <class cCriticalSection_Win*>(x));
-#else
+//#ifdef DEFCORE_OS_WIN
+//    UMUDEVICE::_parentClass->criticalSectionEnter(reinterpret_cast <class cCriticalSection_Win*>(x));
+//#else
     UMUDEVICE::_parentClass->criticalSectionEnter(reinterpret_cast <class cCriticalSection_Lin*>(x));
-#endif
+//#endif
 }
 
 void xSemaphoreGive(xSemaphoreHandle x)
 {
-#ifdef DEFCORE_OS_WIN
-    UMUDEVICE::_parentClass->criticalSectionRelease(reinterpret_cast <class cCriticalSection_Win*>(x));
-#else
+//#ifdef DEFCORE_OS_WIN
+//    UMUDEVICE::_parentClass->criticalSectionRelease(reinterpret_cast <class cCriticalSection_Win*>(x));
+//#else
     UMUDEVICE::_parentClass->criticalSectionRelease(reinterpret_cast <class cCriticalSection_Lin*>(x));
-#endif
+//#endif
 }
 
 void vTaskDelay(unsigned int value)
@@ -203,7 +203,8 @@ void putmsg(UCHAR *srcbuf, USHORT size, vfuncpv userproc)
 {
     UMUDEVICE::_critical_sectionPtr->Enter();
     if (userproc) userproc((void*)srcbuf);
-    AddToOutBuffNoSync(reinterpret_cast<tLAN_CDUMessage*>(srcbuf));
+//    AddToOutBuffNoSync(reinterpret_cast<tLAN_CDUMessage*>(srcbuf));
+    UMUDEVICE::deviceObjectPtr->NonSyncAddToOutBuffer(reinterpret_cast<tLAN_CDUMessage*>(srcbuf));
     UMUDEVICE::_critical_sectionPtr->Release();
 }
 
@@ -247,11 +248,10 @@ unsigned char *srcPtr; \
     for (unsigned int ii=0; ii < sizeof(header); ++ii) \
     { \
         *destPtr++ = *srcPtr++; \
-     }\
-    AddToOutBuffNoSync(&UMUDEVICE::_BScanMessage); \
+    }\
+    UMUDEVICE::deviceObjectPtr->NonSyncAddToOutBuffer(&UMUDEVICE::_BScanMessage);\
     UMUDEVICE::_critical_sectionPtr->Release(); \
 }
-//
 
 unsigned short Rd_RegPLD(unsigned int regAddr)
 {
@@ -322,21 +322,21 @@ cCriticalSection *pCS2;
 
     _movingDirection = Test::DirNotDefined;
     qsrand(getCurrentTime());
-#ifdef DEFCORE_OS_WIN
-     _pTrolley = new TROLLEY(reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection());
+//#ifdef DEFCORE_OS_WIN
+//     _pTrolley = new TROLLEY(reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection());
 
-#else
+//#else
      _pTrolley = new TROLLEY(reinterpret_cast<UNITLIN*>(parentClass)->createCriticalSection());
-#endif
+//#endif
 
 
-#ifdef DEFCORE_OS_WIN
-     pCS1 = reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection();
-     pCS2 = reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection();
-#else
+//#ifdef DEFCORE_OS_WIN
+//     pCS1 = reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection();
+//     pCS2 = reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection();
+//#else
      pCS1 = reinterpret_cast<UNITLIN*>(parentClass)->createCriticalSection();
      pCS2 = reinterpret_cast<UNITLIN*>(parentClass)->createCriticalSection();
-#endif
+//#endif
     _pEmulator = new EMULATOR(pCS1, pCS2, TROLLEY::step, _pConfig->getPathToObjectsFiles());
     _pEmulator->getChannelList(_channelList);
     connect(_pEmulator, SIGNAL(message(QString)), this, SLOT(onMessage(QString)));
@@ -344,29 +344,32 @@ cCriticalSection *pCS2;
       moveLargeBScanInit
 //
      _thlist = ThreadClassList;
-#ifdef DEFCORE_OS_WIN
-     _parentClass = reinterpret_cast<UNITWIN*>(parentClass);
-     _critical_section[CDUoutBufferIndex] = reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection();
-     _critical_section[PCoutBufferIndex] = reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection();
-     _critical_sectionPtr = reinterpret_cast<cCriticalSection_Win*>(_critical_section[CDUoutBufferIndex]);
-#else
+
+//#ifdef DEFCORE_OS_WIN
+//     _parentClass = reinterpret_cast<UNITWIN*>(parentClass);
+//     _critical_section[CDUoutBufferIndex] = reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection();
+//     _critical_section[PCoutBufferIndex] = reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection();
+//     _critical_sectionPtr = reinterpret_cast<cCriticalSection_Win*>(_critical_section[CDUoutBufferIndex]);
+//#else
      _parentClass = reinterpret_cast<UNITLIN*>(parentClass);
      _critical_section[CDUoutBufferIndex] = reinterpret_cast<UNITLIN*>(parentClass)->createCriticalSection();
      _critical_section[PCoutBufferIndex] = reinterpret_cast<UNITLIN*>(parentClass)->createCriticalSection();
      _critical_sectionPtr = reinterpret_cast<cCriticalSection_Lin*>(_critical_section[CDUoutBufferIndex]);
-#endif
+//#endif
+
      _out_bufferPtr = &_CDU_out_buffer;
 
      _enablePLDInt = false;
      enablePLDIntPtr = &_enablePLDInt;
 
-#ifdef DEFCORE_OS_WIN
-     _pldl = new PLDEMULATOR(reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection());
-     _pldr = new PLDEMULATOR(reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection());
-#else
+//#ifdef DEFCORE_OS_WIN
+//     _pldl = new PLDEMULATOR(reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection());
+//     _pldr = new PLDEMULATOR(reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection());
+//#else
      _pldl = new PLDEMULATOR(reinterpret_cast<UNITLIN*>(parentClass)->createCriticalSection());
      _pldr = new PLDEMULATOR(reinterpret_cast<UNITLIN*>(parentClass)->createCriticalSection());
-#endif
+//#endif
+
      pldLPtr = _pldl;
      pldRPtr = _pldr;
 
@@ -437,12 +440,11 @@ cCriticalSection *pCS2;
     deviceObjectPtr = this;
     ush_init();
 
-#ifdef DEFCORE_OS_WIN
-     _pPingTimerCS = reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection();
-
-#else
+//#ifdef DEFCORE_OS_WIN
+//     _pPingTimerCS = reinterpret_cast<UNITWIN*>(parentClass)->createCriticalSection();
+//#else
      _pPingTimerCS = reinterpret_cast<UNITLIN*>(parentClass)->createCriticalSection();
-#endif
+//#endif
 
     _needToPing = false;
      connect(&_pingTimer, SIGNAL(timeout()), this, SLOT(_onPingTimer()));
@@ -471,6 +473,7 @@ cCriticalSection *pCS2;
 #endif
 
     _engineThreadIndex = _thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, engine));
+
     _UmuTickThreadIndex = 0;
     _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, CDUTick)));
     _thlist->Resume(_thlist->AddTick(DEFCORE_THREAD_FUNCTION(UMUDEVICE, this, PCTick)));
@@ -501,7 +504,6 @@ bool UMUDEVICE::engine(void)
 {
     SLEEP(1);
 #ifndef SKIP_CDU_CONNECTING
-    qWarning() << "CDU connecting...";
    if (_CDUConnected == false)
    {
        if (_dtLan->openConnection(_CDUConnection_id) == 0)
@@ -551,7 +553,7 @@ bool UMUDEVICE::engine(void)
 }
 
 //
-bool UMUDEVICE::CDUTick()
+bool UMUDEVICE::CDUTick(void)
 {
     CDUTickSend();
     if (_CDUConnected) this->TickCDUReceive();
@@ -559,7 +561,7 @@ bool UMUDEVICE::CDUTick()
     return !_endWorkFlag;
 }
 //
-bool UMUDEVICE::PCTick()
+bool UMUDEVICE::PCTick(void)
 {
     _pPingTimerCS->Enter();
     if ((_PCConnected) && (_needToPing))
@@ -1003,6 +1005,11 @@ void UMUDEVICE::AddToOutBuffSync(tLAN_PCMessage* _out_block)
 void UMUDEVICE::AddToOutBuffNoSync(tLAN_PCMessage* _out_block)
 {
     _PC_out_buffer.push(*_out_block);
+}
+
+void UMUDEVICE::NonSyncAddToOutBuffer(tLAN_CDUMessage* _out_block)
+{
+    _CDU_out_buffer.push(*_out_block);
 }
 
 void UMUDEVICE::_onPCLinkFaultTimer()

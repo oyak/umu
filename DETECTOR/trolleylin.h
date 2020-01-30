@@ -2,6 +2,7 @@
 #define TROLLEYLIN_H
 
 #include "trolley.h"
+#include "CriticalSection_Lin.h"
 
 class TROLLEY_LIN
 {

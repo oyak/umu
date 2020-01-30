@@ -19,15 +19,15 @@ MainWindow::MainWindow(QWidget* parent)
     ui->setupUi(this);
     pConfig = new CONFIG("");
 
-#ifdef DEFCORE_OS_WIN
-    pDevice = new UNITWIN(pConfig);
-#else
+//#ifdef DEFCORE_OS_WIN
+//    pDevice = new UNITWIN(pConfig);
+//#else
     pDevice = new UNITLIN(pConfig);
-#endif
+//#endif
 
 #ifdef DEFCORE_DEBUG
-    qInstallMessageHandler(&pDevice->messageHandler);
-    connect(pDevice, SIGNAL(messageHandlerSignal(QString)), this, SLOT(on_MessageHandler(QString)));
+//    qInstallMessageHandler(&pDevice->messageHandler);
+//    connect(pDevice, SIGNAL(messageHandlerSignal(QString)), this, SLOT(on_MessageHandler(QString)));
 #endif
     //
     drawCDULocalIPAddress();
@@ -425,8 +425,8 @@ void MainWindow::on_startCduButton_released()
 {
 #ifdef ANDROID
     QAndroidJniObject::callStaticMethod<void>("com/radioavionica/UmuEmulator/MyService", "startApplication", "(Landroid/content/Context;)V", QtAndroid::androidContext().object());
-#endif
     pDevice->restartCDUConection();
+#endif
 }
 
 void MainWindow::on_MessageHandler(QString s)

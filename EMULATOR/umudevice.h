@@ -9,11 +9,11 @@
 #include <QString>
 #include <QStringList>
 #include "platforms.h"
-#ifdef DEFCORE_OS_WIN
-#include "unitwin.h"
-#else
+//#ifdef DEFCORE_OS_WIN
+//#include "unitwin.h"
+//#else
 #include "unitlin.h"
-#endif
+//#endif
 
 #include "datatransfer_lan.h"
 #include "sockets/socket_lan.h"
@@ -312,13 +312,13 @@ class UMUDEVICE : public QObject
 public:
     static UMUDEVICE* deviceObjectPtr;
 
-#ifdef DEFCORE_OS_WIN
-    static class UNITWIN* _parentClass;
-    static class cCriticalSection_Win* _critical_sectionPtr;
-#else
+//#ifdef DEFCORE_OS_WIN
+//    static class UNITWIN* _parentClass;
+//    static class cCriticalSection_Win* _critical_sectionPtr;
+//#else
     static class UNITLIN* _parentClass;
     static class cCriticalSection_Lin* _critical_sectionPtr;
-#endif
+//#endif
     static std::queue<tLAN_CDUMessage>* _out_bufferPtr;  // указатель на буфер выгрузки данных для БУИ
     static tLAN_CDUMessage _BScanMessage;
     static unsigned int _BScanMessageCounter;
@@ -341,7 +341,7 @@ public:
 
     void stop();
 
-    bool engine();
+    bool engine(void);
 
     void writePLDRegister(eUMUSide side, unsigned int regAddress, unsigned char value);
     unsigned char readPLDRegister(eUMUSide side, unsigned int regAddress);
@@ -383,6 +383,7 @@ public:
     void save();
 
     void restartCDUConection();
+    void NonSyncAddToOutBuffer(tLAN_CDUMessage* _out_block);
 
 #ifdef _test_message_numeration_integrity
     void testMessageNumerationIntegrity(tLAN_CDUMessage* _out_block);
@@ -450,8 +451,8 @@ private:
     LOGFILE *_pLANPCMessageLogFile;
 
     void unload(eOutBufferIndex outBufferIndex);
-    bool CDUTick();
-    bool PCTick();
+    bool CDUTick(void);
+    bool PCTick(void);
     void CDUTickSend();
     void PCTickSend();
     void TickCDUReceive();
