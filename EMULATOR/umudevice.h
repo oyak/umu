@@ -9,11 +9,7 @@
 #include <QString>
 #include <QStringList>
 #include "platforms.h"
-//#ifdef DEFCORE_OS_WIN
-//#include "unitwin.h"
-//#else
 #include "unitlin.h"
-//#endif
 
 #include "datatransfer_lan.h"
 #include "sockets/socket_lan.h"
@@ -312,14 +308,9 @@ class UMUDEVICE : public QObject
 public:
     static UMUDEVICE* deviceObjectPtr;
 
-//#ifdef DEFCORE_OS_WIN
-//    static class UNITWIN* _parentClass;
-//    static class cCriticalSection_Win* _critical_sectionPtr;
-//#else
     static class UNITLIN* _parentClass;
     static class cCriticalSection_Lin* _critical_sectionPtr;
-//#endif
-    static std::queue<tLAN_CDUMessage>* _out_bufferPtr;  // указатель на буфер выгрузки данных для БУИ
+//    static std::queue<tLAN_CDUMessage>* _out_bufferPtr;  // указатель на буфер выгрузки данных для БУИ
     static tLAN_CDUMessage _BScanMessage;
     static unsigned int _BScanMessageCounter;
     static bool* enablePLDIntPtr;  // указатель на флаг "прерывания" от ПЛИС разрешены

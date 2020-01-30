@@ -18,17 +18,11 @@ MainWindow::MainWindow(QWidget* parent)
 
     ui->setupUi(this);
     pConfig = new CONFIG("");
-
-//#ifdef DEFCORE_OS_WIN
-//    pDevice = new UNITWIN(pConfig);
-//#else
     pDevice = new UNITLIN(pConfig);
-//#endif
 
-#ifdef DEFCORE_DEBUG
 //    qInstallMessageHandler(&pDevice->messageHandler);
 //    connect(pDevice, SIGNAL(messageHandlerSignal(QString)), this, SLOT(on_MessageHandler(QString)));
-#endif
+
     //
     drawCDULocalIPAddress();
     drawCDULocalPort();
@@ -86,9 +80,9 @@ MainWindow::MainWindow(QWidget* parent)
 MainWindow::~MainWindow()
 {
     pDevice->stop();
-#ifdef DEFCORE_DEBUG
-    disconnect(pDevice, SIGNAL(messageHandlerSignal(QString)), this, SLOT(on_MessageHandler(QString)));
-#endif
+
+//  disconnect(pDevice, SIGNAL(messageHandlerSignal(QString)), this, SLOT(on_MessageHandler(QString)));
+
     delete pDevice;
     delete pConfig;
     delete ui;

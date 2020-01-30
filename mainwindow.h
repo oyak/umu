@@ -1,15 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #include "platforms.h"
-
-//#ifdef DEFCORE_OS_WIN
-//#include "unitwin.h"
-//#else
 #include "unitlin.h"
-//#endif
-
 #include "config.h"
-
 #include <QMainWindow>
 
 namespace Ui
@@ -101,13 +94,7 @@ private slots:
     void on_MessageHandler(QString s);
 private:
     Ui::MainWindow* ui;
-
-//#ifdef DEFCORE_OS_WIN
-//    UNITWIN* pDevice;
-//#else
     UNITLIN* pDevice;
-//#endif
-
     CONFIG* pConfig;
 };
 
