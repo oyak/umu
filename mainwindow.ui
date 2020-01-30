@@ -885,6 +885,9 @@
                  <layout class="QVBoxLayout" name="verticalLayout_16">
                   <item>
                    <widget class="QLineEdit" name="lineEdit_27">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -1104,7 +1107,7 @@
      <x>0</x>
      <y>0</y>
      <width>1462</width>
-     <height>19</height>
+     <height>18</height>
     </rect>
    </property>
   </widget>
