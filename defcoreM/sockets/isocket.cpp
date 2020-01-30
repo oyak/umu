@@ -1,10 +1,11 @@
 ﻿#include "isocket.h"
 #include "stdio.h"
 #include "assert.h"
+#include <iostream>
 
 
 #if defined (DEFCORE_OS_WIN) && defined (DEFCORE_CC_MINGW)
-const char WINSOCKET_LIBRARY_PATH[] = {"C:/WINDOWS/system32/wsock32.dll"};
+const char WINSOCKET_LIBRARY_PATH[] = {"C:/WINDOWS/system32/wsock32.dll"}; // path for windows XP
 #endif
 
 cISocket::cISocket() : _socket (-1),
@@ -53,9 +54,14 @@ wchar_t libPath[strLen + 1];
             !_sendProc || \
             !_setsockoptProc || \
             !_socketProc){
+            std::cerr << "cISocket(): wsock32.dll functions not found"  << std::endl;
             assert(false);
         }
     }
+        else
+        {
+            std::cerr << "cISocket(): wsock32.dll not found"  << std::endl;
+        }
 #endif
 #endif
 }
