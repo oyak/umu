@@ -4,24 +4,25 @@
 #include "FreeRTOSConfig.h"
 
 #define BUM3204
-#define TWO_COLOR_LED // создать для МОИ версии 3 (БУМ с двуцветным светодиодом на боковой панели) - светодиоды включаются лог.1
+#define TWO_COLOR_LED
+// создать для МОИ версии 3 (БУМ с двуцветным светодиодом на боковой панели) - светодиоды включаются лог.1
 
-#define X  46
+#define XNumber 46
 #define asmblnum 3
 
 #ifndef _DEBUG
 
 #ifdef TWO_COLOR_LED
-#define Y  9
+#define YNumber  9
 #else
-#define Y  7
+#define YNumber  7
 #endif
 
 #else
-#define Y  134
+#define YNumber  134
 #endif
 
-#define Z  7
+#define ZNumber  7
 
 
 //define CONFIGURATION_PRINT      // гјўпҐЁ о  лЇ­п¬ј пІ®в¦­оЇ±иЎЄп®ґй¤іб·ЁиЎЏОЌ
@@ -33,9 +34,9 @@
 
 //--------------------------------------------------------------------------------------------------------	
 //
-#define D  asmblnum
+#define DNumber  asmblnum
 //
-#define version_number (( (X & 0xFF) << 24) | ( (Y & 0xFF) << 16) | ( (Z & 0xFF) << 8) | (D & 0xFF))
+#define version_number (( (XNumber & 0xFF) << 24) | ( (YNumber & 0xFF) << 16) | ( (ZNumber & 0xFF) << 8) | (DNumber & 0xFF))
 //
 #ifdef BUM3204
 #define RMII_BUM     // е¬ї В“М  RMII й®Іж±ґжЄ±п¬Ќ

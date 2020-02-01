@@ -2,7 +2,7 @@
 #include <QDebug>
 #include "pldemu.h"
 #include "math.h"
-#include "MISC46_2.H"
+#include "umudevice.h"
 
 PLDEMULATOR::PLDEMULATOR(cCriticalSection *cs):
                              _numOfTacts(1),
@@ -450,11 +450,11 @@ unsigned char byteMask;
 
     if (line == 0)
     {
-        byteMask = mask[(strobNumber & 0x03)];
+        byteMask = UMU::mask[(strobNumber & 0x03)];
     }
         else
         {
-            byteMask = mask[(strobNumber & 0x03) | 0x04];
+            byteMask = UMU::mask[(strobNumber & 0x03) | 0x04];
         }
 
     stage = 0;

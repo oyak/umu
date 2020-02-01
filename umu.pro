@@ -33,10 +33,6 @@ SOURCES += main.cpp\
     DETECTOR/trolleylin.cpp \
     UMU3204/MAIN/MISC133.C \
     UMU3204/MAIN/MISC46.C \
-    UMU3204/US/_umuvar32.cpp \
-    UMU3204/US/_us320444.cpp \
-    UMU3204/US/_us4619.cpp \
-    UMU3204/US/_us_32048.cpp \
     defcoreM/datatransfers/datatransfer_lan.cpp \
     defcoreM/datatransfers/idatatransfer.cpp \
     defcoreM/sockets/isocket.cpp \
