@@ -1,7 +1,7 @@
 #ifndef DEVICE_EMULATION
 #include "values.h"
 #else
-int xTaskGetTickCount(void);
+#include "umudevice.h"
 #endif
 
 // gets ammount of ticks passed till timestartick
@@ -9,7 +9,7 @@ int get_tickdur(int timestartick)
 {
 register int ii;
 
-   ii = xTaskGetTickCount() - timestartick;
+   ii = UMU::xTaskGetTickCount() - timestartick;
    return  (ii >= 0) ? ii:(0-ii);
 }
 //------------------------------------------------------------------------
