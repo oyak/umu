@@ -1050,6 +1050,23 @@ const unsigned char UMU::mask[8] = {1,2,4,8,16,32,64,128};
 const unsigned char UMU::mask2[8] = {0xFE,0xFD,0xFB,0xF7,0xEF,0xDF,0xBF,0x7F};
 
 
+UMU::UMU(UMUDEVICE* parent): _device(parent),
+                        flWasStopped(0),
+                        ascancounter(0),
+                        NumOfTacts(1),
+                        ascan({0, 0, 0, 0}),
+                        curchan({0, 0, 0, 0}),
+                        ascanstart({0, 0, 0, 0}),
+                        ascanscale({0, 0, 0, 0}),
+                        ascanregim({0, 0, 0, 0}),
+                        ascanstrobformax({0, 0, 0, 0}),
+                        EnableASD(0),
+                        EnableBScan(0),
+                        fMScan(0),
+                        messageNumber(0),
+                        fIsTrolleyDP(true)
+{};
+
 // эмуляция параметров настройки БУМа, извлекаемых из файла PARAMS.INI
 
 void UMU::dbgPrintOfMessage(tLAN_CDUMessage* _out_block)
@@ -3053,7 +3070,6 @@ void UMU::scanerSwitch(UCHAR *p)
 tres UMU::parcer(UCHAR* pmsg,USHORT dataLength)
 {
 tres res;
-
      switch ( ReadLE32U(pmsg) & 0xFFFF00FF)
      {
         case Gc(idNtact,szNtact):
@@ -3196,9 +3212,9 @@ tres res;
 }
 //--------------------------------------------------------------------
 //
-unsigned char UMU::lanmsgparcer(UCHAR* buf, USHORT lng)
+tres UMU::lanmsgparcer(UCHAR* buf, USHORT lng)
 {
-register int res = 0;
+tres res = 0;
 register int l;
 register UCHAR *p = buf;
 register unsigned char receiveStartOffset;

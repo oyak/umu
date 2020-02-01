@@ -28,7 +28,7 @@
 #include "ustyp468.h"
 
 //define SKIP_CDU_CONNECTING
-#define SKIP_PC_CONNECTING
+//define SKIP_PC_CONNECTING
 
 //define PATH_MAP_LOGFILE_ON // включить запись лога по карте пути
 //define TESTING_PATH_MAP_ON // включить проверку допустимых зазоров между объектами пути
@@ -549,19 +549,14 @@ public:
     static const unsigned char mask2[8];
     static int xTaskGetTickCount(void);
 
-    UMU(UMUDEVICE* parent): _device(parent),
-                            flWasStopped(0),
-                            ascancounter(0)
-//                            mask({1,2,4,8,16,32,64,128}),
-//                            mask2({0xFE,0xFD,0xFB,0xF7,0xEF,0xDF,0xBF,0x7F})
-    {};
-    ~UMU();
+    UMU(UMUDEVICE* parent);
+    ~UMU(){};
 
     void PLDInterruptEmulation();
     void ustsk(void *ppar);
     void moveLargeBScanInit();
     void ush_init(void);
-    unsigned char lanmsgparcer(UCHAR* buf, USHORT lng);
+    tres lanmsgparcer(UCHAR* buf, USHORT lng);
     void dbgPrintOfMessage(tLAN_CDUMessage* _out_block);
 
 private:
@@ -798,7 +793,7 @@ private:
     void KSwitch(UCHAR fScanerOn);
     void scanerSwitch(UCHAR *p);
 //
-    int parcer(UCHAR* pmsg,USHORT dataLength);
+    tres parcer(UCHAR* pmsg,USHORT dataLength);
     void varsinit(void);
     void BUMctrlproc(UCHAR *ptr);
     void ASD_On(void);
