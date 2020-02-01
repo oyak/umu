@@ -177,6 +177,11 @@ void PLDEMULATOR::redefineSignalAmplitudes(unsigned int line)
         {
            correctedAmplitudeInDB = _BScanBuffer[line][tact][s].Reserved2 + getATTValueChange(tact, line, _BScanBuffer[line][tact][s].MaximumDelay);
            _BScanBuffer[line][tact][s].MaximumAmpl = DBToAmplitude(correctedAmplitudeInDB);
+//
+           if ((line == _AScanLine) && (tact == _AScanTact))
+           {
+               qWarning() << "signal" << s << "line" << line << "tact" << tact << "corrected to" << correctedAmplitudeInDB << "dB";
+           }
         }
     }
 }
