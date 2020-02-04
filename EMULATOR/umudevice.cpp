@@ -143,9 +143,12 @@ cCriticalSection *pCS2;
 UMUDEVICE::~UMUDEVICE()
 {
     deviceObjectPtr = nullptr;
+    delete _pTrolley;
     delete _pldl;
     delete _pldr;
-    delete _pTrolley;
+    delete _pEmulator;
+    delete _umu;
+    delete _dtLan;
     if (_pPathMapLogFile != 0) delete _pPathMapLogFile;
     if (_pLANPCMessageLogFile != 0) delete _pLANPCMessageLogFile;
 }
