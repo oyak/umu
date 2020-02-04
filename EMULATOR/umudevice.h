@@ -550,13 +550,13 @@ public:
     static int xTaskGetTickCount(void);
 
     UMU(UMUDEVICE* parent);
-    ~UMU(){};
+    ~UMU(){}
 
     void PLDInterruptEmulation();
     void ustsk(void *ppar);
     void moveLargeBScanInit();
     void ush_init(void);
-    tres lanmsgparcer(UCHAR* buf, USHORT lng);
+    unsigned char lanmsgparcer(UCHAR* buf, USHORT lng);
     void dbgPrintOfMessage(tLAN_CDUMessage* _out_block);
 
 private:
@@ -699,8 +699,8 @@ private:
     unsigned short readFromRAM(unsigned short address);
     unsigned short get_devicenumber(void){ return 1;}
 
-    void intdisf(){};
-    void intenf(){};
+    void intdisf(){}
+    void intenf(){}
     void whenStartPLD();
     void attachMessageNumber(void* par)
     {
@@ -749,19 +749,19 @@ private:
     }
     void restartAScan(void)
     {
-    register unsigned char i;
+        unsigned char i;
         for (i = 0; i < 4; ++i)
         {
           if (ascan[i] > 1) ascan[i] = 1;
         }
     }
-    void printTactParams(unsigned char tact){};
+    void printTactParams(unsigned char tact){Q_UNUSED(tact);}
 
     void read_ascan(UCHAR line);
     void Get_Uakk(void);
-    void PLDEn(void){};
-    void PDLDis(void){};
-    void ReloadBUM(void){};
+    void PLDEn(void){}
+    void PDLDis(void){}
+    void ReloadBUM(void){}
     void SetNumOfTacts(UCHAR *ptr);
     BOOL isAScanStopped(BOOL fUnlocked);
     void StopAScan(void);

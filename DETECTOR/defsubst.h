@@ -7,10 +7,6 @@
 
 #define TimeToTick(time) time
 
-#define __irq
-#define __arm
-
-#define __no_init
 #define TBD
 #define PARAM_UNDEFINED
 
@@ -55,7 +51,7 @@ typedef unsigned short USHORT;
 #define minImitDPIncTime 20   // минимальное значение imitDPIncTime[] в м—
 
 #define Set_CSPLD
-#define Reset_CSPLD;
+#define Reset_CSPLD
 
 #define RESET_INT_PLD
 

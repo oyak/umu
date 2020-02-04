@@ -3215,12 +3215,12 @@ tres res;
 }
 //--------------------------------------------------------------------
 //
-tres UMU::lanmsgparcer(UCHAR* buf, USHORT lng)
+unsigned char UMU::lanmsgparcer(UCHAR* buf, USHORT lng)
 {
 tres res = 0;
-register int l;
-register UCHAR *p = buf;
-register unsigned char receiveStartOffset;
+int l;
+UCHAR *p = buf;
+unsigned char receiveStartOffset;
 //
   l = lng;
   while (l > hdrsize)
