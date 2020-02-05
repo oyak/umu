@@ -1,10 +1,15 @@
 #include "mainwindow.h"
 #include <QApplication>
-//#include "devlin.h"
 
 int main(int argc, char* argv[])
 {
-    // DEVLin device;
+#ifdef DEFCORE_OS_WIN
+//    QStringList paths = QCoreApplication::libraryPaths();
+//    paths.append(".");
+//    paths.append("platforms");
+//    QCoreApplication::setLibraryPaths(paths);
+#endif
+
 #ifdef ANDROID
     QApplication::setStyle("fusion");
     QApplication::setEffectEnabled(Qt::UI_AnimateMenu, false);
@@ -22,9 +27,6 @@ int main(int argc, char* argv[])
 #else
     w.show();
 #endif
-
-    //    QApplication::connect(&a, SIGNAL(aboutToQuit()), &device, SLOT(onFinishing()));
-    //    device.start();
 
     return a.exec();
 }
