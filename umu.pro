@@ -32,8 +32,8 @@ SOURCES += main.cpp\
     DETECTOR/test.cpp \
     DETECTOR/trolley.cpp \
     DETECTOR/trolleylin.cpp \
-    UMU3204/MAIN/MISC133.C \
-    UMU3204/MAIN/MISC46.C \
+    UMU3204/MAIN/MISC133.CPP \
+    UMU3204/MAIN/MISC46.CPP \
     defcoreM/datatransfers/datatransfer_lan.cpp \
     defcoreM/datatransfers/idatatransfer.cpp \
     defcoreM/sockets/isocket.cpp \
