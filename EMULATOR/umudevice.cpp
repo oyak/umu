@@ -1057,18 +1057,22 @@ UMU::UMU(UMUDEVICE* parent): _device(parent),
                         flWasStopped(0),
                         ascancounter(0),
                         NumOfTacts(1),
-                        ascan({0, 0, 0, 0}),
-                        curchan({0, 0, 0, 0}),
-                        ascanstart({0, 0, 0, 0}),
-                        ascanscale({0, 0, 0, 0}),
-                        ascanregim({0, 0, 0, 0}),
-                        ascanstrobformax({0, 0, 0, 0}),
                         EnableASD(0),
                         EnableBScan(0),
                         fMScan(0),
                         messageNumber(0),
                         fIsTrolleyDP(true)
-{};
+{
+    for(int ii=0; ii<4; ++ii)
+    {
+        ascan[ii] = 0;
+        curchan[ii] = 0;
+        ascanstart[ii] = 0;
+        ascanscale[ii] = 0;
+        ascanregim[ii] = 0;
+        ascanstrobformax[ii] = 0;
+    }
+};
 
 // эмуляция параметров настройки БУМа, извлекаемых из файла PARAMS.INI
 
