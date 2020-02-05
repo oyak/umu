@@ -77,7 +77,6 @@ HEADERS  += mainwindow.h \
     defcoreM/CriticalSection_Lin.h \
     defcoreM/ThreadClassList_Lin.h \
     defcoreM/LinThread.h \
-    defcoreM/WinThread.h \
     defcoreM/platforms.h \
     defcoreM/TickCount.h \
     DETECTOR/objectstor.h \
