@@ -25,7 +25,6 @@
 #include "pconst.h"
 #include "defsubst.h"
 #include "MISC46_2.H"
-#include "ustyp468.h"
 
 //define SKIP_CDU_CONNECTING
 //define SKIP_PC_CONNECTING

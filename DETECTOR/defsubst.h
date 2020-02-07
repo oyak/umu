@@ -1,6 +1,8 @@
 #ifndef DEFSUBST_H
 #define DEFSUBST_H
 
+#include "ustyp468.h"
+
 #ifndef pconsth46
 //#error file pconst.h must be included before this one
 #endif
@@ -19,8 +21,6 @@ typedef class cCriticalSection* xSemaphoreHandle;
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
-typedef unsigned char UCHAR;
-typedef unsigned short USHORT;
 
 #define idBUM 4
 // fields offset() respectively start of message's body

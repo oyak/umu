@@ -5,10 +5,9 @@
 #include <QObject>
 #include <assert.h>
 #include "CriticalSection.h"
-#include "ustyp468.h"
 #include "ascanpulse.h"
+#include "defsubst.h"
 
-extern const UCHAR mask[8];
 
 const unsigned int PLDVerId = 0x02000408; // версия эмулируемой прошивки ПЛИС - 2.0.4.8
 
