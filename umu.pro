@@ -15,8 +15,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = UmuEmulator
 TEMPLATE = app
-CONFIG += c++11
-
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -32,8 +30,8 @@ SOURCES += main.cpp\
     DETECTOR/test.cpp \
     DETECTOR/trolley.cpp \
     DETECTOR/trolleylin.cpp \
-    UMU3204/MAIN/MISC133.CPP \
-    UMU3204/MAIN/MISC46.CPP \
+    UMU3204/MAIN/misc133.cpp \
+    UMU3204/MAIN/misc46.cpp \
     defcoreM/datatransfers/datatransfer_lan.cpp \
     defcoreM/datatransfers/idatatransfer.cpp \
     defcoreM/sockets/isocket.cpp \
@@ -70,7 +68,6 @@ HEADERS  += mainwindow.h \
     UMU3204/ETHER/IPOPT43.H \
     UMU3204/MAIN/MISC133.H \
     UMU3204/MAIN/MISC46_2.H \
-    UMU3204/US/us465d.h \
     defcoreM/datatransfers/datatransfer_lan.h \
     defcoreM/datatransfers/idatatransfer.h \
     defcoreM/sockets/isocket.h \
