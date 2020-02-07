@@ -71,8 +71,8 @@ EMULATOR::EMULATOR(cCriticalSection* cs1, cCriticalSection* cs2, float pathStep,
 
 EMULATOR::~EMULATOR()
 {
-    disconnect(_pPathModel[usLeft], SIGNAL(messge(QString)), this, SLOT(onLeftSideMessage(QString)));
-    disconnect(_pPathModel[usRight], SIGNAL(messge(QString)), this, SLOT(onRightSideMessage(QString)));
+    disconnect(_pPathModel[usLeft], SIGNAL(message(QString)), this, SLOT(onLeftSideMessage(QString)));
+    disconnect(_pPathModel[usRight], SIGNAL(message(QString)), this, SLOT(onRightSideMessage(QString)));
     _channelList.clear();
     _config[usLeft].clear();
     _config[usRight].clear();
