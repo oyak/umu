@@ -51,7 +51,9 @@ cIDataTransfer::~cIDataTransfer()
             delete _connections_pull[i]._socket_server;
         }
         else {
+            if (_connections_pull[i]._socket_host != 0){
             delete _connections_pull[i]._socket_host;
+            }
         }
         _connections_pull[i]._socket_host = 0;
         _connections_pull[i]._socket_server = 0;

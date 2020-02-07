@@ -3,6 +3,23 @@
 #define OK 0
 #define ERR (-(__LINE__))
 
+cDataTransferLan::~cDataTransferLan()
+{
+    for (unsigned i = 0; i < _connections_pull.size(); ++i) {
+        closeConnection(i);
+
+        if (_connections_pull[i]._socket_1 != _connections_pull[i]._socket_2) {
+            delete _connections_pull[i]._socket_1;
+            delete _connections_pull[i]._socket_2;
+        }
+        else {
+            delete _connections_pull[i]._socket_1;
+        }
+        _connections_pull[i]._socket_1 = 0;
+        _connections_pull[i]._socket_2 = 0;
+    }
+}
+
 int cDataTransferLan::addConnection(const cISocket::cConnectionParams* const connection_params)
 {
     if (connection_params == NULL) {

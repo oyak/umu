@@ -34,9 +34,8 @@ public:
         };
     };
 
-    cDataTransferLan() {}
-    ~cDataTransferLan() {}
-
+    cDataTransferLan(){}
+    ~cDataTransferLan();
     virtual int addConnection(const cISocket::cConnectionParams* const connection_params);
     virtual int openConnection(const int connection_id);
     virtual bool closeConnection(const int connection_id);

@@ -34,6 +34,8 @@ protected:
         cConnection()
             : _socket_1(0)
             , _socket_2(0)
+            ,_socket_host(0)
+            ,_socket_server(0)
             , _parameters(0)
             , _recv_buffer(0)
             , _bytes_downloaded(0)
