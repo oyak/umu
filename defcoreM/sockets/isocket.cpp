@@ -5,7 +5,7 @@
 
 
 #if defined (DEFCORE_OS_WIN) && defined (DEFCORE_CC_MINGW)
-const char WINSOCKET_LIBRARY_PATH[] = {"C:/WINDOWS/system32/wsock32.dll"}; // path for windows XP
+const char WINSOCKET_LIBRARY_PATH[] = {"C:\\WINDOWS\\system32\\wsock32.dll"}; // path for windows XP
 #endif
 
 cISocket::cISocket() : _socket (-1),
@@ -15,10 +15,11 @@ cISocket::cISocket() : _socket (-1),
     _state = false;
 
 #ifdef DEFCORE_CC_MINGW
-int strLen = strlen(WINSOCKET_LIBRARY_PATH);
-wchar_t libPath[strLen + 1];
-    mbstowcs(libPath, WINSOCKET_LIBRARY_PATH, strLen);
-    _libraryH = LoadLibrary(libPath);
+//int strLen = strlen(WINSOCKET_LIBRARY_PATH);
+//wchar_t libPath[strLen + 1];
+//    mbstowcs(libPath, WINSOCKET_LIBRARY_PATH, strLen);
+    _libraryH = LoadLibraryA(WINSOCKET_LIBRARY_PATH);
+
     if (_libraryH)
     {
         _WSAStartupProc = (WSAStartupPtr)GetProcAddress(_libraryH, "WSAStartup");
@@ -55,12 +56,15 @@ wchar_t libPath[strLen + 1];
             !_setsockoptProc || \
             !_socketProc){
             std::cerr << "cISocket(): wsock32.dll functions not found"  << std::endl;
-            assert(false);
+            FreeLibrary(_libraryH);
+            _libraryH = 0;
+            exit(1);
         }
     }
         else
         {
             std::cerr << "cISocket(): wsock32.dll not found"  << std::endl;
+            exit(1);
         }
 #endif
 #endif
