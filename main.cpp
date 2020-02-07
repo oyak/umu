@@ -4,10 +4,10 @@
 int main(int argc, char* argv[])
 {
 #ifdef DEFCORE_OS_WIN
-//    QStringList paths = QCoreApplication::libraryPaths();
-//    paths.append(".");
-//    paths.append("platforms");
-//    QCoreApplication::setLibraryPaths(paths);
+    QStringList paths = QCoreApplication::libraryPaths();
+    paths.append(".");
+    paths.append("platforms");
+    QCoreApplication::setLibraryPaths(paths);
 #endif
 
 #ifdef ANDROID
