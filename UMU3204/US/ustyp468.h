@@ -4,7 +4,7 @@
 #define _ustyp468h
 
 
-#include "syshrdw.inc"
+//#include "syshrdw.inc"
 #include "mvnewa.h"
 #include "MSG32041.H"
 //
@@ -103,9 +103,6 @@ typedef tARRAYOFSUMS ACTHRARRAY[2][2][NumberOfReceivers]; // массивы сумм А-разв
 //
 #define  Aaddr1 (ramstart+(AScanStartAddr1<<9))
 #define  Aaddr2 (ramstart+(AScanStartAddr2<<9))
-//
-//
-#define BufferSize 4096 // increased *2 and USHORT instead of UCHAR
 //
 #define Lo(v) *(UCHAR*)&v
 #define Hi(v) *((UCHAR*)&v+1)
