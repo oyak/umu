@@ -1,9 +1,15 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QSystemSemaphore>
+#include <QSharedMemory>
+#include <iostream>
 
 int main(int argc, char* argv[])
 {
-#ifdef DEFCORE_OS_WIN
+QString semaphoreName("UMUSemaphore");
+QString memoryBlockName("UMUMemory");
+
+#ifdef Q_OS_WIN32
     QStringList paths = QCoreApplication::libraryPaths();
     paths.append(".");
     paths.append("platforms");
@@ -21,6 +27,33 @@ int main(int argc, char* argv[])
 #endif
 
     QApplication a(argc, argv);
+    QSystemSemaphore semaphore(semaphoreName, 1);
+    semaphore.acquire();
+
+#ifndef Q_OS_WIN32
+    // в linux разделяемая память не освобождается при аварийном завершении приложения,
+    QSharedMemory fixSharedMemory(memoryBlockName);
+    if(fixSharedMemory.attach()){
+        fixSharedMemory.detach();
+    }
+#endif
+
+    QSharedMemory sharedMemory(memoryBlockName);
+    bool isRunning;
+    if (sharedMemory.attach()){
+
+        isRunning = true;
+    }else{
+        sharedMemory.create(1);
+        isRunning = false;
+    }
+    semaphore.release();
+
+    if(isRunning){
+        std::cerr << "umuEmulator main(): there was an attempt to execute the 2-nd process. Aborted"  << std::endl;
+        return 1;
+    }
+
     MainWindow w;
 #ifdef ANDROID
     w.showFullScreen();
