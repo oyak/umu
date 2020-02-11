@@ -58,7 +58,7 @@ QString memoryBlockName("UMUMemory");
 #ifdef ANDROID
     w.showFullScreen();
 #else
-    w.show();
+    w.showMinimized();
 #endif
 
     return a.exec();
