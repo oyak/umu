@@ -72,8 +72,15 @@ MainWindow::MainWindow(QWidget* parent)
     pDevice->start();
     ui->startButtonwidget->show();
     ui->settingsWidget->hide();
-    setWindowTitle(APP_VERSION);
+    QString title("Эмулятор БУМ ");
+    title.append(APP_VERSION);
+    setWindowTitle(title);
+#ifdef ANDROID
+    ui->startCduButton->setText("Запуск БУИ");
     ui->label_12->setText(APP_VERSION);
+#else
+    ui->label_12->setText("");
+#endif
     QTimer::singleShot(1000, this, &MainWindow::on_startCduButton_released);
 }
 
@@ -310,7 +317,7 @@ void MainWindow::on_lineEdit_25_textChanged(const QString& arg1)
     if (!testPCRemotePort()) drawPCRemotePort();
 }
 
-// ���������� ���������� ���������� � �����
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
 void MainWindow::on_pushButton_2_released()
 {
     pDevice->save();

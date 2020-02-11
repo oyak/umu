@@ -1064,7 +1064,7 @@
             <enum>Qt::NoFocus</enum>
            </property>
            <property name="text">
-            <string>Запуск БУИ</string>
+            <string/>
            </property>
           </widget>
          </item>
@@ -1107,7 +1107,7 @@
      <x>0</x>
      <y>0</y>
      <width>1462</width>
-     <height>18</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>
