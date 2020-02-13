@@ -41,6 +41,9 @@ cCriticalSection *pCS2;
      _pldl = new PLDEMULATOR(createCriticalSection());
      _pldr = new PLDEMULATOR(createCriticalSection());
      _umu = new UMU(this);
+     _versionInfoTimer.setInterval(VERSIONINFO_TIMEOUT);
+     connect(_umu, SIGNAL(versionInfoReceived()), this, SLOT(onVersionInfoReceived()));
+     connect(&_versionInfoTimer, SIGNAL(timeout()), this, SLOT(onVersionInfoTimeout()));
      _umu->moveLargeBScanInit();
      _umu->ush_init();
 
@@ -147,6 +150,8 @@ UMUDEVICE::~UMUDEVICE()
     delete _pldl;
     delete _pldr;
     delete _pEmulator;
+    disconnect(_umu, SIGNAL(versionInfoReceived()), this, SLOT(onVersionInfoReceived()));
+    disconnect(&_versionInfoTimer, SIGNAL(timeout()), this, SLOT(onVersionInfoTimeout()));
     delete _umu;
     delete _dtLan;
     if (_pPathMapLogFile != 0) delete _pPathMapLogFile;
@@ -173,7 +178,9 @@ bool UMUDEVICE::engine(void)
        if (_dtLan->openConnection(_CDUConnection_id) == 0)
        {
            _restartCDUConnectionFlag = false;
+           emit CDUConnected();
            _CDUConnected = true;
+           onVersionInfoReceived();
            qWarning() << "CDU connected";
            if(_UmuTickThreadIndex == 0)
            {
@@ -1048,10 +1055,23 @@ void UMUDEVICE::messageHandler(QtMsgType type, const QMessageLogContext& context
         outFile.close();
     }
 }
+
+void UMUDEVICE::onVersionInfoReceived()
+{
+    _versionInfoTimer.start();
+}
+
+void UMUDEVICE::onVersionInfoTimeout()
+{
+    emit versionInfoTimeout();
+#ifndef ANDROID
+    restartCDUConection();
+#endif
+}
 //----------------------------------------------------------------------------------------
 const unsigned char UMU::mask[8] = {1,2,4,8,16,32,64,128};
 const unsigned char UMU::mask2[8] = {0xFE,0xFD,0xFB,0xF7,0xEF,0xDF,0xBF,0x7F};
-
+const unsigned int UMU::lengthPathEncoderDividerOffPar = 0;
 
 UMU::UMU(UMUDEVICE* parent): _device(parent),
                         flWasStopped(0),
@@ -1072,9 +1092,15 @@ UMU::UMU(UMUDEVICE* parent): _device(parent),
         ascanregim[ii] = 0;
         ascanstrobformax[ii] = 0;
     }
+     connect(_device, SIGNAL(CDUConnected()), this, SLOT(onCDUConnected()));
+     connect(_device, SIGNAL(versionInfoTimeout()), this, SLOT(onVersionInfoTimeout()));
 };
 
-// эмуляция параметров настройки БУМа, извлекаемых из файла PARAMS.INI
+UMU::~UMU()
+{
+    disconnect(_device, SIGNAL(CDUConnected()), this, SLOT(onCDUConnected()));
+    disconnect(_device, SIGNAL(versionInfoTimeout()), this, SLOT(onVersionInfoTimeout()));
+}
 
 void UMU::dbgPrintOfMessage(tLAN_CDUMessage* _out_block)
 {
@@ -1150,9 +1176,6 @@ void UMU::dbgPrintOfMessage(tLAN_CDUMessage* _out_block)
         break;
     }
 }
-
-
-const unsigned int lengthPathEncoderDividerOffPar = 0;
 
 int UMU::xTaskGetTickCount(void)
 {
@@ -3367,7 +3390,7 @@ void UMU::BUMctrlproc(UCHAR *ptr)
 //
      case 0xDE:
           SendVersionInfo() ;
-          versionInfoSendTick =  xTaskGetTickCount();
+          emit versionInfoReceived();
           break;
 //
      case 0xF0:
@@ -4176,6 +4199,20 @@ void UMU::ustskBody(void)
    }
    COND_IntASD_ENABLE
    xSemaphoreGive(s_ACTH);
+#endif
+}
+
+void UMU::onVersionInfoTimeout()
+{
+    ASD_Off();
+    StopAScan();
+    StopBScan();
+}
+
+void UMU::onCDUConnected()
+{
+#ifndef OLD_PACKET_HEADER
+    messageNumber = 0;
 #endif
 }
 

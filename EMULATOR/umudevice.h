@@ -50,6 +50,9 @@ class UMU;
 #define LAN_MESSAGE_SHORT_HEADER_SIZE 4
 #define LAN_MESSAGE_BIG_HEADER_SIZE 6
 
+#define VERSIONINFO_TIMEOUT 6000 // максимальное время между запросами версии. При превышении -
+// переинициализация соединения по сети
+
 // идентификаторы сообщений обмена БУМ-тренажер
 enum MessageId  //: unsigned char
 {
@@ -385,7 +388,8 @@ public:
 #endif
     //
 signals:
-    void CDUconnected();
+    void CDUConnected();
+    void versionInfoTimeout();
     void restartPCLinkFaultTimer();
     void message(QString s);
     void messageHandlerSignal(QString s); // порождается в messageHandler()
@@ -399,6 +403,10 @@ public slots:
     void onMessage(QString s); // слот на сигналы с текстовыми сообщениями от используемых классов
     void messageHandler(QtMsgType type, const QMessageLogContext& context, const QString &msg); // обработчик сообщений из QDebug
 
+private slots:
+    void onVersionInfoReceived();
+    void onVersionInfoTimeout();
+
 private:
     class UNITLIN* _parentClass;
     bool _endWorkFlag;
@@ -408,6 +416,8 @@ private:
 
     bool _CDUConnected;  // соединение с БУИ установлено
     bool _PCConnected;   // соединение с ПК установлено
+
+    QTimer _versionInfoTimer;
 
     bool _PCLinkFault;  // устанавливаем, если нет PingId от ПК в течение PC_LINK_FAULT_TIMEOUT
     QTimer _PCLinkFaultTimer;
@@ -541,15 +551,17 @@ redefineDPCycleProc(); \
 DP_SEMAPHORE_LEAVE\
 }
 
-class UMU
+class UMU : public QObject
 {
+    Q_OBJECT
 public:
     static const unsigned char mask[8];
     static const unsigned char mask2[8];
+    static const unsigned int lengthPathEncoderDividerOffPar;// эмуляция параметров настройки БУМа, извлекаемых из файла PARAMS.INI
     static int xTaskGetTickCount(void);
 
     UMU(UMUDEVICE* parent);
-    ~UMU(){}
+    ~UMU();
 
     void PLDInterruptEmulation();
     void ustsk(void *ppar);
@@ -558,6 +570,12 @@ public:
     unsigned char lanmsgparcer(UCHAR* buf, USHORT lng);
     void dbgPrintOfMessage(tLAN_CDUMessage* _out_block);
 
+signals:
+    void versionInfoReceived();
+
+public slots:
+    void onCDUConnected();
+    void onVersionInfoTimeout();
 private:
 
     UMUDEVICE* _device;
@@ -668,8 +686,8 @@ private:
     unsigned char fIntPLDMustBeEnable;
     unsigned char messageNumber;
 
-    DWORD versionInfoSendTick;
-    DWORD versionInfoTimeout;
+//    DWORD versionInfoSendTick;
+//    DWORD versionInfoTimeout;
 
     BOOL fIsTrolleyDP;        // признак FALSE/TRUE - подключен датчик разъема ДП/ датчик dL сканера
 

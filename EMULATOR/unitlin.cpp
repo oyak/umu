@@ -10,7 +10,7 @@ UNITLIN::UNITLIN(CONFIG *pConfig)
 {
     _pDevice = new UMUDEVICE(&_thList, (void*)this, pConfig);
     DevicePtr = _pDevice;
-     connect(_pDevice, SIGNAL(CDUconnected()), this, SLOT(on_CDU_connected()));
+     connect(_pDevice, SIGNAL(CDUConnected()), this, SLOT(on_CDU_connected()));
 //    connect(_pDevice, SIGNAL(message(QString)), this, SLOT(onMessage(QString)));
      connect(_pDevice, SIGNAL(messageHandlerSignal(QString)), this, SLOT(on_MessageHandler(QString)));
 }
@@ -18,7 +18,7 @@ UNITLIN::UNITLIN(CONFIG *pConfig)
 UNITLIN::~UNITLIN()
 {
 QVector <cCriticalSection_Lin*>::iterator it;
-    disconnect(_pDevice, SIGNAL(CDUconnected()), this, SLOT(on_CDU_connected()));
+    disconnect(_pDevice, SIGNAL(CDUConnected()), this, SLOT(on_CDU_connected()));
 //  disconnect(_pDevice, SIGNAL(message(QString)), this, SLOT(onMessage(QString)));
     classCs.Enter();
     delete _pDevice;
