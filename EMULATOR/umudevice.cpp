@@ -196,8 +196,9 @@ bool UMUDEVICE::engine(void)
        {
            _restartCDUConnectionFlag = false;
            qWarning() << "CDU reconnection...";
-           _dtLan->closeConnection(_CDUConnection_id);
            _CDUConnected = false;
+           SLEEP(2000); // чтобы функции read/write в сокетах завершились
+           _dtLan->closeConnection(_CDUConnection_id);
         }
     }
 #endif
@@ -216,8 +217,9 @@ bool UMUDEVICE::engine(void)
             if ((_pConfig->getRestorePCConnectionFlagState()) && (_PCLinkFault))
             {
                 qWarning() << "PC LAN reconnection due to ping timeout";
-                _dtLan->closeConnection(_PCConnection_id);
                 _PCConnected = false;
+                SLEEP(2000); // чтобы функции read/write в сокетах завершились
+                _dtLan->closeConnection(_PCConnection_id);
                 _read_state = rsHead;
             }
         }
