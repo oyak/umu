@@ -38,6 +38,7 @@ cISocket::cISocket() : _socket (-1),
         _sendProc = (sendPtr)GetProcAddress(_libraryH, "send");
         _setsockoptProc = (setsockoptPtr)GetProcAddress(_libraryH, "setsockopt");
         _socketProc = (socketPtr)GetProcAddress(_libraryH, "socket");
+        _closesocketProc = (closesocketPtr)GetProcAddress(_libraryH, "closesocket");
 
         if (!_WSAStartupProc || \
             !_WSACleanupProc || \
@@ -54,7 +55,8 @@ cISocket::cISocket() : _socket (-1),
             !_sendtoProc || \
             !_sendProc || \
             !_setsockoptProc || \
-            !_socketProc){
+            !_socketProc || \
+            !_closesocketProc){
             std::cerr << "cISocket(): wsock32.dll functions not found"  << std::endl;
             FreeLibrary(_libraryH);
             _libraryH = 0;
@@ -114,8 +116,6 @@ bool cISocket::connect(const cConnectionParams *socket_params)
         return false;
     }
 #endif
-
-
     return true;
 }
 
@@ -123,13 +123,21 @@ void cISocket::disconnect()
 {
     if (_serverSocket >= 0)
     {
-        close(_serverSocket);
+#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+       _closesocketProc(_serverSocket);
+#else
+        closesocket(_serverSocket);
+#endif
         _serverSocket = -1;
     }
 //
     if (_socket >= 0)
     {
-        close(_socket);
+#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+        _closesocketProc(_socket);
+#else
+        closesocket(_socket);
+#endif
         _socket = -1;
     }
 

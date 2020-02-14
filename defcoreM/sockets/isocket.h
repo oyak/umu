@@ -64,6 +64,7 @@ typedef int WSAAPI (*sendPtr)(SOCKET s,const char *buf,int len,int flags);
 typedef int WSAAPI (*sendtoPtr)(SOCKET s,const char *buf,int len,int flags,const struct sockaddr *to,int tolen);
 typedef int WSAAPI (*setsockoptPtr)(SOCKET s,int level,int optname,const char *optval,int optlen);
 typedef SOCKET WSAAPI (*socketPtr)(int af,int type,int protocol);
+typedef int WSAAPI (*closesocketPtr)(SOCKET s);
 #endif
 
 class cISocket
@@ -133,6 +134,7 @@ protected:
     sendtoPtr _sendtoProc;
     setsockoptPtr _setsockoptProc;
     socketPtr _socketProc;
+    closesocketPtr _closesocketProc;
 
 private:
     HMODULE _libraryH;
