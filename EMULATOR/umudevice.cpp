@@ -44,6 +44,7 @@ cCriticalSection *pCS2;
      _versionInfoTimer.setInterval(VERSIONINFO_TIMEOUT);
      connect(_umu, SIGNAL(versionInfoReceived()), this, SLOT(onVersionInfoReceived()));
      connect(&_versionInfoTimer, SIGNAL(timeout()), this, SLOT(onVersionInfoTimeout()));
+     connect(this, SIGNAL(startVersionInfoTimer()), this, SLOT(onStartVersionInfoTimer()));
      _umu->moveLargeBScanInit();
      _umu->ush_init();
 
@@ -152,6 +153,7 @@ UMUDEVICE::~UMUDEVICE()
     delete _pEmulator;
     disconnect(_umu, SIGNAL(versionInfoReceived()), this, SLOT(onVersionInfoReceived()));
     disconnect(&_versionInfoTimer, SIGNAL(timeout()), this, SLOT(onVersionInfoTimeout()));
+    disconnect(this, SIGNAL(startVersionInfoTimer()), this, SLOT(onStartVersionInfoTimer()));
     delete _umu;
     delete _dtLan;
     if (_pPathMapLogFile != 0) delete _pPathMapLogFile;
@@ -1058,7 +1060,7 @@ void UMUDEVICE::messageHandler(QtMsgType type, const QMessageLogContext& context
 
 void UMUDEVICE::onVersionInfoReceived()
 {
-    _versionInfoTimer.start();
+    emit startVersionInfoTimer(); // запуск _versionInfoTimer в слоте
 }
 
 void UMUDEVICE::onVersionInfoTimeout()
@@ -1067,6 +1069,11 @@ void UMUDEVICE::onVersionInfoTimeout()
 #ifndef ANDROID
     restartCDUConection();
 #endif
+}
+
+void UMUDEVICE::onStartVersionInfoTimer()
+{
+    _versionInfoTimer.start();
 }
 //----------------------------------------------------------------------------------------
 const unsigned char UMU::mask[8] = {1,2,4,8,16,32,64,128};

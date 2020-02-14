@@ -50,7 +50,7 @@ class UMU;
 #define LAN_MESSAGE_SHORT_HEADER_SIZE 4
 #define LAN_MESSAGE_BIG_HEADER_SIZE 6
 
-#define VERSIONINFO_TIMEOUT 6000 // максимальное время между запросами версии. При превышении -
+#define VERSIONINFO_TIMEOUT 8000 // максимальное время между запросами версии, мс. При превышении -
 // переинициализация соединения по сети
 
 // идентификаторы сообщений обмена БУМ-тренажер
@@ -391,6 +391,7 @@ signals:
     void CDUConnected();
     void versionInfoTimeout();
     void restartPCLinkFaultTimer();
+    void startVersionInfoTimer();
     void message(QString s);
     void messageHandlerSignal(QString s); // порождается в messageHandler()
 
@@ -406,7 +407,7 @@ public slots:
 private slots:
     void onVersionInfoReceived();
     void onVersionInfoTimeout();
-
+    void onStartVersionInfoTimer(); // слот на сигнал startVersionInfoTimer()
 private:
     class UNITLIN* _parentClass;
     bool _endWorkFlag;
