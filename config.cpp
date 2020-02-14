@@ -8,19 +8,19 @@ CONFIG::CONFIG(QString configFilePath)
     _permission = false;
     _qAttempts = 0;
     //
-    _CDULocalIpAddressParameterName = "CDU_LOCAL_IP_ADDRESS";
-    _CDURemoteIpAddressParameterName = "CDU_REMOTE_IP_ADDRESS";
+    _CDULocalIpAddressParameterName = "CDU_CHANNEL_LOCAL_IP_ADDRESS";
+    _CDURemoteIpAddressParameterName = "CDU_CHANNEL_REMOTE_IP_ADDRESS";
 
-    _PCLocalIpAddressParameterName = "PC_LOCAL_IP_ADDRESS";
-    _PCRemoteIpAddressParameterName = "PC_REMOTE_IP_ADDRESS";
+    _PCLocalIpAddressParameterName = "PC_CHANNEL_LOCAL_IP_ADDRESS";
+    _PCRemoteIpAddressParameterName = "PC_CHANNEL_REMOTE_IP_ADDRESS";
 
     _restorePCConnectionParameterName = "RESTORE_PC_CONNECTION";
-    _pathToObjectsFilesParameterName = "PATH_TO_OBJECTS_FILES";
+    _pathToObjectsFilesParameterName = "PATH_TO_LOG_FILES";
 
-    _CDULocalPortParameterName = "CDU_LOCAL_PORT";
-    _CDURemotePortParameterName = "CDU_REMOTE_PORT";
-    _PCLocalPortParameterName = "PC_LOCAL_PORT";
-    _PCRemotePortParameterName = "PC_REMOTE_PORT";
+    _CDULocalPortParameterName = "CDU_CHANNEL_LOCAL_PORT";
+    _CDURemotePortParameterName = "CDU_CHANNEL_REMOTE_PORT";
+    _PCLocalPortParameterName = "PC_CHANNEL_LOCAL_PORT";
+    _PCRemotePortParameterName = "PC_CHANNEL_REMOTE_PORT";
 
     //
     _configFilePath = configFilePath;
