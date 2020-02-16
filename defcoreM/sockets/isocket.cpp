@@ -123,21 +123,13 @@ void cISocket::disconnect()
 {
     if (_serverSocket >= 0)
     {
-#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
-       _closesocketProc(_serverSocket);
-#else
-        closesocket(_serverSocket);
-#endif
+        close(_serverSocket);
         _serverSocket = -1;
     }
 //
     if (_socket >= 0)
     {
-#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
-        _closesocketProc(_socket);
-#else
-        closesocket(_socket);
-#endif
+        close(_socket);
         _socket = -1;
     }
 

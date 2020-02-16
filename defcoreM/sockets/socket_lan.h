@@ -26,6 +26,7 @@ public:
         cSocketLanParams(): _transferDirection(eSocketTransferDirection::DirectionUnknown)
         {};
     };
+    virtual void disconnect();
 };
 
 class cSocketLanUdp : public cSocketLan
