@@ -3,9 +3,10 @@
 
 void cSocketLan::disconnect()
 {
+#if defined(DEFCORE_OS_WIN)
     if (_serverSocket >= 0)
     {
-#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+#if defined(DEFCORE_CC_MINGW)
        _closesocketProc(_serverSocket);
 #else
         closesocket(_serverSocket);
@@ -15,13 +16,14 @@ void cSocketLan::disconnect()
 //
     if (_socket >= 0)
     {
-#if defined(DEFCORE_OS_WIN) && defined(DEFCORE_CC_MINGW)
+#if defined(DEFCORE_CC_MINGW)
         _closesocketProc(_socket);
 #else
         closesocket(_socket);
 #endif
         _socket = -1;
     }
+#endif
     cISocket::disconnect();
 }
 // ------------------------------- cSocketLanTcp -------------------------------
