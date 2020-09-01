@@ -5,7 +5,7 @@ contains( GIT, git ) {
 } else {
     HAS_GIT=FALSE
 }
-    VER ="1.1.6."
+    VER ="1.1.7."
 
 contains(HAS_GIT, TRUE) {
     message("has git: yes")
