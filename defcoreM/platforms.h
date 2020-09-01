@@ -67,11 +67,11 @@ void defcore_assert(const char* assertion, const char* file, int line) DEFCORE_N
 #define DEFCORE_ASSERT(cond) (defcore_noop())
 #endif
 
-#if defined(DEFCORE_OS_WIN) && !defined(DEFCORE_CC_GNU)
+#if defined(DEFCORE_OS_WIN) // для windows usleep() не работает?
 #define SLEEP(ms) Sleep(ms)
 #else
 #include <unistd.h>
-#define SLEEP(ms) usleep(ms * 1000);
+#define SLEEP(ms) usleep(ms * 1000)
 #endif
 
 #if !defined(DEFCORE_CC_BOR)
